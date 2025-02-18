@@ -34,12 +34,14 @@ const usePagination = <T>(countPerPage: number) => {
     setTotalPageList(totalPageList);
     setTotalSection(totalSection);
 
-    setCurrentPage(1);
-    setCurrentSection(1);
-
     setView();
     setViewPage();
   }, [totalList, totalPageList])
+
+  useEffect(() => {
+    setCurrentPage(1);
+    setCurrentSection(1);
+  }, [totalList])
 
   useEffect(setView, [currentPage])
   useEffect(setViewPage, [currentPage])
