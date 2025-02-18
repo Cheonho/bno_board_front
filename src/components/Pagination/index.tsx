@@ -44,7 +44,7 @@ export default function Pagination(props: Props) {
 
       {viewPageList.map(page => page === currentPage ? 
         <div className='pagination-text-active'>{page}</div> :
-        <div className='pagination-text' onClick={() => onPageClickHandler(2)}>{page}</div>
+        <div className='pagination-text' onClick={() => onPageClickHandler(page)}>{page}</div>
       )}
 
       <div className='pagination-divider'>{`\|`}</div>

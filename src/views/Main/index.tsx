@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import './style.css'
-import { BOARD_API_URL } from 'constant';
-import axios from 'axios';
+// import { BOARD_API_URL } from 'constant';
+// import axios from 'axios';
 import BoardItem from 'components/BoardItem';
 import Pagination from 'components/Pagination';
 import { usePagination } from 'hooks';
 import { BoardListType } from 'types/interface';
+import { getBoardListApi, getSearchBoardListApi} from 'api/board';
 
 export default function Main() {
-  const {} = usePagination<BoardListType>(3);
+  const {currentPage, currentSection, viewList, viewPageList, totalSection,
+    setCurrentPage, setCurrentSection, setTotalList} 
+    = usePagination<BoardListType>(3);
   const category = [
     {value:1, name:"전체"},
     {value:2, name:"작성자"},
@@ -28,15 +31,21 @@ export default function Main() {
   }
 
   const getBoardList = async () => {
-    const res = await axios.get(BOARD_API_URL()+'board-list')
-    setBoardList(res.data.boardList)
+    try {
+      const res = await getBoardListApi()
+      setBoardList(res.data.boardList)
+      setTotalList(res.data.boardList)
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   const getSearchBoardList = async () => {
     try{
-      const res = await axios.get(BOARD_API_URL()+`search-list/${selected}/${searchWord}`)
+      const res = await getSearchBoardListApi(selected, searchWord)
       const resData = res.data.boardSearchList
       setBoardList(resData)
+      setTotalList(resData)
     } catch (err) {
       console.log(err)
     }
@@ -47,7 +56,7 @@ export default function Main() {
   },[])
 
   useEffect(() => {
-    if(searchWord && selected){
+    if(searchWord && selected) {
       getSearchBoardList();
     } else if (searchWord === "" && selected) {
       getBoardList();
@@ -69,21 +78,31 @@ export default function Main() {
         <input type="text" value={searchWord} onChange={handleSearchWord} />
       </div>
 
-      {boardList.map((item) => {
+      {/* {boardList.map((item) => {
         return (
           <div>
             <BoardItem boardListType={item} />
-            {/* <Pagination 
-              currentPage={}
-              currentSection={}
-              setCurrentPage={}
-              setCurrentSection={}
-              viewPageList={}
-              totalSection={}
-            /> */}
+          </div>
+        )
+      })} */}
+
+      {viewList.map((item) => {
+        return (
+          <div>
+            <BoardItem boardListType={item} />
           </div>
         )
       })}
+
+      <Pagination
+        currentPage={currentPage}
+        currentSection={currentSection}
+        setCurrentPage={setCurrentPage}
+        setCurrentSection={setCurrentSection}
+        viewPageList={viewPageList}
+        totalSection={totalSection}
+      />
+
     </div>
   )
 }
