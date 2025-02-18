@@ -3,8 +3,12 @@ import './style.css'
 import { BOARD_API_URL } from 'constant';
 import axios from 'axios';
 import BoardItem from 'components/BoardItem';
+import Pagination from 'components/Pagination';
+import { usePagination } from 'hooks';
+import { BoardListType } from 'types/interface';
 
 export default function Main() {
+  const {} = usePagination<BoardListType>(3);
   const category = [
     {value:1, name:"전체"},
     {value:2, name:"작성자"},
@@ -67,7 +71,17 @@ export default function Main() {
 
       {boardList.map((item) => {
         return (
-          <BoardItem boardListType={item} />
+          <div>
+            <BoardItem boardListType={item} />
+            {/* <Pagination 
+              currentPage={}
+              currentSection={}
+              setCurrentPage={}
+              setCurrentSection={}
+              viewPageList={}
+              totalSection={}
+            /> */}
+          </div>
         )
       })}
     </div>
