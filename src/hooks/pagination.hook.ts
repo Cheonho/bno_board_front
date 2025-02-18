@@ -39,7 +39,7 @@ const usePagination = <T>(countPerPage: number) => {
 
     setView();
     setViewPage();
-  }, [totalList])
+  }, [totalList, totalPageList])
 
   useEffect(setView, [currentPage])
   useEffect(setViewPage, [currentPage])

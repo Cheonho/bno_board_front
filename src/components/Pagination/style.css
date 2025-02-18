@@ -33,4 +33,10 @@
 
 .pagination-text {
   color: rgba(0,0,0,0.6);
+
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 140%;
+
+  cursor: pointer;
 }
