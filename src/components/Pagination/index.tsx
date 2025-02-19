@@ -1,20 +1,19 @@
-import React, { Dispatch, SetStateAction } from 'react'
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import './style.css'
 
 interface Props {
   currentPage: number;
   currentSection: number;
+  totalPages: number;
   setCurrentPage: Dispatch<SetStateAction<number>>;
   setCurrentSection: Dispatch<SetStateAction<number>>;
-
-  viewPageList: number[];
-  totalSection: number;
 }
 
 export default function Pagination(props: Props) {
 
-  const {currentPage, currentSection, viewPageList, totalSection} = props;
+  const {currentPage, currentSection, totalPages} = props;
   const {setCurrentPage, setCurrentSection} = props;
+  const [viewPageList, setViewPageList] = useState<number[]>([]);
 
   const onPageClickHandler = (page: number) => {
     setCurrentPage(page);
@@ -27,10 +26,26 @@ export default function Pagination(props: Props) {
   }
 
   const onNextClickHandler = () => {
-    if (currentSection === totalSection) return;
+    if (currentSection === totalPages) return;
     setCurrentPage((currentSection * 10) + 10);
     setCurrentSection(currentSection + 1);
   }
+
+  const getViewPageList = () => {
+    const FIRST_INDEX = 10 * (currentSection - 1);
+    const LAST_INDEX = Math.min(totalPages, 10 * currentSection);
+    
+    const newViewPageList = Array.from(
+      { length: LAST_INDEX - FIRST_INDEX },
+      (_, i) => i + FIRST_INDEX + 1
+    );
+
+    setViewPageList(newViewPageList);
+  }
+
+  useEffect(() => {
+    getViewPageList()
+  }, [currentSection, totalPages])
 
   return (
     <div id="pagination-wrapper">

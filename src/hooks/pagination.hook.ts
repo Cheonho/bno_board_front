@@ -31,8 +31,8 @@ const usePagination = <T>(countPerPage: number) => {
     const totalPageList = [];
 
     for (let page = 1; page <= totalPage; page++) totalPageList.push(page);
-    setTotalPageList(totalPageList);
-    setTotalSection(totalSection);
+    // setTotalPageList(totalPageList);
+    // setTotalSection(totalSection);
 
     setView();
     setViewPage();

@@ -1,40 +1,51 @@
 import React, { useEffect, useState } from 'react'
 import './style.css'
-// import { BOARD_API_URL } from 'constant';
-// import axios from 'axios';
 import BoardItem from 'components/BoardItem';
-import Pagination from 'components/Pagination';
-import { usePagination } from 'hooks';
-import { BoardListType } from 'types/interface';
 import { getBoardListApi, getSearchBoardListApi} from 'api/board';
+import Pagination from 'components/Pagination';
 
 export default function Main() {
-  const {currentPage, currentSection, viewList, viewPageList, totalSection,
-    setCurrentPage, setCurrentSection, setTotalList} 
-    = usePagination<BoardListType>(5);
   const category = [
     {value:1, name:"전체"},
     {value:2, name:"작성자"},
     {value:3, name:"제목"},
     {value:4, name:"내용"},
   ]
+  const [page, setPage] = useState(1); // 페이지 번호
+  const [totalPages, setTotalPages] = useState(0); // 전체 페이지 수
+  const [totalElements, setTotalElements] = useState(0); // 전체 데이터 수
+  const [currentSection, setCurrentSection] = useState(1);
+  // const [pageSize] = useState(5);
+
   const [selected, setSelected] = useState(1);
   const [searchWord, setSearchWord] = useState("");
-  // const [boardList, setBoardList] = useState([]);
+  const [boardList, setBoardList] = useState([]);
 
   const handleSelect = (event: any) => {
     setSelected(event?.target.value)
+    getSearchBoardList()
   }
 
   const handleSearchWord = (event: any) => {
     setSearchWord(event?.target.value)
+    getSearchBoardList()
+  }
+
+  const getPageData = (resData: any) => {
+    setPage(resData.pageNumber + 1)
+    setTotalPages(resData.totalPages)
+    setTotalElements(resData.totalElements)
   }
 
   const getBoardList = async () => {
     try {
-      const res = await getBoardListApi()
-      // setBoardList(res.data.boardList)
-      setTotalList(res.data.boardList)
+      const res = await getBoardListApi(page-1)
+      
+      if (res.data) {
+        const resData = res.data
+        setBoardList(resData.boardList)
+        getPageData(resData);
+      }
     } catch (err) {
       console.log(err)
     }
@@ -42,26 +53,23 @@ export default function Main() {
 
   const getSearchBoardList = async () => {
     try{
-      const res = await getSearchBoardListApi(selected, searchWord)
-      const resData = res.data.boardSearchList
-      // setBoardList(resData)
-      setTotalList(resData)
+      const res = await getSearchBoardListApi(selected, searchWord, page-1)
+      const resData = res.data
+      setBoardList(resData.boardSearchList)
+
+      if (resData) getPageData(resData);
     } catch (err) {
       console.log(err)
     }
-    
   }
-  useEffect(() => { 
-    getBoardList();
-  },[])
 
-  useEffect(() => {
-    if(searchWord && selected) {
+  useEffect(() => { 
+    if (searchWord && selected) {
       getSearchBoardList();
-    } else if (searchWord === "" && selected) {
+    } else {
       getBoardList();
     }
-  },[searchWord, selected])
+  },[page])
 
   return (
     <div>
@@ -78,15 +86,7 @@ export default function Main() {
         <input type="text" value={searchWord} onChange={handleSearchWord} />
       </div>
 
-      {/* {boardList.map((item) => {
-        return (
-          <div>
-            <BoardItem boardListType={item} />
-          </div>
-        )
-      })} */}
-
-      {viewList.map((item) => {
+      {boardList?.map((item) => {
         return (
           <div>
             <BoardItem boardListType={item} />
@@ -95,12 +95,11 @@ export default function Main() {
       })}
 
       <Pagination
-        currentPage={currentPage}
+        currentPage={page}
         currentSection={currentSection}
-        setCurrentPage={setCurrentPage}
+        setCurrentPage={setPage}
         setCurrentSection={setCurrentSection}
-        viewPageList={viewPageList}
-        totalSection={totalSection}
+        totalPages={totalPages}
       />
 
     </div>
