@@ -1,13 +1,15 @@
-import axios from "axios";
+import { authInstance } from "api/auth";
 
-axios.defaults.baseURL = "http://localhost:8080";
-
-export async function getBoardListApi() {
-  const res = await axios.get(`/api/v1/board/board-list`);
+export async function getBoardListApi(page: number) {
+  const res = await authInstance.get(`/api/v1/board/board-list`, {
+    params: {page}
+  });
   return res;
 }
 
-export async function getSearchBoardListApi(category: number, searchWord: string) {
-  const res = await axios.get(`/api/v1/board/search-list/${category}/${searchWord}`);
+export async function getSearchBoardListApi(category: number, searchWord: string, page: number) {
+  const res = await authInstance.get(`/api/v1/board/search-list/${category}/${searchWord}`, {
+    params: {page}
+  });
   return res;
 }
