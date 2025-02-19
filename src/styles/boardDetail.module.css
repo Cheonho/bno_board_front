@@ -88,8 +88,14 @@
 .btn{
     border: none;
     background: #ffffff;
-    font-size: 17px;
+    font-size: 15px;
     color: #555;
+    padding: 5px;
+}
+
+.btn:hover{
+    background: #f0f0f0; 
+    border-radius: 25%;
 }
 
 .loading {
@@ -134,9 +140,28 @@
     font-size: 20px;
 }
 
-.register{
-    margin-left: 20px;
+.formBtn {
+    margin-left: 25px;
     width: 100px;
     height: 40px;
+    background-color: #f0f0f0; 
+    border: 1px solid #d9d9d9; 
+    border-radius: 8px; 
+    color: #555; 
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.formBtn:hover {
+    background-color: #e0e0e0; 
+    border-color: #c4c4c4;
+}
+
+
+
+.commentForm{
+    margin-top: 30px;
 }
 

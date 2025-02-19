@@ -5,6 +5,7 @@ import { BoardListType, CommentListType } from "types/interface";
 import BoardInfo from "components/BoardInfo";
 import { getBoard, getComments, deleteBoard } from "api/board";
 import CommentItem from "components/CommentItem";
+import CommentForm from "components/CommentForm";
 
 export default function BoardDetail() {
     let navigate = useNavigate();
@@ -43,9 +44,7 @@ export default function BoardDetail() {
                     <div className={styles.container_comment}>
                         <h2>댓글목록</h2>
                         <h3>총 댓글 수 : {comments.length}개</h3>
-
-                        <input className={styles.input_comment} />
-                        <button className={styles.register}>댓글 등록</button>
+                        <CommentForm />
 
                         {comments.map((comment, index) => (
                             <CommentItem key={index} comment={comment} />
