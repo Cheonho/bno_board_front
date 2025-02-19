@@ -1,0 +1,142 @@
+@font-face {
+    font-family: 'NanumHumanTTFBold';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2501-1@1.1/NanumHumanTTFBold.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f4f4f4;
+}
+
+.card {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    max-width: 1000px;
+    min-height: 700px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.title {
+    font-size: 28px;
+    font-family: 'NanumHumanTTFBold', sans-serif;
+    color: #222;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.info-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px 20px;
+}
+
+.info {
+    font-size: 18px;
+    color: #555;
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.label {
+    font-weight: bold;
+    color: #222;
+    flex: 1;
+}
+
+.value {
+    flex: 2;
+    text-align: right;
+}
+
+.content {
+    margin-top: 20px;
+    padding: 20px;
+    background: #fafafa;
+    border-radius: 8px;
+    font-size: 18px;
+    line-height: 1.8;
+    color: #444;
+    min-height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: justify;
+}
+
+.btn_box{
+    margin-left: auto;
+    padding: 20px;
+    font-size: 17px;
+    color: #555;
+}
+
+.btn{
+    border: none;
+    background: #ffffff;
+    font-size: 17px;
+    color: #555;
+}
+
+.loading {
+    font-size: 20px;
+    text-align: center;
+    color: #777;
+}
+
+.container_comment{
+    line-height: 50px;
+    padding: 60px 20px;
+}
+
+.comment{
+    margin-top: 50px;
+}
+
+.comment1{
+    display:flex;
+    font-size: 20px;
+}
+
+.comment2{
+    font-size: 22px;
+    margin-left: auto;
+}
+
+.comment3{
+    display:flex;
+    color: #555;
+}
+
+.comment4{
+    color: #555;
+    margin-left: 30px;
+}
+
+
+.input_comment{
+    width: 86%;
+    height: 80px;
+    font-size: 20px;
+}
+
+.register{
+    margin-left: 20px;
+    width: 100px;
+    height: 40px;
+}
+
