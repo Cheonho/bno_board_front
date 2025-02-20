@@ -1,5 +1,5 @@
 export default interface CommentList {
-    commentNum: number;
+    commentNum: number; // commentIdx
     content: string;
     commentLevel: number;
     parentNum: number | null;

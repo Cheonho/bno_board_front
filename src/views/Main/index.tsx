@@ -5,6 +5,9 @@ import BoardItem from 'components/BoardItem';
 import { getBoardListApi, getSearchBoardListApi} from 'api/board';
 import Pagination from 'components/Pagination';
 import { BoardListType } from 'types/interface';
+import { Link } from 'react-router-dom';
+import { BOARD_DETAIL_PATH, BOARD_PATH } from 'constant';
+import { customFormatDate } from 'utils/dateUtil';
 
 export default function Main() {
   const category = [
@@ -41,21 +44,16 @@ export default function Main() {
     setTotalElements(resData.totalElements)
   }
 
-  const dateFormmat = (date: Date) => {
-    return format(date, 'yyyy. MM. dd')
-  }
-
   const getBoardList = async () => {
     try {
       const res = await getBoardListApi(page-1)
       
-      console.log(res)
       if (res.data) {
         const resData = res.data
         const newBoardList = resData.boardList.map((item: BoardListType) => {
-          const createAtFormat = dateFormmat(item.createAt);
+          const createAtFormat = customFormatDate(item.createAt);
           if (item.updateAt) {
-            const updateAtFormat = dateFormmat(item.updateAt);
+            const updateAtFormat = customFormatDate(item.updateAt);
             return {...item, createAtFormat: createAtFormat, updateAtFormat: updateAtFormat}
           }
           return {...item, createAtFormat: createAtFormat}
@@ -73,9 +71,9 @@ export default function Main() {
       const res = await getSearchBoardListApi(selected, searchWord, page-1)
       const resData = res.data
       const newBoardList = resData.boardSearchList.map((item: BoardListType) => {
-        const createAtFormat = dateFormmat(item.createAt);
+        const createAtFormat = customFormatDate(item.createAt);
         if (item.updateAt) {
-          const updateAtFormat = dateFormmat(item.updateAt);
+          const updateAtFormat = customFormatDate(item.updateAt);
           return {...item, createAtFormat: createAtFormat, updateAtFormat: updateAtFormat}
         }
         return {...item, createAtFormat: createAtFormat}
@@ -129,7 +127,9 @@ export default function Main() {
                 <tr>
                   {/* <BoardItem boardListType={item} /> */}
                     <td>{item.boardNum}</td>
-                    <td>{item.title}</td>
+                    <td>
+                      <Link to={`${BOARD_PATH()}/${BOARD_DETAIL_PATH(item.boardNum)}`}>{ item.title }</Link>
+                    </td>
                     <td>{item.writerNickname}</td>
                     <td>{item.createAtFormat}</td>
                     <td>{item.viewCount}</td>
@@ -138,7 +138,7 @@ export default function Main() {
             })}
             </tbody>
         </table>
-    </div>    
+      </div>    
       <Pagination
         currentPage={page}
         currentSection={currentSection}

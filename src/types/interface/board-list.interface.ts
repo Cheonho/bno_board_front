@@ -1,5 +1,5 @@
 export default interface BoardList {
-    boardNum: number;
+    boardNum: number; // boardIdx
     title: string;
     content: string;
     writerId: string;
