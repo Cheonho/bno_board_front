@@ -8,4 +8,7 @@ export default interface BoardList {
     updateAt: Date | null;
     viewCount: number | 0;
     commentCount: number | 0;
+    favoriteCount: number | 0;
+    createAtFormat: string | "";
+    updateAtFormat: string | "";
 }

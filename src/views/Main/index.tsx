@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react'
+import { format } from 'date-fns';
 import './style.css'
 import BoardItem from 'components/BoardItem';
 import { getBoardListApi, getSearchBoardListApi} from 'api/board';
 import Pagination from 'components/Pagination';
+import { BoardListType } from 'types/interface';
 
 export default function Main() {
   const category = [
@@ -19,7 +21,7 @@ export default function Main() {
 
   const [selected, setSelected] = useState(1);
   const [searchWord, setSearchWord] = useState("");
-  const [boardList, setBoardList] = useState([]);
+  const [boardList, setBoardList] = useState<BoardListType[]>([]);
 
   const handleSelect = (event: any) => {
     setSelected(event?.target.value)
@@ -39,13 +41,26 @@ export default function Main() {
     setTotalElements(resData.totalElements)
   }
 
+  const dateFormmat = (date: Date) => {
+    return format(date, 'yyyy. MM. dd')
+  }
+
   const getBoardList = async () => {
     try {
       const res = await getBoardListApi(page-1)
       
+      console.log(res)
       if (res.data) {
         const resData = res.data
-        setBoardList(resData.boardList)
+        const newBoardList = resData.boardList.map((item: BoardListType) => {
+          const createAtFormat = dateFormmat(item.createAt);
+          if (item.updateAt) {
+            const updateAtFormat = dateFormmat(item.updateAt);
+            return {...item, createAtFormat: createAtFormat, updateAtFormat: updateAtFormat}
+          }
+          return {...item, createAtFormat: createAtFormat}
+        })
+        setBoardList(newBoardList)
         getPageData(resData);
       }
     } catch (err) {
@@ -57,7 +72,15 @@ export default function Main() {
     try{
       const res = await getSearchBoardListApi(selected, searchWord, page-1)
       const resData = res.data
-      setBoardList(resData.boardSearchList)
+      const newBoardList = resData.boardSearchList.map((item: BoardListType) => {
+        const createAtFormat = dateFormmat(item.createAt);
+        if (item.updateAt) {
+          const updateAtFormat = dateFormmat(item.updateAt);
+          return {...item, createAtFormat: createAtFormat, updateAtFormat: updateAtFormat}
+        }
+        return {...item, createAtFormat: createAtFormat}
+      })
+      setBoardList(newBoardList)
 
       if (resData) getPageData(resData);
     } catch (err) {
@@ -75,27 +98,47 @@ export default function Main() {
 
   return (
     <div>
-      <div>
-        <select onChange={handleSelect} value={selected}>
-          {category.map((item, index) => {
-            return (
-              <option value={item.value} key={index}>
-                {item.name}
-              </option>
-            )
-          })}
-        </select>
-        <input type="text" value={searchWord} onChange={handleSearchWord} />
-      </div>
+      <div className="board-container">
+        <h2>게시판</h2>
+        <div className="search-box">
+          <select id="category" onChange={handleSelect} value={selected}>
+            {category.map((item, index) => {
+              return (
+                <option value={item.value} key={index}>
+                  {item.name}
+                </option>
+              )
+            })}
+          </select>
+          <input type="text" id="search-input" value={searchWord} onChange={handleSearchWord} />
+        </div>
 
-      {boardList?.map((item) => {
-        return (
-          <div>
-            <BoardItem boardListType={item} />
-          </div>
-        )
-      })}
-
+        <table className="board-table">
+            <thead>
+                <tr>
+                    <th>번호</th>
+                    <th>제목</th>
+                    <th>작성자</th>
+                    <th>작성일</th>
+                    <th>조회수</th>
+                </tr>
+            </thead>
+            <tbody>
+            {boardList?.map((item) => {
+              return (
+                <tr>
+                  {/* <BoardItem boardListType={item} /> */}
+                    <td>{item.boardNum}</td>
+                    <td>{item.title}</td>
+                    <td>{item.writerNickname}</td>
+                    <td>{item.createAtFormat}</td>
+                    <td>{item.viewCount}</td>
+                </tr>
+              )
+            })}
+            </tbody>
+        </table>
+    </div>    
       <Pagination
         currentPage={page}
         currentSection={currentSection}
