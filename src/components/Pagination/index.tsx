@@ -13,6 +13,7 @@ export default function Pagination(props: Props) {
 
   const {currentPage, currentSection, totalPages} = props;
   const {setCurrentPage, setCurrentSection} = props;
+  const maxViewPageList = 5
   const [viewPageList, setViewPageList] = useState<number[]>([]);
 
   const onPageClickHandler = (page: number) => {
@@ -21,20 +22,20 @@ export default function Pagination(props: Props) {
 
   const onPerClickHandler = () => {
     if (currentSection === 1) return;
-    setCurrentPage((currentSection - 1) * 10);
+    setCurrentPage((currentSection - 1) * maxViewPageList);
     setCurrentSection(currentSection - 1);
   }
 
   const onNextClickHandler = () => {
-    if (currentSection === totalPages) return;
-    setCurrentPage((currentSection * 10) + 10);
+    if (currentSection === Math.ceil(totalPages / maxViewPageList)) return;
+    setCurrentPage((currentSection * maxViewPageList) + 1);
     setCurrentSection(currentSection + 1);
   }
 
   const getViewPageList = () => {
-    const FIRST_INDEX = 10 * (currentSection - 1);
-    const LAST_INDEX = Math.min(totalPages, 10 * currentSection);
-    
+    const FIRST_INDEX = maxViewPageList * (currentSection - 1);
+    const LAST_INDEX = Math.min(totalPages, maxViewPageList * currentSection);
+
     const newViewPageList = Array.from(
       { length: LAST_INDEX - FIRST_INDEX },
       (_, i) => i + FIRST_INDEX + 1

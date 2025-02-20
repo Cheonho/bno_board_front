@@ -23,12 +23,14 @@ export default function Main() {
 
   const handleSelect = (event: any) => {
     setSelected(event?.target.value)
-    getSearchBoardList()
+    setPage(1)
+    setCurrentSection(1)
   }
 
   const handleSearchWord = (event: any) => {
     setSearchWord(event?.target.value)
-    getSearchBoardList()
+    setPage(1)
+    setCurrentSection(1)
   }
 
   const getPageData = (resData: any) => {
@@ -69,7 +71,7 @@ export default function Main() {
     } else {
       getBoardList();
     }
-  },[page])
+  },[page,searchWord, selected])
 
   return (
     <div>
