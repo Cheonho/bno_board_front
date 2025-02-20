@@ -9,8 +9,8 @@ import CommentForm from "components/comment/CommentForm";
 
 export default function BoardDetail() {
     let navigate = useNavigate();
-    const { id } = useParams();
-    const numericId = id ? parseInt(id, 10) : undefined; // 문자열 → 숫자로 변환
+    const { boardNum } = useParams();
+    const numericId = boardNum ? parseInt(boardNum, 10) : undefined; // 문자열 → 숫자로 변환
 
     const [board, setBoard] = useState<BoardListType | null>(null);
     const [comments, setComments] = useState<CommentListType[]>([]);
@@ -32,7 +32,7 @@ export default function BoardDetail() {
     const handleDeleteBoard = async () => {
         if (!numericId) return;
         await deleteBoard(numericId);
-        navigate("/board/1");
+        navigate("/");
     };
 
     return (
