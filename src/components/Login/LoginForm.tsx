@@ -25,7 +25,7 @@ const LoginForm: React.FC<Props> = ({ userId, salt, onEmailChange, onPwChange, o
             <input
                 className={styles.pw}
                 value={salt}
-                placeholder="*******" feature/login
+                placeholder="*******"
                 type="password"
                 onChange={onPwChange}
             />
