@@ -49,25 +49,27 @@ export default function Pagination(props: Props) {
   }, [currentSection, totalPages])
 
   return (
-    <div id="pagination-wrapper">
-      <div className='pagination-change-link-box'>
-        <div className='icon-box-small'>
-          <div></div>
+    <div>
+      <div id="pagination-wrapper">
+        <div className='pagination-change-link-box'>
+          <div className='icon-box-small'>
+            <div></div>
+          </div>
+          <div className='pagination-change-link-text' onClick={onPerClickHandler}>{`이전`}</div>
         </div>
-        <div className='pagination-change-link-text' onClick={onPerClickHandler}>{`이전`}</div>
-      </div>
-      <div className='pagination-divider'>{`|`}</div>
+        <div className='pagination-divider'>{`|`}</div>
 
-      {viewPageList.map(page => page === currentPage ? 
-        <div className='pagination-text-active'>{page}</div> :
-        <div className='pagination-text' onClick={() => onPageClickHandler(page)}>{page}</div>
-      )}
+        {viewPageList.map(page => page === currentPage ? 
+          <div className='pagination-text-active'>{page}</div> :
+          <div className='pagination-text' onClick={() => onPageClickHandler(page)}>{page}</div>
+        )}
 
-      <div className='pagination-divider'>{`|`}</div>
-      <div className='pagination-change-link-box'>
-        <div className='pagination-change-link-text' onClick={onNextClickHandler}>{`다음`}</div>
-        <div className='icon-box-small'>
-          <div></div>
+        <div className='pagination-divider'>{`|`}</div>
+        <div className='pagination-change-link-box'>
+          <div className='pagination-change-link-text' onClick={onNextClickHandler}>{`다음`}</div>
+          <div className='icon-box-small'>
+            <div></div>
+          </div>
         </div>
       </div>
     </div>

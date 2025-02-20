@@ -102,14 +102,14 @@ export default function Main() {
         searchWord={searchWord}
         handleSearchWord={handleSearchWord}
       />
-      <Pagination
-        currentPage={page}
-        currentSection={currentSection}
-        setCurrentPage={setPage}
-        setCurrentSection={setCurrentSection}
-        totalPages={totalPages}
-      />
-
+      {totalPages ? 
+        <Pagination
+          currentPage={page}
+          currentSection={currentSection}
+          totalPages={totalPages}
+          setCurrentPage={setPage}
+          setCurrentSection={setCurrentSection}
+        />: ""}
     </div>
   )
 }

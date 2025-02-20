@@ -1,5 +1,5 @@
 import { authInstance } from "api/interceptor";
-import { BoardListType, CommentListType } from "types/interface";
+import { BoardListType, CommentListType, BoardWriteType } from "types/interface";
 
 export async function getBoardListApi(page: number) {
   const res = await authInstance.get(`/api/v1/board/board-list`, {
@@ -12,6 +12,11 @@ export async function getSearchBoardListApi(category: number, searchWord: string
   const res = await authInstance.get(`/api/v1/board/search-list/${category}/${searchWord}`, {
     params: {page}
   });
+  return res;
+}
+
+export async function postWriteBoardApi(board: BoardWriteType) {
+  const res = await authInstance.post(`/api/v1/board/write`, board)
   return res;
 }
 

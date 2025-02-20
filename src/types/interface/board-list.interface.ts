@@ -1,4 +1,4 @@
-export default interface BoardList {
+export interface BoardListType {
     boardNum: number; // boardIdx
     title: string;
     content: string;
@@ -11,4 +11,10 @@ export default interface BoardList {
     favoriteCount: number | 0;
     createAtFormat: string | "";
     updateAtFormat: string | "";
-}
+};
+
+export interface BoardWriteType {
+    title: string;
+    content: string;
+    writerId: string;
+};
