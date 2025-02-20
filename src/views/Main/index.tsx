@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { format } from 'date-fns';
 import './style.css'
-import BoardItem from 'components/BoardItem';
 import { getBoardListApi, getSearchBoardListApi} from 'api/board';
 import Pagination from 'components/Pagination';
 import { BoardListType } from 'types/interface';
-import { Link } from 'react-router-dom';
-import { BOARD_DETAIL_PATH, BOARD_PATH } from 'constant';
 import { customFormatDate } from 'utils/dateUtil';
+import BoardTable from 'components/board/BoardTable';
 
 export default function Main() {
   const category = [
@@ -96,49 +93,15 @@ export default function Main() {
 
   return (
     <div>
-      <div className="board-container">
-        <h2>게시판</h2>
-        <div className="search-box">
-          <select id="category" onChange={handleSelect} value={selected}>
-            {category.map((item, index) => {
-              return (
-                <option value={item.value} key={index}>
-                  {item.name}
-                </option>
-              )
-            })}
-          </select>
-          <input type="text" id="search-input" value={searchWord} onChange={handleSearchWord} />
-        </div>
-
-        <table className="board-table">
-            <thead>
-                <tr>
-                    <th>번호</th>
-                    <th>제목</th>
-                    <th>작성자</th>
-                    <th>작성일</th>
-                    <th>조회수</th>
-                </tr>
-            </thead>
-            <tbody>
-            {boardList?.map((item) => {
-              return (
-                <tr>
-                  {/* <BoardItem boardListType={item} /> */}
-                    <td>{item.boardNum}</td>
-                    <td>
-                      <Link to={`${BOARD_PATH()}/${BOARD_DETAIL_PATH(item.boardNum)}`}>{ item.title }</Link>
-                    </td>
-                    <td>{item.writerNickname}</td>
-                    <td>{item.createAtFormat}</td>
-                    <td>{item.viewCount}</td>
-                </tr>
-              )
-            })}
-            </tbody>
-        </table>
-      </div>    
+      <BoardTable 
+        boardList={boardList} 
+        category={category} 
+        onChangeSelect={handleSelect} 
+        selected={selected}
+        
+        searchWord={searchWord}
+        handleSearchWord={handleSearchWord}
+      />
       <Pagination
         currentPage={page}
         currentSection={currentSection}

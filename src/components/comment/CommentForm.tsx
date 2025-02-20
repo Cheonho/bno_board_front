@@ -1,4 +1,4 @@
-import styles from "../styles/boardDetail.module.css";
+import styles from "styles/boardDetail.module.css";
 
 export default function CommentForm() {
 
