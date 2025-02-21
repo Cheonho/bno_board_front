@@ -1,21 +1,19 @@
-import axios from "axios";
-
-axios.defaults.baseURL = process.env.REACT_APP_SERVER_URL || "http://localhost:8080";
+import { authInstance } from "api/interceptor";
 
 // 회원가입 API
 export const join = async (userData: any) => {
-    const response = await axios.post("/join", userData);
-    return response.data;
+    const response = await authInstance.post("/join", userData, {headers: { 'Content-Type': 'application/json' }});
+    return response;
 };
 
 // 이메일 중복 확인 API
-export const checkUserId = async (userId: string) => {
-    const response = await axios.get(`/idcheck?userId=${userId}`);
+export const checkUserId = async (email: string) => {
+    const response = await authInstance.get(`/idcheck?email=${email}`);
     return response.data.isAvailable;
 };
 
 // 닉네임 중복 확인 API
 export const checkUserName = async (userName: string) => {
-    const response = await axios.get(`/namecheck?userName=${userName}`);
+    const response = await authInstance.get(`/namecheck?userName=${userName}`);
     return response.data.isAvailable;
 };

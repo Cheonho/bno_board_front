@@ -3,6 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import 'styles/board-style.css';
 import { BoardListType } from 'types/interface';
 import { BOARD_DETAIL_PATH, BOARD_PATH, BOARD_WRITE_PATH, LOGIN_PATH } from 'constant';
+import { loginUserState } from 'stores';
+import { useRecoilState } from 'recoil';
 
 interface Props {
   boardList: BoardListType[];
@@ -16,6 +18,8 @@ interface Props {
 export default function BoardTable({ boardList, category, onChangeSelect, selected, searchWord, handleSearchWord }: Props) {
 
   const navigate = useNavigate();
+  // const userInfo = useRecoilState(loginUserState);
+  // console.log(userInfo);
 
   return (
     <div className="board-container">

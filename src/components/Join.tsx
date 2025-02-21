@@ -4,10 +4,11 @@ import { useNavigate } from "react-router-dom";
 import styles from "styles/join.module.css"
 import DaumPostcode from 'react-daum-postcode';
 import {UserModel} from "../common/UserModel";
+import {join as joinApi, checkUserId, checkUserName} from 'api/JoinBoard'
 
 function Join() {
 
-    const [userId, setUserId] = useState("");
+    const [userEmail, setUserEmail] = useState("");
     const [userName, setUserName] = useState("");
     const [userPw, setUserPw] = useState("");
     const [userCheckPw, setUserCheckPw] = useState("");
@@ -33,18 +34,20 @@ function Join() {
         async (event: React.FormEvent) => {
             event.preventDefault();
             try {
-                const response =
-                    await axios.post("http://localhost:8080/join", {
-                        userId,
-                        userPw,
-                        userName,
-                        address,
-                    }, { headers: { 'Content-Type': 'application/json' } }
-                    ) ;
+                const payload = {
+                    email: userEmail,
+                    password: userPw,
+                    address: address,
+                    userName: userName
+                }
+                const response = await joinApi(payload)
 
-                console.log('회원가입 성공')
-                alert('회원가입이 완료되었습니다.')
-                navigagte("/")
+                console.log(response)
+                if (response.status === 200) {
+                    console.log('회원가입 성공')
+                    alert('회원가입이 완료되었습니다.')
+                    navigagte("/")
+                }
             } catch (error) {
                 alert('회원가입 실패')
             }
@@ -53,15 +56,14 @@ function Join() {
 
     const onEmailHandler
         = (event: React.ChangeEvent<HTMLInputElement>) =>
-        setUserId(event.target.value);
+        setUserEmail(event.target.value);
 
     const onClickButton
         = async (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
         try {
-            const response = await axios.get(
-                `http://localhost:8080/idcheck?userId=${userId}`,
-            );
-            if (response.data.isAvailable === true) {
+            const response = await checkUserId(userEmail);
+            // if (response.data.isAvailable === true) {
+            if (response === true) {
                 setIdConfirmMsg("사용 가능한 아이디입니다.")
                 setIsIdConfirm(true)
             } else {
@@ -117,11 +119,10 @@ function Join() {
     const onNameClickButton
         = async (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
         try {
-            const response = await axios.get(
-                `http://localhost:8080/namecheck?userName=${userName}`,
-            );
+            const response = await checkUserName(userName);
 
-            if (response.data.isAvailable === true) {
+            // if (response.data.isAvailable === true) {
+            if (response === true) {
                 setIsNamewConfirm(true)
                 setNameConfirmMsg("사용 가능한 닉네임입니다.")
             } else {
@@ -177,7 +178,7 @@ function Join() {
                 <div className={styles.input_container} >
                 <input
                     className={styles.email}
-                    value={userId}
+                    value={userEmail}
                     placeholder="이메일을 입력해 주세요."
                     type="email"
                     name="이메일"
@@ -187,7 +188,7 @@ function Join() {
                             onClick={onClickButton}>
                         중복 확인
                     </button>
-                {userId.length > 0 && (
+                {userEmail.length > 0 && (
                     <span className={`message ${IsIdConfirm ? 'success' : 'error'}`}>{IdConfirmMsg}</span>
                 )}
 

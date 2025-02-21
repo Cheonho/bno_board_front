@@ -15,10 +15,10 @@ const Login = () => {
         e.preventDefault();
         try {
             const response = await login(userId, salt);
+            
             if (response.status === 200) {
                 const user: UserModel = response.data.user;
-                saveSession(user.userName, user.role);
-                alert(response.data.msg);
+                saveSession(user.userName, user.role, user.email);
                 navigate("/");
             }
         } catch (error) {

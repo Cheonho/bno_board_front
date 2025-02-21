@@ -4,7 +4,7 @@ interface JoinFormProps {
     form: any;
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     onSubmit: (e: React.FormEvent) => void;
-    onCheck: (field: "userId" | "userName") => void;
+    onCheck: (field: "email" | "userName") => void;
 }
 
 const JoinForm: React.FC<JoinFormProps> = ({ form, onChange, onSubmit, onCheck }) => {
@@ -12,20 +12,20 @@ const JoinForm: React.FC<JoinFormProps> = ({ form, onChange, onSubmit, onCheck }
         <form onSubmit={onSubmit}>
             <h2>회원가입</h2>
             <input
-    name="userId"
+    name="email"
     placeholder="이메일"
-    value={form.userId}
+    value={form.email}
     onChange={onChange}
     />
-    <button type="button" onClick={() => onCheck("userId")}>
+    <button type="button" onClick={() => onCheck("email")}>
     중복 확인
     </button>
 
     <input
-    name="userPw"
+    name="password"
     placeholder="비밀번호"
     type="password"
-    value={form.userPw}
+    value={form.password}
     onChange={onChange}
     />
 

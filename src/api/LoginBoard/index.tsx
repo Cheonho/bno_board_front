@@ -1,9 +1,9 @@
-import axios from "axios";
+import { authInstance } from "api/interceptor";
 
-export const login = async (userId: string, salt: string) => {
-    return await axios.post(
-        "http://localhost:8080/login",
-        { userId, salt },
+export const login = async (email: string, salt: string) => {
+    return await authInstance.post(
+        "/login",
+        { email: email, salt: salt },
         { headers: { "Content-Type": "application/json" } }
     );
 };

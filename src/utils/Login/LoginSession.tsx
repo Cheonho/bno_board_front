@@ -1,6 +1,7 @@
-export const saveSession = (name: string, role: string) => {
-    sessionStorage.setItem("name", name);
-    sessionStorage.setItem("member", role);
+export const saveSession = (userName: string, role: string, email: string) => {
+    sessionStorage.setItem("userName", userName);
+    sessionStorage.setItem("user", role);
+    sessionStorage.setItem("email", role);
 };
 
 export const clearSession = () => {
