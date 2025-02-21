@@ -32,16 +32,23 @@ body {
   border-radius: 4px;
 }
 
-.search-box button {
+.search-box .btn-box {
+  display: flex;
+  gap: 10px;
+  width: 30%;
+}
+
+.search-box .btn-box button {
   background-color: #007bff;
   color: white;
   border: none;
   padding: 8px 12px;
   cursor: pointer;
   border-radius: 4px;
+  width: 100%;
 }
 
-.search-box button:hover {
+.search-box .btn-box button:hover {
   background-color: #0056b3;
 }
 

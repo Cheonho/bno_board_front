@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import 'styles/board-style.css';
 import { BoardListType } from 'types/interface';
-import { BOARD_DETAIL_PATH, BOARD_PATH, BOARD_WRITE_PATH } from 'constant';
+import { BOARD_DETAIL_PATH, BOARD_PATH, BOARD_WRITE_PATH, LOGIN_PATH } from 'constant';
 
 interface Props {
   boardList: BoardListType[];
@@ -32,7 +32,10 @@ export default function BoardTable({ boardList, category, onChangeSelect, select
           </select>
           <div className='board-top'>
             <input type="text" id="search-input" value={searchWord} onChange={handleSearchWord} />
-            <button onClick={() => navigate(`${BOARD_PATH()}/${BOARD_WRITE_PATH()}`)}>글쓰기</button>
+            <div className='btn-box'>
+              <button onClick={() => navigate(`${BOARD_PATH()}/${BOARD_WRITE_PATH()}`)}>글쓰기</button>
+              <button onClick={() => navigate(`${LOGIN_PATH()}`)}>로그인</button>
+            </div>
           </div>
         </div>
 
