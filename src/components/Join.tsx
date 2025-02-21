@@ -35,11 +35,11 @@ function Join() {
             try {
                 const response =
                     await axios.post("http://localhost:8080/join", {
-                        userId,
-                        userPw,
-                        userName,
-                        address,
-                    }, { headers: { 'Content-Type': 'application/json' } }
+                            userId,
+                            userPw,
+                            userName,
+                            address,
+                        }, { headers: { 'Content-Type': 'application/json' } }
                     ) ;
 
                 console.log('회원가입 성공')
@@ -162,7 +162,7 @@ function Join() {
     };
 
     const onDetailAdsHandler
-    = (event : React.ChangeEvent<HTMLInputElement>) => {
+        = (event : React.ChangeEvent<HTMLInputElement>) => {
         setDetailedAddress(event.target.value) ;
     }
 
@@ -172,98 +172,98 @@ function Join() {
     return(
         <div className={styles.join_page}>
             <form className="join-form" onSubmit={onClickLJoin}>
-            <h2 className={styles.title}>회원가입</h2>
-            <div>이메일 주소</div>
-            <div>
-                <div className={styles.input_container} >
-                <input
-                    className={styles.email}
-                    value={userId}
-                    placeholder="이메일을 입력해 주세요."
-                    type="email"
-                    name="이메일"
-                    onChange={onEmailHandler}
-                    />
-                    <button className={styles.btn} type="button"
-                            onClick={onClickButton}>
-                        중복 확인
-                    </button>
-                {userId.length > 0 && (
-                    <span className={`message ${IsIdConfirm ? 'success' : 'error'}`}>{IdConfirmMsg}</span>
-                )}
+                <h2 className={styles.title}>회원가입</h2>
+                <div>이메일 주소</div>
+                <div>
+                    <div className={styles.input_container} >
+                        <input
+                            className={styles.email}
+                            value={userId}
+                            placeholder="이메일을 입력해 주세요."
+                            type="email"
+                            name="이메일"
+                            onChange={onEmailHandler}
+                        />
+                        <button className={styles.btn} type="button"
+                                onClick={onClickButton}>
+                            중복 확인
+                        </button>
+                        {userId.length > 0 && (
+                            <span className={`message ${IsIdConfirm ? 'success' : 'error'}`}>{IdConfirmMsg}</span>
+                        )}
 
-            </div>
-            <div>비밀번호</div>
-                <input
-                    className={styles.pw}
-                    value={userPw}
-                    placeholder="비밀번호를 입력해 주세요."
-                    type="password"
-                    name="비밀번호"
-                    onChange={onPwHandler} />
+                    </div>
+                    <div>비밀번호</div>
+                    <input
+                        className={styles.pw}
+                        value={userPw}
+                        placeholder="비밀번호를 입력해 주세요."
+                        type="password"
+                        name="비밀번호"
+                        onChange={onPwHandler} />
                     {userPw.length > 0 && (
                         <span className={`message ${IsPwErrorcofirm ? 'success' : 'error'}`}>{PwErrorMsg}</span>
                     )}
 
-                <div>
-                <input
-                className={styles.pw}
-                value={userCheckPw}
-                placeholder="비밀번호를 다시 입력해 주세요."
-                type="password"
-                name="비밀번호 체크"
-                onChange={onPwCheckHandler}/>
-                    {userCheckPw.length > 0 && (
-                        <span className={`message ${IsPwConfirm ? 'success' : 'error'}`}>{PwConfirmMsg}</span>
+                    <div>
+                        <input
+                            className={styles.pw}
+                            value={userCheckPw}
+                            placeholder="비밀번호를 다시 입력해 주세요."
+                            type="password"
+                            name="비밀번호 체크"
+                            onChange={onPwCheckHandler}/>
+                        {userCheckPw.length > 0 && (
+                            <span className={`message ${IsPwConfirm ? 'success' : 'error'}`}>{PwConfirmMsg}</span>
                         )}
                     </div>
-                <div>이름</div>
-                <div className={styles.input_container} >
-                    <input
-                    className={styles.name}
-                    value={userName}
-                    placeholder="닉네임을 입력해 주세요."
-                    type="text"
-                    name="닉네임"
-                    onChange={onNameHandler}/>
-                    <button className={styles.btn} type="button"
-                            onClick={onNameClickButton}>
-                        중복 확인
-                    </button>
-                    {userName.length > 0 && (
-                        <span className={`message ${IsNamewConfirm ? 'success' : 'error'}`}>{NameConfirmMsg}</span>
-                    )}
-                </div>
-                <div>주소</div>
-                <div className={styles.ads} >
-                    <input
-                    value={nomaladdress}
-                    placeholder="주소"
-                    type="text"
-                    name="주소"
-                    />
-                    <input
-                      value={addressCode}
-                      placeholder="우편번호"
-                      type="text"
-                      name="우편번호"
-                      />
-                    <input
-                        value={detailedAddress}
-                        placeholder="상세주소"
-                        type="text"
-                        name="상세주소"
-                        onChange={onDetailAdsHandler}
-                    />
-                    <button type="button" className="Name" onClick={onChangeOpenPost}>주소 찾기</button>
-                    {isOpenPost ? (
-                        <DaumPostcode className="PostCodeStyle" autoClose onComplete={onCompletePost} />
-                    ) : null}
-                </div>
-<br />
-                <button type = "submit">회원가입</button>
+                    <div>이름</div>
+                    <div className={styles.input_container} >
+                        <input
+                            className={styles.name}
+                            value={userName}
+                            placeholder="닉네임을 입력해 주세요."
+                            type="text"
+                            name="닉네임"
+                            onChange={onNameHandler}/>
+                        <button className={styles.check_button} type="button"
+                                onClick={onNameClickButton}>
+                            중복 확인
+                        </button>
+                        {userName.length > 0 && (
+                            <span className={`message ${IsNamewConfirm ? 'success' : 'error'}`}>{NameConfirmMsg}</span>
+                        )}
+                    </div>
+                    <div>주소</div>
+                    <div className={styles.ads} >
+                        <input
+                            value={nomaladdress}
+                            placeholder="주소"
+                            type="text"
+                            name="주소"
+                        />
+                        <input
+                            value={addressCode}
+                            placeholder="우편번호"
+                            type="text"
+                            name="우편번호"
+                        />
+                        <input
+                            value={detailedAddress}
+                            placeholder="상세주소"
+                            type="text"
+                            name="상세주소"
+                            onChange={onDetailAdsHandler}
+                        />
+                        <button type="button" className="Name" onClick={onChangeOpenPost}>주소 찾기</button>
+                        {isOpenPost ? (
+                            <DaumPostcode className="PostCodeStyle" autoClose onComplete={onCompletePost} />
+                        ) : null}
+                    </div>
+                    <br />
+                    <button type = "submit">회원가입</button>
 
-            </div>
+                </div>
             </form>
         </div>
     )

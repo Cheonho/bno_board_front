@@ -3,7 +3,7 @@ import './App.css';
 import Login from "./views/LoginBoard";
 import BoardMain from "./components/BoardMain.";
 import { Route, Routes, BrowserRouter } from 'react-router-dom';
-import Join from "./components/Join";
+import Join from "./views/JoinBoard";
 import FindIdPw from "./components/FindIdPw";
 
 function App() {

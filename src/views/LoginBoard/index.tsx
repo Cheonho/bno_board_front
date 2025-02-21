@@ -6,10 +6,15 @@ import { UserModel } from "../../common/UserModel";
 import LoginForm from "../../components/Login/LoginForm";
 import styles from "../../assets/Login.module.css";
 
+// zustand = 상태관리
+// 캐시 관리 = 리액트쿼리
 const Login = () => {
     const [userId, setUserId] = useState("");
     const [salt, setSalt] = useState("");
     const navigate = useNavigate();
+
+    const join = () => navigate("/join") ;
+    const findIdPw = () => navigate("findIdPw") ;
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -37,13 +42,13 @@ const Login = () => {
                 onSubmit={handleLogin}
             />
             <div className={styles.all}>
-                <Link to="/join" style={{ textDecoration: "none" }}>
+                 <span onClick={join} style={{ cursor: "pointer" }}>
                     회원가입
-                </Link>
+                </span>
                 &nbsp; | &nbsp;
-                <Link to="/findIdPw" style={{ textDecoration: "none" }}>
+                <span  onClick={findIdPw}style={{ cursor: "pointer" }}>
                     아이디, 비밀번호 찾기
-                </Link>
+                </span>
             </div>
         </div>
     );
