@@ -2,6 +2,39 @@
 .join_page {
     display: flex;
     flex-direction: column;
+<<<<<<< HEAD:src/assets/Join.module.css
+=======
+}
+
+/* 제목 스타일 */
+.title {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 30px;
+    color: #333;
+}
+
+/* 각 입력 필드 스타일 */
+.join_page input {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    background-color: #f9f9f9;
+    transition: all 0.3s ease-in-out;
+}
+
+.join_page input:focus {
+    border-color: #4caf50;
+    background-color: #fff;
+    outline: none;
+}
+/* input과 버튼을 가로로 배치하면서 메시지는 아래로 */
+.input_container {
+    display: flex;
+>>>>>>> 6d5f2275eb4f7587aa90a940fb3899ae2047afa7:src/styles/join.module.css
     align-items: center;
     justify-content: center;
     min-height: 100vh; /* 화면 중앙 배치 */
@@ -37,10 +70,32 @@
     border-color: #4a90e2; /* 포커스 시 색상 변경 */
 }
 
+<<<<<<< HEAD:src/assets/Join.module.css
 /* 확인 버튼 (아이디/이름 중복 검사) */
 .check_button {
     padding: 8px 12px;
     margin-left: 8px;
+=======
+/* 메시지 스타일 */
+.message {
+    font-size: 0.875rem;
+    margin-top: -10px;
+    margin-bottom: 20px;
+}
+
+.success {
+    color: #4caf50;
+}
+
+.error {
+    color: #f44336;
+}
+
+/* 버튼 스타일 */
+.btn {
+    padding: 10px 15px;
+    font-size: 1rem;
+>>>>>>> 6d5f2275eb4f7587aa90a940fb3899ae2047afa7:src/styles/join.module.css
     border: none;
     border-radius: 8px;
     background-color: #4a90e2;
@@ -49,8 +104,13 @@
     transition: background-color 0.3s ease;
 }
 
+<<<<<<< HEAD:src/assets/Join.module.css
 .check_button:hover {
     background-color: #357ABD; /* 호버 시 진한 블루 */
+=======
+.btn:hover {
+    background-color: #45a049;
+>>>>>>> 6d5f2275eb4f7587aa90a940fb3899ae2047afa7:src/styles/join.module.css
 }
 
 /* 주소 입력 폼 컨테이너 */

@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "../../assets/Login.module.css";
+import styles from "styles/login.module.css";
 
 interface Props {
     userId: string;

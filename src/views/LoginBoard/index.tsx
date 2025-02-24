@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { login } from "../../api/LoginBoard";
-import { saveSession } from "../../utils/Login/LoginSession";
-import { UserModel } from "../../common/UserModel";
-import LoginForm from "../../components/Login/LoginForm";
-import styles from "../../assets/Login.module.css";
+import { login } from "api/LoginBoard";
+import { saveSession } from "utils/Login/LoginSession";
+import { UserModel } from "common/UserModel";
+import LoginForm from "components/Login/LoginForm";
+import styles from "styles/login.module.css";
 
 // zustand = 상태관리
 // 캐시 관리 = 리액트쿼리
@@ -24,7 +24,7 @@ const Login = () => {
                 const user: UserModel = response.data.user;
                 saveSession(user.userName, user.role);
                 alert(response.data.msg);
-                navigate("/board");
+                navigate("/");
             }
         } catch (error) {
             // @ts-ignore

@@ -89,7 +89,11 @@ const JoinForm: React.FC<JoinFormProps> = ({ form, onChange, onSubmit, checkIdMe
     value={form.userName}
     onChange={onChange}
     />
+<<<<<<< HEAD
     <button className={styles.check_button } type="button" onClick={() => onNameCheck("userName")}>
+=======
+    <button type="button" className="btn" onClick={() => onCheck("userName")}>
+>>>>>>> 6d5f2275eb4f7587aa90a940fb3899ae2047afa7
     중복 확인
     </button>
             {(form.userName).length>0 && checkNameMessage && (

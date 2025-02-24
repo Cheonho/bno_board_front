@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useState} from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import styles from "../assets/Join.module.css"
+import styles from "styles/join.module.css"
 import DaumPostcode from 'react-daum-postcode';
 import {UserModel} from "../common/UserModel";
 
@@ -167,7 +167,6 @@ function Join() {
     }
 
     const address  = nomaladdress + " " + detailedAddress + " " +  addressCode
-    console.log(address) ;
 
     return(
         <div className={styles.join_page}>
@@ -217,6 +216,7 @@ function Join() {
                             <span className={`message ${IsPwConfirm ? 'success' : 'error'}`}>{PwConfirmMsg}</span>
                         )}
                     </div>
+<<<<<<< HEAD
                     <div>이름</div>
                     <div className={styles.input_container} >
                         <input
@@ -262,6 +262,53 @@ function Join() {
                     </div>
                     <br />
                     <button type = "submit">회원가입</button>
+=======
+                <div>이름</div>
+                <div className={styles.input_container} >
+                    <input
+                    className={styles.name}
+                    value={userName}
+                    placeholder="닉네임을 입력해 주세요."
+                    type="text"
+                    name="닉네임"
+                    onChange={onNameHandler}/>
+                    <button className={styles.btn} type="button"
+                            onClick={onNameClickButton}>
+                        중복 확인
+                    </button>
+                    {userName.length > 0 && (
+                        <span className={`message ${IsNamewConfirm ? 'success' : 'error'}`}>{NameConfirmMsg}</span>
+                    )}
+                </div>
+                <div>주소</div>
+                <div className={styles.ads} >
+                    <input
+                    value={nomaladdress}
+                    placeholder="주소"
+                    type="text"
+                    name="주소"
+                    />
+                    <input
+                      value={addressCode}
+                      placeholder="우편번호"
+                      type="text"
+                      name="우편번호"
+                      />
+                    <input
+                        value={detailedAddress}
+                        placeholder="상세주소"
+                        type="text"
+                        name="상세주소"
+                        onChange={onDetailAdsHandler}
+                    />
+                    <button type="button" className={`Name ${styles.btn}`} onClick={onChangeOpenPost}>주소 찾기</button>
+                    {isOpenPost ? (
+                        <DaumPostcode className="PostCodeStyle" autoClose onComplete={onCompletePost} />
+                    ) : null}
+                </div>
+<br />
+                <button type = "submit" className={styles.btn}>회원가입</button>
+>>>>>>> 6d5f2275eb4f7587aa90a940fb3899ae2047afa7
 
                 </div>
             </form>

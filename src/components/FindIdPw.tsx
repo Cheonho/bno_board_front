@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styles from "../assets/Login.module.css";
+import styles from "styles/Login.module.css";
 import axios from "axios";
 import { UserModel } from "../common/UserModel";  // 공용 타입 import
 import { useNavigate } from "react-router-dom";
