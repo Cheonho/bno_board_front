@@ -8,6 +8,7 @@ const RouterSetting = () => {
   return (
     <Routes>
       <Route path={MAIN_PATH()} element={<Navigate to={`${BOARD_PATH()}/${BOARD_LIST_PATH()}`} />}></Route>
+      <Route path={BOARD_PATH()} element={<Navigate to={`${BOARD_PATH()}/${BOARD_LIST_PATH()}`} />}></Route>
       
       <Route element={<Container />}>
         {userRoutes.map(({path, element}) => (
