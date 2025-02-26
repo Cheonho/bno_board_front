@@ -15,11 +15,24 @@ interface Props {
   selected: number;
   searchWord: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  pathList?: {name: string, value: any}[];
 }
 
-export default function BoardTable({ title, tableHeader, boardList, category, onChangeSelect, selected, searchWord, onChange }: Props) {
+export default function BoardTable({ title, tableHeader, boardList, category, onChangeSelect, selected, searchWord, onChange, pathList }: Props) {
 
   const navigate = useNavigate();
+  const writePath = pathList?.find((item) => {return item.name === "write"})?.value 
+                    ?? `${BOARD_PATH()}/${BOARD_WRITE_PATH()}`
+
+  const loginPath = pathList?.find((item) => {return item.name === "login"})?.value 
+                    ?? `${LOGIN_PATH()}`
+
+  const detailPath = (boardNum: number) => {
+    const pathFunc = pathList?.find((item) => {return item.name === "detail"})?.value
+    const path = typeof(pathFunc) === 'function' ? pathFunc(boardNum) : `${BOARD_PATH()}/${BOARD_DETAIL_PATH(boardNum)}`
+    
+    return path
+  }
 
   return (
     <div className="board-container">
@@ -37,8 +50,8 @@ export default function BoardTable({ title, tableHeader, boardList, category, on
           <div className='board-top'>
             <Input type="text" id="search-input" value={searchWord} onChange={onChange} />
             <div className='btn-box'>
-              <Button text={"글쓰기"} onClick={() => navigate(`${BOARD_PATH()}/${BOARD_WRITE_PATH()}`)} />
-              <Button text={"로그인"} onClick={() => navigate(`${LOGIN_PATH()}`)} />
+              <Button text={"글쓰기"} onClick={() => navigate(writePath)} />
+              <Button text={"로그인"} onClick={() => navigate(loginPath)} />
             </div>
           </div>
         </div>
@@ -59,7 +72,7 @@ export default function BoardTable({ title, tableHeader, boardList, category, on
                 <tr>
                     <td>{item.boardIdx}</td>
                     <td>
-                      <Link to={`${BOARD_PATH()}/${BOARD_DETAIL_PATH(item.boardNum)}`}>{ item.title }</Link>
+                      <Link to={detailPath(item.boardNum)}>{ item.title }</Link>
                     </td>
                     <td>{item.writerNickname}</td>
                     <td>{item.createAtFormat}</td>

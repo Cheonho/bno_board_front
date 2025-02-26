@@ -17,7 +17,7 @@ export default function BoardItem({ boardListType }: Props) {
 
   // properties
   const { boardNum, title, content, writerNickname } = boardListType;
-  const { viewCount, commentCount } = boardListType;
+  const { viewCount } = boardListType;
   const { createAt, updateAt } = boardListType;
 
   const createAtForm = formatDate(createAt);
@@ -46,7 +46,7 @@ export default function BoardItem({ boardListType }: Props) {
           <div className='board-list-content'>{content}</div>
         </div>
         <div className='board-list-bottom'>
-          <div className='board-list-counts'>{`조회수 ${viewCount} 댓글 ${commentCount}`}</div>
+          <div className='board-list-counts'>{`조회수 ${viewCount}`}</div>
         </div>
       </div>
       {/* <div className='board-list-image-box'>

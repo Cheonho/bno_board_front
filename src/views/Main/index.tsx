@@ -5,6 +5,7 @@ import Pagination from 'components/Pagination';
 import { BoardListType } from 'types/interface';
 import { customFormatDate } from 'utils/dateUtil';
 import BoardTable from 'components/board/BoardTable';
+import { BOARD_DETAIL_PATH, BOARD_PATH, BOARD_WRITE_PATH, LOGIN_PATH } from 'constant';
 
 export default function Main() {
   const category = [
@@ -25,6 +26,12 @@ export default function Main() {
   const [selected, setSelected] = useState(1);
   const [searchWord, setSearchWord] = useState("");
   const [boardList, setBoardList] = useState<BoardListType[]>([]);
+
+  const pathList = [
+    {name: 'write', value: `${BOARD_PATH()}/${BOARD_WRITE_PATH()}`},
+    {name: 'login', value: `${LOGIN_PATH()}`},
+    {name: 'detail', value: (boardNum: number) => `${BOARD_PATH()}/${BOARD_DETAIL_PATH(boardNum)}`}
+  ]
 
   const handleSelect = (event: any) => {
     setSelected(event?.target.value)
@@ -106,6 +113,7 @@ export default function Main() {
         category={category} 
         onChangeSelect={handleSelect} 
         selected={selected}
+        pathList={pathList}
         
         searchWord={searchWord}
         onChange={handleSearchWord}
