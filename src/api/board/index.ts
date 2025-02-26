@@ -2,26 +2,26 @@ import { authInstance } from "utils/interceptor";
 import { BoardListType, CommentListType, BoardWriteType } from "types/interface";
 
 export async function getBoardListApi(page: number) {
-  const res = await authInstance.get(`/api/v1/board/board-list`, {
+  const res = await authInstance.get(`/board/board-list`, {
     params: {page}
   });
   return res;
 }
 
 export async function getSearchBoardListApi(category: number, searchWord: string, page: number) {
-  const res = await authInstance.get(`/api/v1/board/search-list/${category}/${searchWord}`, {
+  const res = await authInstance.get(`/board/search-list/${category}/${searchWord}`, {
     params: {page}
   });
   return res;
 }
 
 export async function postWriteBoardApi(board: BoardWriteType) {
-  const res = await authInstance.post(`/api/v1/board/write`, board)
+  const res = await authInstance.post(`/board/write`, board)
   return res;
 }
 
 export async function patchViewCountApi(boardNum: number) {
-  const res = await authInstance.patch(`/api/v1/board/${boardNum}/view`)
+  const res = await authInstance.patch(`/board/${boardNum}/view`)
   return res;
 }
 
