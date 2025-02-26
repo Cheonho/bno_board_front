@@ -20,7 +20,7 @@ export async function postWriteBoardApi(board: BoardWriteType) {
   return res;
 }
 
-export async function patchViewCountApi(boardNum: number) {
+export async function patchViewCountApi(boardNum: number | string) {
   const res = await authInstance.patch(`/board/${boardNum}/view`)
   return res;
 }

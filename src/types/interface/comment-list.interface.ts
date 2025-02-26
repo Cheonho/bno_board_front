@@ -7,4 +7,5 @@ export default interface CommentList {
     boardNum: number;
     createAt: Date;
     updateAt: Date | null;
+    status: boolean | true;
 }

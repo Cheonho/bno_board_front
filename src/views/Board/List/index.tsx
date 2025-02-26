@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import './style.css'
-import { getBoardListApi, getSearchBoardListApi} from 'api/board';
+import { getBoardListApi, getSearchBoardListApi, patchViewCountApi} from 'api/board';
 import Pagination from 'components/Pagination';
 import { BoardListType } from 'types/interface';
 import { customFormatDate } from 'utils/dateUtil';
 import BoardTable from 'components/board/BoardTable';
-import { BOARD_DETAIL_PATH, BOARD_PATH, BOARD_WRITE_PATH, LOGIN_PATH } from 'constant';
+import { BOARD_DETAIL_PATH, BOARD_PATH, BOARD_UPDATE_PATH, BOARD_WRITE_PATH, LOGIN_PATH } from 'constant';
 
 export default function Main() {
   const category = [
@@ -14,7 +14,7 @@ export default function Main() {
     {value:3, name:"제목"},
     {value:4, name:"내용"},
   ]
-  const tableHeader = ['번호', '제목', '작성자', '작성일', '조회수']
+  const tableHeader = ['번호', '제목', '작성자', '작성일', '조회수', '임시 수정 btn']
   const [page, setPage] = useState(1); // 페이지 번호
   const [totalPages, setTotalPages] = useState(0); // 전체 페이지 수
   const [totalElements, setTotalElements] = useState(0); // 전체 데이터 수
@@ -30,7 +30,8 @@ export default function Main() {
   const pathList = [
     {name: 'write', value: `${BOARD_PATH()}/${BOARD_WRITE_PATH()}`},
     {name: 'login', value: `${LOGIN_PATH()}`},
-    {name: 'detail', value: (boardNum: number) => `${BOARD_PATH()}/${BOARD_DETAIL_PATH(boardNum)}`}
+    {name: 'detail', value: (boardNum: number) => `${BOARD_PATH()}/${BOARD_DETAIL_PATH(boardNum)}`},
+    {name: 'update', value: (boardNum: number) => `${BOARD_PATH()}/${BOARD_UPDATE_PATH(boardNum)}`}
   ]
 
   const handleSelect = (event: any) => {
@@ -41,6 +42,10 @@ export default function Main() {
   const handleSearchWord = (event: any) => {
     setSearchWord(event?.target.value)
     setPage(1)
+  }
+
+  const handleViewCount = async (boardNum: number | string) => {
+    const res = await patchViewCountApi(boardNum)
   }
 
   const getPageData = (resData: any) => {
@@ -118,6 +123,7 @@ export default function Main() {
         
         searchWord={searchWord}
         onChange={handleSearchWord}
+        handleViewCount={handleViewCount}
       />
       {totalPages ? 
         <Pagination
