@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import 'styles/board-style.css';
 import { BoardListType } from 'types/interface';
 import { BOARD_DETAIL_PATH, BOARD_PATH, BOARD_WRITE_PATH, LOGIN_PATH } from 'constant';
@@ -59,20 +59,19 @@ export default function BoardTable({ title, tableHeader, boardList, category, on
         <table className="board-table">
             <thead>
                 <tr>
-                  {tableHeader?.map((header) => {
+                  {tableHeader?.map((header, index) => {
                     return (
-                      <th>{header}</th>
+                      <th key={index}>{header}</th>
                     )
                   })}
                 </tr>
             </thead>
             <tbody>
-            {boardList?.map((item) => {
+            {boardList?.map((item, index) => {
               return (
-                <tr>
+                <tr key={index}>
                     <td>{item.boardIdx}</td>
                     <td>
-                      {/* <Button to={detailPath(item.boardNum)}>{ item.title }</Button> */}
                       <Button text={item.title} classNames='non-btn' onClick={() => navigate(detailPath(item.boardNum))} />
                     </td>
                     <td>{item.writerNickname}</td>

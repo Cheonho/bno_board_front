@@ -80,13 +80,14 @@ export default function Main() {
     try{
       const res = await getSearchBoardListApi(selected, searchWord, page-1)
       const resData = res.data
-      const newBoardList = resData.boardSearchList.map((item: BoardListType) => {
+      const newBoardList = resData.boardSearchList.map((item: BoardListType, index: number) => {
         const createAtFormat = customFormatDate(item.createAt);
+        const boardIdx = index + 1
         if (item.updateAt) {
           const updateAtFormat = customFormatDate(item.updateAt);
-          return {...item, createAtFormat: createAtFormat, updateAtFormat: updateAtFormat}
+          return {...item, boardIdx: boardIdx, createAtFormat: createAtFormat, updateAtFormat: updateAtFormat}
         }
-        return {...item, createAtFormat: createAtFormat}
+        return {...item, boardIdx: boardIdx, createAtFormat: createAtFormat}
       })
       setBoardList(newBoardList)
 
@@ -102,7 +103,7 @@ export default function Main() {
     } else {
       getBoardList();
     }
-  },[page,searchWord, selected])
+  },[page, searchWord, selected])
 
   return (
     <div>
