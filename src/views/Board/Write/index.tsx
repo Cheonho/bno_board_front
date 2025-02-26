@@ -4,12 +4,14 @@ import BoardWriteCom from 'components/board/BoardWrite'
 import { BoardWriteType } from 'types/interface';
 import { postWriteBoardApi } from 'api/board';
 import { useNavigate } from 'react-router-dom';
+import useUserStore from 'stores/useUserStore';
 
 export default function BoardWrite() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [writer, setWriter] = useState("testId");
   const navigate = useNavigate();
+  const userInfo = useUserStore((state) => state.user)
 
   const onChangeTitle = (e: any) => {
     setTitle(e.target.value)
@@ -37,13 +39,15 @@ export default function BoardWrite() {
 
   return (
     <div>
-      <BoardWriteCom 
-        title={title}
-        content={content}
-        onChangeTitle={onChangeTitle} 
-        onChangeContent={onChangeContent}
-        handleSubmit={handleSubmit}
-      />
+      {userInfo ? 
+        <BoardWriteCom 
+          title={title}
+          content={content}
+          onChangeTitle={onChangeTitle} 
+          onChangeContent={onChangeContent}
+          handleSubmit={handleSubmit}
+        /> : ""
+      }
     </div>
   )
 }

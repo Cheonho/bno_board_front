@@ -5,11 +5,13 @@ import { saveSession } from "utils/Login/LoginSession";
 import { UserModel } from "common/UserModel";
 import LoginForm from "components/Login/LoginForm";
 import styles from "styles/login.module.css";
+import useUserStore from "stores/useUserStore";
 
 const Login = () => {
     const [userId, setUserId] = useState("");
     const [salt, setSalt] = useState("");
     const navigate = useNavigate();
+    const setUser = useUserStore((state) => state.setUser)
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -18,12 +20,18 @@ const Login = () => {
             
             if (response.status === 200) {
                 const user: UserModel = response.data.user;
+                setUser({
+                    email: user.email,
+                    role: user.role,
+                    nickname: user.userName
+                })
                 saveSession(user.userName, user.role, user.email);
                 navigate("/");
             }
         } catch (error) {
             // @ts-ignore
             alert("로그인 실패: " + (error.response?.data.msg || "네트워크 오류"));
+            // clearUser();
         }
     };
 

@@ -5,6 +5,7 @@ import { BoardListType } from 'types/interface';
 import { BOARD_DETAIL_PATH, BOARD_PATH, BOARD_WRITE_PATH, LOGIN_PATH } from 'constant';
 import Input from 'components/common/Input';
 import Button from 'components/common/Button';
+import useUserStore from 'stores/useUserStore';
 
 interface Props {
   title: string;
@@ -33,6 +34,7 @@ export default function BoardTable({ title, tableHeader, boardList, category, on
     
     return path
   }
+  const userState = useUserStore((state) => state.user)
 
   return (
     <div className="board-container">
@@ -50,8 +52,7 @@ export default function BoardTable({ title, tableHeader, boardList, category, on
           <div className='board-top'>
             <Input type="text" id="search-input" value={searchWord} onChange={onChange} />
             <div className='btn-box'>
-              <Button text={"글쓰기"} onClick={() => navigate(writePath)} />
-              <Button text={"로그인"} onClick={() => navigate(loginPath)} />
+              {userState ? <Button text={"글쓰기"} onClick={() => navigate(writePath)} /> : <Button text={"로그인"} onClick={() => navigate(loginPath)} />}
             </div>
           </div>
         </div>

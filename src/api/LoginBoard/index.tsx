@@ -1,9 +1,9 @@
 import { authInstance } from "utils/interceptor";
 
-export const login = async (email: string, salt: string) => {
+export const login = async (email: string, password: string) => {
     return await authInstance.post(
-        "/login",
-        { email: email, salt: salt },
+        "/user/login",
+        { email: email, password: password },
         { headers: { "Content-Type": "application/json" } }
     );
 };
