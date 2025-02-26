@@ -72,7 +72,8 @@ export default function BoardTable({ title, tableHeader, boardList, category, on
                 <tr>
                     <td>{item.boardIdx}</td>
                     <td>
-                      <Link to={detailPath(item.boardNum)}>{ item.title }</Link>
+                      {/* <Button to={detailPath(item.boardNum)}>{ item.title }</Button> */}
+                      <Button text={item.title} classNames='non-btn' onClick={() => navigate(detailPath(item.boardNum))} />
                     </td>
                     <td>{item.writerNickname}</td>
                     <td>{item.createAtFormat}</td>

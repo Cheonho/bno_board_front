@@ -20,6 +20,11 @@ export async function postWriteBoardApi(board: BoardWriteType) {
   return res;
 }
 
+export async function patchViewCountApi(boardNum: number) {
+  const res = await authInstance.patch(`/api/v1/board/${boardNum}/view`)
+  return res;
+}
+
 export const getBoard = async (id: number): Promise<BoardListType> => {
   const response = await authInstance.get(`/${id}`);
   return response.data;
