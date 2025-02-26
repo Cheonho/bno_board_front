@@ -29,7 +29,6 @@ export default function Main() {
 
   const pathList = [
     {name: 'write', value: `${BOARD_PATH()}/${BOARD_WRITE_PATH()}`},
-    {name: 'login', value: `${LOGIN_PATH()}`},
     {name: 'detail', value: (boardNum: number) => `${BOARD_PATH()}/${BOARD_DETAIL_PATH(boardNum)}`},
     {name: 'update', value: (boardNum: number) => `${BOARD_PATH()}/${BOARD_UPDATE_PATH(boardNum)}`}
   ]
@@ -122,7 +121,7 @@ export default function Main() {
         pathList={pathList}
         
         searchWord={searchWord}
-        onChange={handleSearchWord}
+        handleSearch={handleSearchWord}
         handleViewCount={handleViewCount}
       />
       {totalPages ? 

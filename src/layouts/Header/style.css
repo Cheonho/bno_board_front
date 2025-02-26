@@ -1,0 +1,10 @@
+.header-box {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.btn-pr {
+  width: 12% !important;
+}

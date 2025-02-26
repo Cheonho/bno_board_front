@@ -15,19 +15,16 @@ interface Props {
   onChangeSelect: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   selected: number;
   searchWord: string;
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleSearch: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleViewCount?: (boardNum: number | string, event: React.MouseEvent<HTMLButtonElement>) => void;
   pathList?: {name: string, value: any}[];
 }
 
-export default function BoardTable({ title, tableHeader, boardList, category, onChangeSelect, selected, searchWord, onChange, pathList, handleViewCount }: Props) {
+export default function BoardTable({ title, tableHeader, boardList, category, onChangeSelect, selected, searchWord, handleSearch, pathList, handleViewCount }: Props) {
 
   const navigate = useNavigate();
   const writePath = pathList?.find((item) => {return item.name === "write"})?.value 
                     ?? `${BOARD_PATH()}/${BOARD_WRITE_PATH()}`
-
-  const loginPath = pathList?.find((item) => {return item.name === "login"})?.value 
-                    ?? `${LOGIN_PATH()}`
 
   const detailPath = (boardNum: number | string) => {
     const pathFunc = pathList?.find((item) => {return item.name === "detail"})?.value
@@ -65,9 +62,9 @@ export default function BoardTable({ title, tableHeader, boardList, category, on
             })}
           </select>
           <div className='board-top'>
-            <Input type="text" id="search-input" value={searchWord} onChange={onChange} />
+            <Input type="text" id="search-input" value={searchWord} onChange={handleSearch} />
             <div className='btn-box'>
-              {userState ? <Button text={"글쓰기"} onClick={() => navigate(writePath)} /> : <Button text={"로그인"} onClick={() => navigate(loginPath)} />}
+              {userState ? <Button text={"글쓰기"} onClick={() => navigate(writePath)} /> : ""}
             </div>
           </div>
         </div>

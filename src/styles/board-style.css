@@ -21,7 +21,7 @@ body {
 .search-box {
   display: flex;
   justify-content: flex-start;
-  margin-bottom: 20px;
+  margin: 20px 0;
   gap: 5px;
 }
 
