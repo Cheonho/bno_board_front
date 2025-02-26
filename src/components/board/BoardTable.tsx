@@ -3,27 +3,27 @@ import { Link, useNavigate } from 'react-router-dom';
 import 'styles/board-style.css';
 import { BoardListType } from 'types/interface';
 import { BOARD_DETAIL_PATH, BOARD_PATH, BOARD_WRITE_PATH, LOGIN_PATH } from 'constant';
-import { loginUserState } from 'stores';
-import { useRecoilState } from 'recoil';
+import Input from 'components/common/Input';
+import Button from 'components/common/Button';
 
 interface Props {
+  title: string;
+  tableHeader: string[];
   boardList: BoardListType[];
   category: {value: number, name: string}[];
   onChangeSelect: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   selected: number;
   searchWord: string;
-  handleSearchWord: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-export default function BoardTable({ boardList, category, onChangeSelect, selected, searchWord, handleSearchWord }: Props) {
+export default function BoardTable({ title, tableHeader, boardList, category, onChangeSelect, selected, searchWord, onChange }: Props) {
 
   const navigate = useNavigate();
-  // const userInfo = useRecoilState(loginUserState);
-  // console.log(userInfo);
 
   return (
     <div className="board-container">
-        <h2>게시판</h2>
+        <h2>{title}</h2>
         <div className="search-box">
           <select id="category" onChange={onChangeSelect} value={selected}>
             {category?.map((item, index) => {
@@ -35,10 +35,10 @@ export default function BoardTable({ boardList, category, onChangeSelect, select
             })}
           </select>
           <div className='board-top'>
-            <input type="text" id="search-input" value={searchWord} onChange={handleSearchWord} />
+            <Input type="text" id="search-input" value={searchWord} onChange={onChange} />
             <div className='btn-box'>
-              <button onClick={() => navigate(`${BOARD_PATH()}/${BOARD_WRITE_PATH()}`)}>글쓰기</button>
-              <button onClick={() => navigate(`${LOGIN_PATH()}`)}>로그인</button>
+              <Button text={"글쓰기"} onClick={() => navigate(`${BOARD_PATH()}/${BOARD_WRITE_PATH()}`)} />
+              <Button text={"로그인"} onClick={() => navigate(`${LOGIN_PATH()}`)} />
             </div>
           </div>
         </div>
@@ -46,18 +46,17 @@ export default function BoardTable({ boardList, category, onChangeSelect, select
         <table className="board-table">
             <thead>
                 <tr>
-                    <th>번호</th>
-                    <th>제목</th>
-                    <th>작성자</th>
-                    <th>작성일</th>
-                    <th>조회수</th>
+                  {tableHeader?.map((header) => {
+                    return (
+                      <th>{header}</th>
+                    )
+                  })}
                 </tr>
             </thead>
             <tbody>
             {boardList?.map((item) => {
               return (
                 <tr>
-                  {/* <BoardItem boardListType={item} /> */}
                     <td>{item.boardNum}</td>
                     <td>
                       <Link to={`${BOARD_PATH()}/${BOARD_DETAIL_PATH(item.boardNum)}`}>{ item.title }</Link>

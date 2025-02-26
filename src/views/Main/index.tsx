@@ -13,6 +13,7 @@ export default function Main() {
     {value:3, name:"제목"},
     {value:4, name:"내용"},
   ]
+  const tableHeader = ['번호', '제목', '작성자', '작성일', '조회수']
   const [page, setPage] = useState(1); // 페이지 번호
   const [totalPages, setTotalPages] = useState(0); // 전체 페이지 수
   const [totalElements, setTotalElements] = useState(0); // 전체 데이터 수
@@ -94,13 +95,15 @@ export default function Main() {
   return (
     <div>
       <BoardTable 
+        title={"게시판"}
+        tableHeader={tableHeader}
         boardList={boardList} 
         category={category} 
         onChangeSelect={handleSelect} 
         selected={selected}
         
         searchWord={searchWord}
-        handleSearchWord={handleSearchWord}
+        onChange={handleSearchWord}
       />
       {totalPages ? 
         <Pagination
