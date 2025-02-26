@@ -1,4 +1,4 @@
-import { authInstance } from "api/interceptor";
+import { authInstance } from "utils/interceptor";
 
 export const login = async (email: string, salt: string) => {
     return await authInstance.post(

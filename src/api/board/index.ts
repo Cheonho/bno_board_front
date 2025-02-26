@@ -1,4 +1,4 @@
-import { authInstance } from "api/interceptor";
+import { authInstance } from "utils/interceptor";
 import { BoardListType, CommentListType, BoardWriteType } from "types/interface";
 
 export async function getBoardListApi(page: number) {

@@ -12,4 +12,5 @@ export const FIND_ID_PW_PATH = () => `/findIdPw`;
 export const BOARD_PATH = () => '/board';
 export const BOARD_DETAIL_PATH = (boardNum: string | number) => `detail/${boardNum}`;
 export const BOARD_WRITE_PATH = () => 'write';
+export const BOARD_LIST_PATH = () => 'list';
 export const BOARD_UPDATE_PATH = (boardNum: string | number) => `update/${boardNum}`;

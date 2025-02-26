@@ -1,4 +1,4 @@
-import { authInstance } from "api/interceptor";
+import { authInstance } from "utils/interceptor";
 
 // 회원가입 API
 export const join = async (userData: any) => {
