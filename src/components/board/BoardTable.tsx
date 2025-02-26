@@ -58,7 +58,7 @@ export default function BoardTable({ boardList, category, onChangeSelect, select
                     <td>
                       <Link to={`${BOARD_PATH()}/${BOARD_DETAIL_PATH(item.boardNum)}`}>{ item.title }</Link>
                     </td>
-                    <td>{item.writerNickname}</td>
+                    <td>{item.writerEmail}</td>
                     <td>{item.createAtFormat}</td>
                     <td>{item.viewCount}</td>
                 </tr>

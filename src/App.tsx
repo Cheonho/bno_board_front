@@ -17,7 +17,7 @@ import FindIdPw from "./components/FindIdPw";
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/">
       <Routes>
         <Route element={<Container />}>
           <Route path={LOGIN_PATH()} element={<Login />}/>

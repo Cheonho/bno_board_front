@@ -2,8 +2,7 @@ export interface BoardListType {
     boardNum: number; // boardIdx
     title: string;
     content: string;
-    writerId: string;
-    writerNickname: string;
+    writerEmail: string;
     createAt: Date;
     updateAt: Date | null;
     viewCount: number | 0;
@@ -11,7 +10,9 @@ export interface BoardListType {
     favoriteCount: number | 0;
     createAtFormat: string | "";
     updateAtFormat: string | "";
+    status: boolean;
 };
+
 
 export interface BoardWriteType {
     title: string;

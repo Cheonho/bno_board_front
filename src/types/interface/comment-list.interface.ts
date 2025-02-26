@@ -1,10 +1,16 @@
 export default interface CommentList {
-    commentNum: number; // commentIdx
-    content: string;
-    commentLevel: number;
-    parentNum: number | null;
-    writer: string;
+    commentNum: number;
     boardNum: number;
+    parentNum: number | null;
+    content: string;
+    writerEmail: string;
     createAt: Date;
     updateAt: Date | null;
+    status: boolean;
+}
+
+export interface GetCommentListResponse {
+    code: string;
+    message: string;
+    commentList: CommentList[];
 }

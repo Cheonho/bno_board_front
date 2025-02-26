@@ -16,7 +16,7 @@ export default function BoardItem({ boardListType }: Props) {
   }
 
   // properties
-  const { boardNum, title, content, writerNickname } = boardListType;
+  const { boardNum, title, content, writerEmail } = boardListType;
   const { viewCount, commentCount } = boardListType;
   const { createAt, updateAt } = boardListType;
 
@@ -37,7 +37,7 @@ export default function BoardItem({ boardListType }: Props) {
             <div className='board-list-profile-image' style={{backgroundColor: `rgba(255, 255, 255, 5)`}}></div>
           </div>
           <div className='board-list-write-box'>
-            <div className='board-list-nickname'>{writerNickname}</div>
+            <div className='board-list-nickname'>{writerEmail}</div>
             <div className='board-list-write-date'>{createAtForm}</div>
           </div>
         </div>

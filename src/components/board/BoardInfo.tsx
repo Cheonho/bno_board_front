@@ -1,13 +1,16 @@
+import { useNavigate } from "react-router-dom";
 import styles from "styles/boardDetail.module.css";
-import {BoardListType} from "types/interface";
+import { BoardListType } from "types/interface";
 
 interface BoardInfoProps {
     board: BoardListType;
     id?: number;
     deleteBoard: () => void;
+    goBoardList: () => void;
 }
 
-export default function BoardInfo({ board, id, deleteBoard }: BoardInfoProps) {
+
+export default function BoardInfo({ board, id, deleteBoard, goBoardList }: BoardInfoProps) {
     return (
         <>
             <h2 className={styles.title}>{board.title}</h2>
@@ -18,7 +21,7 @@ export default function BoardInfo({ board, id, deleteBoard }: BoardInfoProps) {
                 </p>
                 <p className={styles.info}>
                     <span className={styles.label}>작성자:</span>
-                    <span className={styles.value}>{board.writerNickname}</span>
+                    <span className={styles.value}>{board.writerEmail}</span>
                 </p>
                 <p className={styles.info}>
                     <span className={styles.label}>작성일:</span>
@@ -35,8 +38,11 @@ export default function BoardInfo({ board, id, deleteBoard }: BoardInfoProps) {
                 <p>{board.content}</p>
             </div>
             <div className={styles.btn_box}>
-                <button className={styles.btn}>수정</button> |  
-                <button className={styles.btn} onClick={deleteBoard}>삭제</button>
+
+                <button className={styles.boardlistBtn} onClick={goBoardList}>목록으로</button>
+                <div className={styles.toboardlist}>
+                    <button className={styles.btn}>수정</button> |
+                    <button className={styles.btn} onClick={deleteBoard}>삭제</button></div>
             </div>
         </>
     );
