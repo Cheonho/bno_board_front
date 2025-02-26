@@ -1,5 +1,6 @@
 export interface BoardListType {
-    boardNum: number; // boardIdx
+    boardIdx: number;
+    boardNum: number;
     title: string;
     content: string;
     writerId: string;

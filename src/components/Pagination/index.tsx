@@ -5,15 +5,16 @@ interface Props {
   currentPage: number;
   currentSection: number;
   totalPages: number;
+  firstPageNumber: number;
+  lastPageNumber: number;
+  pageNumberSize: number;
   setCurrentPage: Dispatch<SetStateAction<number>>;
-  setCurrentSection: Dispatch<SetStateAction<number>>;
 }
 
 export default function Pagination(props: Props) {
 
-  const {currentPage, currentSection, totalPages} = props;
-  const {setCurrentPage, setCurrentSection} = props;
-  const maxViewPageList = 5
+  const {currentPage, currentSection, totalPages, firstPageNumber, lastPageNumber, pageNumberSize} = props;
+  const {setCurrentPage} = props;
   const [viewPageList, setViewPageList] = useState<number[]>([]);
 
   const onPageClickHandler = (page: number) => {
@@ -22,23 +23,18 @@ export default function Pagination(props: Props) {
 
   const onPerClickHandler = () => {
     if (currentSection === 1) return;
-    setCurrentPage((currentSection - 1) * maxViewPageList);
-    setCurrentSection(currentSection - 1);
+    setCurrentPage((currentSection-1) * pageNumberSize)
   }
 
   const onNextClickHandler = () => {
-    if (currentSection === Math.ceil(totalPages / maxViewPageList)) return;
-    setCurrentPage((currentSection * maxViewPageList) + 1);
-    setCurrentSection(currentSection + 1);
+    if (currentSection === Math.ceil(totalPages / pageNumberSize)) return;
+    setCurrentPage(currentSection * pageNumberSize + 1)
   }
 
   const getViewPageList = () => {
-    const FIRST_INDEX = maxViewPageList * (currentSection - 1);
-    const LAST_INDEX = Math.min(totalPages, maxViewPageList * currentSection);
-
     const newViewPageList = Array.from(
-      { length: LAST_INDEX - FIRST_INDEX },
-      (_, i) => i + FIRST_INDEX + 1
+      { length: lastPageNumber - firstPageNumber + 1 },
+      (_, i) => i + firstPageNumber
     );
 
     setViewPageList(newViewPageList);

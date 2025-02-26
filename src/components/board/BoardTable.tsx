@@ -57,7 +57,7 @@ export default function BoardTable({ title, tableHeader, boardList, category, on
             {boardList?.map((item) => {
               return (
                 <tr>
-                    <td>{item.boardNum}</td>
+                    <td>{item.boardIdx}</td>
                     <td>
                       <Link to={`${BOARD_PATH()}/${BOARD_DETAIL_PATH(item.boardNum)}`}>{ item.title }</Link>
                     </td>

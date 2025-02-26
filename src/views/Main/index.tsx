@@ -18,7 +18,9 @@ export default function Main() {
   const [totalPages, setTotalPages] = useState(0); // 전체 페이지 수
   const [totalElements, setTotalElements] = useState(0); // 전체 데이터 수
   const [currentSection, setCurrentSection] = useState(1);
-  // const [pageSize] = useState(5);
+  const [firstPageNumber, setFirstPageNumber] = useState(1);
+  const [lastPageNumber, setLastPageNumber] = useState(1);
+  const [pageNumberSize, setPageNumberSize] = useState(5);
 
   const [selected, setSelected] = useState(1);
   const [searchWord, setSearchWord] = useState("");
@@ -27,19 +29,21 @@ export default function Main() {
   const handleSelect = (event: any) => {
     setSelected(event?.target.value)
     setPage(1)
-    setCurrentSection(1)
   }
 
   const handleSearchWord = (event: any) => {
     setSearchWord(event?.target.value)
     setPage(1)
-    setCurrentSection(1)
   }
 
   const getPageData = (resData: any) => {
     setPage(resData.pageNumber + 1)
-    setTotalPages(resData.totalPages)
+    setTotalPages(resData.totalPage)
     setTotalElements(resData.totalElements)
+    setCurrentSection(resData.currentSection)
+    setFirstPageNumber(resData.firstPageNumber)
+    setLastPageNumber(resData.lastPageNumber)
+    setPageNumberSize(resData.pageNumberSize ? resData.pageNumberSize : 5)
   }
 
   const getBoardList = async () => {
@@ -48,13 +52,14 @@ export default function Main() {
       
       if (res.data) {
         const resData = res.data
-        const newBoardList = resData.boardList.map((item: BoardListType) => {
+        const newBoardList = resData.boardList.map((item: BoardListType, index: number) => {
           const createAtFormat = customFormatDate(item.createAt);
+          const boardIdx = index + 1
           if (item.updateAt) {
             const updateAtFormat = customFormatDate(item.updateAt);
-            return {...item, createAtFormat: createAtFormat, updateAtFormat: updateAtFormat}
+            return {...item, boardIdx: boardIdx, createAtFormat: createAtFormat, updateAtFormat: updateAtFormat}
           }
-          return {...item, createAtFormat: createAtFormat}
+          return {...item, boardIdx: boardIdx, createAtFormat: createAtFormat}
         })
         setBoardList(newBoardList)
         getPageData(resData);
@@ -110,8 +115,10 @@ export default function Main() {
           currentPage={page}
           currentSection={currentSection}
           totalPages={totalPages}
+          firstPageNumber={firstPageNumber}
+          lastPageNumber={lastPageNumber}
+          pageNumberSize={pageNumberSize}
           setCurrentPage={setPage}
-          setCurrentSection={setCurrentSection}
         />: ""}
     </div>
   )
