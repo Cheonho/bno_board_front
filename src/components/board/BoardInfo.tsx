@@ -4,20 +4,18 @@ import { BoardListType } from "types/interface";
 
 interface BoardInfoProps {
     board: BoardListType;
-    id?: number;
     deleteBoard: () => void;
     goBoardList: () => void;
 }
 
-
-export default function BoardInfo({ board, id, deleteBoard, goBoardList }: BoardInfoProps) {
+export default function BoardInfo({ board, deleteBoard, goBoardList }: BoardInfoProps) {
     return (
         <>
             <h2 className={styles.title}>{board.title}</h2>
             <div className={styles.infoContainer}>
                 <p className={styles.info}>
                     <span className={styles.label}>게시글 ID:</span>
-                    <span className={styles.value}>{id}</span>
+                    <span className={styles.value}>{board.boardNum}</span>
                 </p>
                 <p className={styles.info}>
                     <span className={styles.label}>작성자:</span>

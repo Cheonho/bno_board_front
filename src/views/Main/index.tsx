@@ -92,7 +92,7 @@ export default function Main() {
   },[page,searchWord, selected])
 
   return (
-    <div>
+    <div className="main-container">
       <BoardTable 
         boardList={boardList} 
         category={category} 
