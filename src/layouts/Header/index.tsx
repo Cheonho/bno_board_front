@@ -20,7 +20,7 @@ export default function Header() {
 
   return (
     <div className='header-box'>
-      {userState ? <Button text={"로그아웃"} classNames='btn-pr' onClick={logoutBtn}></Button> : <Button text={"로그인"} classNames='btn-pr' onClick={() => navigate(loginPath)} />}
+      {userState ? <Button text={"로그아웃"} classNames='btn-pr btn-login' onClick={logoutBtn}></Button> : <Button text={"로그인"} classNames='btn-pr btn-login' onClick={() => navigate(loginPath)} />}
     </div>
   )
 }

@@ -22,7 +22,7 @@ const GlobalStyles = createGlobalStyle`
   padding: 8px 12px;
   cursor: pointer;
   border-radius: 4px;
-  width: 50%;
+  width: 100%;
 }
 
 .btn-pr button:hover {
