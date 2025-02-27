@@ -1,6 +1,6 @@
 {
   "name": "board-front",
-  "proxy": "http://localhost:8080/",
+  "proxy": "http://192.168.35.199:80/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
