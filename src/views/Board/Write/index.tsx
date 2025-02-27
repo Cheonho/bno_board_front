@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './style.css'
 import BoardWriteCom from 'components/board/BoardWrite'
 import { BoardWriteType } from 'types/interface';
@@ -9,7 +9,8 @@ import useUserStore from 'stores/useUserStore';
 export default function BoardWrite() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [writer, setWriter] = useState("testId");
+  const [writer, setWriter] = useState("");
+  const [writerEmail, setWriterEmail] = useState("");
   const navigate = useNavigate();
   const userInfo = useUserStore((state) => state.user)
 
@@ -27,7 +28,7 @@ export default function BoardWrite() {
         const payload: BoardWriteType = {
           title: title,
           content: content,
-          writerId: writer,
+          writerEmail: writerEmail,
         }
 
         const res = await postWriteBoardApi(payload)
@@ -37,12 +38,21 @@ export default function BoardWrite() {
       navigate("/");
     };
 
+  useEffect(() => {
+    if (userInfo) {
+      setWriter(userInfo.nickname)
+      setWriterEmail(userInfo.email)
+    }
+  })
+
   return (
     <div>
       {userInfo ? 
         <BoardWriteCom 
+          comType='w'
           title={title}
           content={content}
+          writer={writer}
           onChangeTitle={onChangeTitle} 
           onChangeContent={onChangeContent}
           handleSubmit={handleSubmit}

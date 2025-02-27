@@ -1,9 +1,9 @@
 export interface BoardListType {
-    boardIdx: number;
+    boardIdx?: number;
     boardNum: string | number;
     title: string;
     content: string;
-    writerId: string;
+    writerEmail: string;
     writerNickname: string;
     createAt: Date;
     updateAt: Date | null;
@@ -16,5 +16,5 @@ export interface BoardListType {
 export interface BoardWriteType {
     title: string;
     content: string;
-    writerId: string;
+    writerEmail: string;
 };

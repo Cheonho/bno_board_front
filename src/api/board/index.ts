@@ -25,6 +25,18 @@ export async function patchViewCountApi(boardNum: number | string) {
   return res;
 }
 
+export async function putUpdateBoardApi(board: BoardWriteType) {
+  const res = await authInstance.put(`/board/update`, board)
+  return res;
+}
+
+export async function getDetailBoardApi(boardNum: number | string) {
+  const res = await authInstance.get(`/board/detailBoard`, {
+    params: {boardNum}
+  });
+  return res;
+}
+
 export const getBoard = async (id: number): Promise<BoardListType> => {
   const response = await authInstance.get(`/${id}`);
   return response.data;
