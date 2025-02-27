@@ -66,6 +66,7 @@ export default function BoardUpdate() {
       }
 
       const res = await putUpdateBoardApi(payload)
+      console.log(res.status)
     } catch (err) {
       console.log(err)
     }
@@ -92,7 +93,7 @@ export default function BoardUpdate() {
           onChangeContent={onChangeContent}
           handleSubmit={handleSubmit}
         />) : (
-          isModalOpen && <Modal modalClose={modalClose} message="로그인 해주세요" />
+          isModalOpen && (<Modal modalClose={modalClose} message="로그인 해주세요" />)
         )
       }
     </div>

@@ -5,7 +5,7 @@ import Pagination from 'components/Pagination';
 import { BoardListType } from 'types/interface';
 import { customFormatDate } from 'utils/dateUtil';
 import BoardTable from 'components/board/BoardTable';
-import { BOARD_DETAIL_PATH, BOARD_PATH, BOARD_UPDATE_PATH, BOARD_WRITE_PATH, LOGIN_PATH } from 'constant';
+import { BOARD_DETAIL_PATH, BOARD_PATH, BOARD_UPDATE_PATH, BOARD_WRITE_PATH } from 'constant';
 
 export default function Main() {
   const category = [
@@ -44,7 +44,12 @@ export default function Main() {
   }
 
   const handleViewCount = async (boardNum: number | string) => {
-    const res = await patchViewCountApi(boardNum)
+    try{
+      const res = await patchViewCountApi(boardNum)
+      console.log(res.status)
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   const getPageData = (resData: any) => {

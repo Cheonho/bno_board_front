@@ -43,7 +43,7 @@ export default function BoardWrite() {
       setWriter(userInfo.nickname)
       setWriterEmail(userInfo.email)
     }
-  })
+  }, [userInfo])
 
   return (
     <div>
