@@ -6,7 +6,7 @@ interface ButtonProps {
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-export default function Input({text, id, type, classNames,  onClick}: ButtonProps) {
+export default function Input({text, id, type = 'button', classNames,  onClick}: ButtonProps) {
   return (
     <button 
       type={type ? type : "button"}
