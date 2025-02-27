@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import './style.css'
 import BoardWriteCom from 'components/board/BoardWrite'
-import { BoardListType, BoardWriteType } from 'types/interface';
+import { BoardListType } from 'types/interface';
 import { putUpdateBoardApi, getDetailBoardApi } from 'api/board';
 import { useNavigate, useParams } from 'react-router-dom';
 import useUserStore from 'stores/useUserStore';

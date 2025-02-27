@@ -65,7 +65,7 @@ export default function Main() {
         const resData = res.data
         const newBoardList = resData.boardList.map((item: BoardListType, index: number) => {
           const createAtFormat = customFormatDate(item.createAt);
-          const boardIdx = index + 1
+          const boardIdx = index + 1 + ((page - 1) * pageNumberSize)
           if (item.updateAt) {
             const updateAtFormat = customFormatDate(item.updateAt);
             return {...item, boardIdx: boardIdx, createAtFormat: createAtFormat, updateAtFormat: updateAtFormat}
@@ -86,7 +86,7 @@ export default function Main() {
       const resData = res.data
       const newBoardList = resData.boardSearchList.map((item: BoardListType, index: number) => {
         const createAtFormat = customFormatDate(item.createAt);
-        const boardIdx = index + 1
+        const boardIdx = index + 1 + ((currentSection - 1) * pageNumberSize)
         if (item.updateAt) {
           const updateAtFormat = customFormatDate(item.updateAt);
           return {...item, boardIdx: boardIdx, createAtFormat: createAtFormat, updateAtFormat: updateAtFormat}
