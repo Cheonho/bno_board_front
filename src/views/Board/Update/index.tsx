@@ -5,6 +5,8 @@ import { BoardListType } from 'types/interface';
 import { putUpdateBoardApi, getDetailBoardApi } from 'api/board';
 import { useNavigate, useParams } from 'react-router-dom';
 import useUserStore from 'stores/useUserStore';
+import Modal from 'components/common/Modal'
+import { LOGIN_PATH } from 'constant';
 
 export default function BoardUpdate() {
   const [title, setTitle] = useState("");
@@ -27,6 +29,12 @@ export default function BoardUpdate() {
   const navigate = useNavigate();
   const params = useParams();
   const userInfo = useUserStore((state) => state.user)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
+  const modalClose = () => {
+    setIsModalOpen(false);
+    navigate(LOGIN_PATH())
+  };
 
   const getBoardData = async () => {
     if (params.boardNum) {
@@ -67,13 +75,15 @@ export default function BoardUpdate() {
   useEffect(() => {
     if (userInfo) {
       getBoardData()
+    } else {
+      setIsModalOpen(true)
     }
   }, [])
 
   return (
     <div>
       {userInfo ? 
-        <BoardWriteCom 
+        (<BoardWriteCom 
           comType="u"
           title={title}
           content={content}
@@ -81,7 +91,9 @@ export default function BoardUpdate() {
           onChangeTitle={onChangeTitle} 
           onChangeContent={onChangeContent}
           handleSubmit={handleSubmit}
-        /> : ""
+        />) : (
+          isModalOpen && <Modal modalClose={modalClose} message="로그인 해주세요" />
+        )
       }
     </div>
   )
