@@ -2,16 +2,17 @@ import { CommentListType } from "types/interface";
 import styles from "styles/boardDetail.module.css";
 import { useState } from "react";
 import CommentForm from "./CommentForm";
-import { getComments, deleteComment, modifyComment } from "api/board";
+import { getCommentsApi, deleteCommentApi, modifyCommentApi } from "api/board";
 
 interface CommentListProps {
     comment: CommentListType;
     openFormId: number | null;
     setOpenFormId: (boardNum: number | null) => void;
     setComments: React.Dispatch<React.SetStateAction<CommentListType[]>>;
+    onSubmitSuccess: () => void;
 }
 
-export default function CommentItem({ comment, openFormId, setOpenFormId, setComments }: CommentListProps) {
+export default function CommentItem({ comment, openFormId, setOpenFormId, setComments, onSubmitSuccess }: CommentListProps) {
 
     const isOpen = openFormId === comment.commentNum;
 
@@ -24,7 +25,7 @@ export default function CommentItem({ comment, openFormId, setOpenFormId, setCom
         if (!isConfirmed) return;
 
         try {
-            await deleteComment(boardNum, commentNum);
+            await deleteCommentApi(boardNum, commentNum);
             setComments(prevComments =>
                 prevComments.filter(comment => comment.commentNum !== commentNum)
             );
@@ -41,6 +42,9 @@ export default function CommentItem({ comment, openFormId, setOpenFormId, setCom
     const cancleEdit = () => setIsEditing(false);
 
 
+    
+
+
     return (
         <>
             <div style={{ marginLeft: comment.parentNum == null ? "0px" : "80px" }}
@@ -52,8 +56,8 @@ export default function CommentItem({ comment, openFormId, setOpenFormId, setCom
                             boardNum={comment.boardNum}
                             commentNum={comment.commentNum}
                             isEdit={true}
-                            initialContent={comment.content}
-                            onSubmitSuccess={() => setIsEditing(false)}
+                            defaultContent={comment.content}
+                            onSubmitSuccess={onSubmitSuccess} 
                             onCancel={cancleEdit}
                         />
                     </div>

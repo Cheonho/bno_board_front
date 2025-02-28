@@ -1,20 +1,20 @@
 import { useState } from "react";
 import styles from "styles/boardDetail.module.css";
-import {modifyComment} from "api/board";
-    
+import { modifyCommentApi } from "api/board";
+
 interface CommentFormProps {
-    boardNum: number;
+    boardNum: number|string;
     commentNum: number;
     isEdit?: boolean;
-    initialContent?: string;
+    defaultContent?: string;
     onSubmitSuccess: () => void;
     onCancel?: () => void;
 }
 
-export default function CommentForm({boardNum, commentNum, isEdit = false, initialContent = "", onSubmitSuccess, onCancel }: CommentFormProps) {
-    const [content, setContent] = useState(initialContent);
+export default function CommentForm({ boardNum, commentNum, isEdit = false, defaultContent = "", onSubmitSuccess, onCancel }: CommentFormProps) {
+    const [content, setContent] = useState(defaultContent);
 
-    const handleChange = (event:React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setContent(event.target.value);
     };
 
@@ -26,11 +26,12 @@ export default function CommentForm({boardNum, commentNum, isEdit = false, initi
 
         try {
             if (isEdit) {
-                await modifyComment(boardNum, commentNum, content);
+                await modifyCommentApi(boardNum, commentNum, content);
                 alert("댓글이 수정되었습니다!");
             } else {
+                //parentNum이 null이면 댓글, 아니면 대댓글, 그냥 어차피 같은 댃글..
                 //await addComment(boardNum, parentNum, content);
-               // alert("댓글이 등록되었습니다!");
+                //alert("댓글이 등록되었습니다!");
             }
             setContent("");
             onSubmitSuccess();
@@ -50,12 +51,12 @@ export default function CommentForm({boardNum, commentNum, isEdit = false, initi
             />
             <div className={styles.CommentButtonBox}>
                 {isEdit ? (
-                     <div className={styles.CommentEditBox}>
-                     <button className={styles.CommentEditBtn} onClick={handleSubmit}>댓글 수정</button>
-                     <button className={styles.CommentEditBtn} onClick={onCancel}>취소</button>
-                 </div>
+                    <div className={styles.CommentEditBox}>
+                        <button className={styles.CommentEditBtn} onClick={handleSubmit}>댓글 수정</button>
+                        <button className={styles.CommentEditBtn} onClick={onCancel}>취소</button>
+                    </div>
                 ) : (
-                    <button className={styles.CommentEditBtn} onClick={handleSubmit}>댓글 등록</button>
+                        <button className={styles.CommentSubmitBtn} onClick={handleSubmit}>댓글 등록</button>
                 )}
             </div>
         </>

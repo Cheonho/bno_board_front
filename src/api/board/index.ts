@@ -21,29 +21,26 @@ export async function postWriteBoardApi(board: BoardWriteType) {
   return res;
 }
 
-export const getBoard = async (boardNum:number | string): Promise<BoardListType> => {
+export const getBoardApi = async (boardNum:number | string): Promise<BoardListType> => {
   console.log('요청 URL:', `/board/${boardNum}`);
   const response = await authInstance.get(`/board/${boardNum}`);
   return response.data;
 };
 
-export const getComments = async (boardNum:number | string): Promise<GetCommentListResponse> => {
+export const getCommentsApi = async (boardNum:number | string): Promise<GetCommentListResponse> => {
   const response = await authInstance.get<GetCommentListResponse>(`/board/${boardNum}/comment`);
   return response.data;
 };
 
 
-export const deleteBoard = async (boardNum: number | string): Promise<void> => {
-  const isConfirmed = window.confirm("정말로 삭제하시겠습니까?");
-  if (!isConfirmed) return;
+export const deleteBoardApi = async (boardNum: number | string): Promise<void> => {
   await authInstance.delete(`/board/${boardNum}`);
-  alert("게시글이 성공적으로 삭제되었습니다!");
 };
 
-export const deleteComment = async (boardNum: number, commentNum: number): Promise<void> => {
+export const deleteCommentApi = async (boardNum: number, commentNum: number): Promise<void> => {
   await authInstance.delete(`/board/${boardNum}/comment/${commentNum}`);
 };
 
- export const modifyComment = async (boardNum: number, commentNum: number, content: string): Promise<void> => {
-     await authInstance.patch(`/board/${boardNum}/comment/${commentNum}`, content);
+ export const modifyCommentApi = async (boardNum:number | string, commentNum: number, content: string): Promise<void> => {
+     await authInstance.patch(`/board/${boardNum}/comment/${commentNum}`, { content });
  };
