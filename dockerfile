@@ -20,3 +20,5 @@ ENTRYPOINT ["nginx", "-g", "daemon off;"]
 # docker container 실행 확인
 # docker ps
 
+# docker container 실행
+# docker start react-nginx
