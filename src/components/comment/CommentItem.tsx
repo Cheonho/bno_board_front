@@ -2,49 +2,93 @@ import { CommentListType } from "types/interface";
 import styles from "styles/boardDetail.module.css";
 import { useState } from "react";
 import CommentForm from "./CommentForm";
-
+import { getComments, deleteComment, modifyComment } from "api/board";
 
 interface CommentListProps {
     comment: CommentListType;
-    id?: number;
+    openFormId: number | null;
+    setOpenFormId: (boardNum: number | null) => void;
+    setComments: React.Dispatch<React.SetStateAction<CommentListType[]>>;
 }
 
-export default function CommentItem({ comment }: CommentListProps) {
+export default function CommentItem({ comment, openFormId, setOpenFormId, setComments }: CommentListProps) {
+
+    const isOpen = openFormId === comment.commentNum;
+
+    const ReplyFormOpen = () => {
+        setOpenFormId(isOpen ? null : comment.commentNum);
+    };
+
+    const onDeleteComment = async (boardNum: number, commentNum: number) => {
+        const isConfirmed = window.confirm("정말로 삭제하시겠습니까?");
+        if (!isConfirmed) return;
+
+        try {
+            await deleteComment(boardNum, commentNum);
+            setComments(prevComments =>
+                prevComments.filter(comment => comment.commentNum !== commentNum)
+            );
+
+            alert("댓글이 성공적으로 삭제되었습니다!");
+        } catch (error) {
+            console.error("댓글 삭제 중 오류 발생:", error);
+            alert("댓글 삭제에 실패했습니다. 다시 시도해주세요.");
+        }
+    };
+
+    const [isEditing, setIsEditing] = useState(false);
+    const handleEdit = () => setIsEditing(true);
+    const cancleEdit = () => setIsEditing(false);
 
 
-    const [openform, setOpenform] = useState(false);
+    return (
+        <>
+            <div style={{ marginLeft: comment.parentNum == null ? "0px" : "80px" }}
+                className={styles.comment}>
 
-    const onClick = () => 
-        setOpenform((prev) => !prev);
- 
+                {isEditing ? (
+                    <div className={styles.CommentEditContainer}>
+                        <CommentForm
+                            boardNum={comment.boardNum}
+                            commentNum={comment.commentNum}
+                            isEdit={true}
+                            initialContent={comment.content}
+                            onSubmitSuccess={() => setIsEditing(false)}
+                            onCancel={cancleEdit}
+                        />
+                    </div>
+                ) : (
+                    <>
+                        <div className={styles.comment1}>
+                            {comment.parentNum == null ? "" : <span>↳ &ensp;</span>}
+                            {comment.content}
+                            <div className={styles.comment2}>
+                                <button className={styles.btn} onClick={handleEdit}>✏️</button>
+                                <button className={styles.btn} onClick={() => onDeleteComment(comment.boardNum, comment.commentNum)}>❌</button>
+                            </div>
+                        </div>
 
-
-    return (<>
-        <div
-            style={{ marginLeft: comment.commentLevel > 0 ? "80px" : "0px" }}
-            className={styles.comment}
-        >
-            <div className={styles.comment1}>
-            {comment.commentLevel > 0 ? <span>↳ &ensp;</span>: ""}
-                {comment.content}
-                <div className={styles.comment2}>
-                    <button className={styles.btn}>✏️</button>
-                    <button className={styles.btn}>❌</button>
-                </div>
+                        <div className={styles.comment3}>
+                            [{comment.writerEmail}]
+                            <div className={styles.comment4}>{new Date(comment.createAt).toLocaleString()}</div>
+                            <div className={styles.comment4}>
+                            <button className={styles.btn} onClick={ReplyFormOpen}>{isOpen ? "닫기" : "답글달기"}</button>
+                        </div>
+                        </div>
+                    </>
+                )}
             </div>
-            <div className={styles.comment3}>
-                [{comment.writer}]
-                <div className={styles.comment4}>
-                    {new Date(comment.createAt).toLocaleString()}
-                </div>
-                <div className={styles.comment4}>
-                    <button className={styles.btn} onClick={onClick}>{openform ? "닫기" : "답글달기"}</button>
-                </div>
-            </div>
-        </div>
-        {openform? <CommentForm />: null}
 
-    </>
+            {isOpen && (
+                <CommentForm
+                    boardNum={comment.boardNum}
+                    commentNum={comment.commentNum}
+                    onSubmitSuccess={() => setOpenFormId(null)}
+                />
+            )}
+        </>
     );
+   
+
 
 }

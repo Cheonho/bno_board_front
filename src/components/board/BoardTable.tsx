@@ -87,7 +87,7 @@ export default function BoardTable({ title, tableHeader, boardList, category, on
                     <td>
                       <Button text={item.title} classNames='non-btn' onClick={(event) => handleDetailPath(event, item.boardNum)} />
                     </td>
-                    <td>{item.writerNickname}</td>
+                    <td>{item.writerEmail}</td>
                     <td>{item.createAtFormat}</td>
                     <td>{item.viewCount}</td>
                     <td>

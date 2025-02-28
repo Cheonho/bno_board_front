@@ -13,6 +13,7 @@ export interface BoardListType {
     status: boolean | true;
 };
 
+
 export interface BoardWriteType {
     title: string;
     content: string;

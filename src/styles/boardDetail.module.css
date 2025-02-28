@@ -26,7 +26,7 @@
     justify-content: space-between;
 }
 
-.title {
+:where(.title) {
     font-size: 28px;
     font-family: 'NanumHumanTTFBold', sans-serif;
     color: #222;
@@ -52,7 +52,7 @@
     border-bottom: 1px solid #eee;
 }
 
-.label {
+:where(.label) {
     font-weight: bold;
     color: #222;
     flex: 1;
@@ -79,16 +79,19 @@
 }
 
 .btn_box{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 95%;
     margin-left: auto;
     padding: 20px;
-    font-size: 17px;
-    color: #555;
+
 }
 
 .btn{
     border: none;
     background: #ffffff;
-    font-size: 15px;
+    font-size: 17px;
     color: #555;
     padding: 5px;
 }
@@ -154,14 +157,60 @@
     transition: all 0.3s ease;
 }
 
-.formBtn:hover {
+.formBtn,.boardlistBtn,.CommentEditBtn:hover {
     background-color: #e0e0e0; 
     border-color: #c4c4c4;
 }
-
-
 
 .commentForm{
     margin-top: 30px;
 }
 
+.boardlistBtn{
+    margin-right: auto;
+    padding: 15px 25px;
+    border: none;
+}
+
+.toboardlist{
+    font-size: 22px;
+    color: #555;
+    display: flex;
+    gap: 10px;
+}
+
+.CommentEditContainer {
+    display: flex;
+    align-items: flex-start; 
+  }
+  
+  .CommentEditInput {
+    width: 86%;
+    height: 80px;
+    font-size: 20px;
+
+  }
+  
+  .CommentEditBox {
+    margin-left: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  
+  .CommentEditBtn {
+    width: 100px;
+    height: 20px;
+    width: 100px;
+    height: 40px;
+    background-color: #f0f0f0; 
+    border: 1px solid #d9d9d9; 
+    border-radius: 8px; 
+    color: #555; 
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  

@@ -6,7 +6,7 @@ export default interface CommentList {
     parentNum: number | null;
     writer: string;
     boardNum: string | number;
+    writerEmail: string;
     createAt: Date;
     updateAt: Date | null;
-    status: boolean | true;
 }
