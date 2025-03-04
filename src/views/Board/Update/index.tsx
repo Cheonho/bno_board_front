@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import './style.css'
 import BoardWriteCom from 'components/board/BoardWrite'
 import { BoardListType } from 'types/interface';
@@ -36,7 +36,7 @@ export default function BoardUpdate() {
     navigate(LOGIN_PATH())
   };
 
-  const getBoardData = async () => {
+  const getBoardData = useCallback( async () => {
     if (params.boardNum) {
       const res = await getDetailBoardApi(params.boardNum)
       const boardData = res.data.boardListView
@@ -46,7 +46,7 @@ export default function BoardUpdate() {
       setWriter(boardData.writerNickname)
       setWriterEmail(boardData.writerEmail)
     }
-  }
+  }, [params.boardNum])
 
   const onChangeTitle = (e: any) => {
     setTitle(e.target.value)
@@ -79,7 +79,7 @@ export default function BoardUpdate() {
     } else {
       setIsModalOpen(true)
     }
-  }, [])
+  }, [getBoardData, userInfo])
 
   return (
     <div>
