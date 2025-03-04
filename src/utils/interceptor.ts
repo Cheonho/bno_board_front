@@ -1,4 +1,4 @@
-import axios, { Axios, AxiosError } from "axios";
+import axios, { Axios, AxiosError, Method } from "axios";
 // import { getSession } from "next-auth/react";
 
 axios.defaults.baseURL = process.env.REACT_APP_SERVER_URL;
@@ -26,7 +26,6 @@ export const authInstance = axios.create({
 //   }
 // );
 
-// type 선언
 authInstance.interceptors.response.use(
   (response) => {
     const etcObj: any = {}
@@ -37,7 +36,7 @@ authInstance.interceptors.response.use(
     if (response.headers['x-last-page-number']) { etcObj.lastPageNumber = response.headers['x-last-page-number'] }
     if (response.headers['x-first-page-number']) { etcObj.firstPageNumber = response.headers['x-first-page-number'] }
     if (response.headers['x-current-section']) { etcObj.currentSection = response.headers['x-current-section'] }
-    return {...response, data: {...response.data, etcObj}};
+    return {...response, data: {...response.data, pageData: etcObj}};
   },
   async (error: AxiosError) => {
     if (error.response) {
@@ -58,3 +57,28 @@ authInstance.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+export const useApi = async <T>(
+  apiUrl: string,
+  opts: {
+    method: Method;
+    data?: { [key: string]: any } | any;
+    params?: any;
+    headers?: any;
+  },
+  etc?: { isAuth?: boolean; responseType?: ResponseType }
+) => {
+  
+  const headers = opts.headers
+    ? { ...opts.headers }
+    : { 'Content-Type': 'application/json' }
+
+  return await authInstance<T>({
+    method: opts.method,
+    url: apiUrl,
+    headers: headers,
+    data: opts.data,
+    params: opts.params,
+    // responseType: etc?.responseType ? etc?.responseType : 'json',
+  })
+}

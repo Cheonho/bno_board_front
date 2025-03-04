@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import styles from "styles/boardDetail.module.css";
-import { BoardListType, CommentListType } from "types/interface";
+import { BoardType, CommentListType } from "types/interface";
 import BoardInfo from "components/board/BoardInfo";
 import { getBoard, getComments, deleteBoard } from "api/board";
 import CommentItem from "components/comment/CommentItem";
@@ -12,7 +12,7 @@ export default function BoardDetail() {
     const { boardNum } = useParams();
     const numericId = boardNum ? parseInt(boardNum, 10) : undefined; // 문자열 → 숫자로 변환
 
-    const [board, setBoard] = useState<BoardListType | null>(null);
+    const [board, setBoard] = useState<BoardType | null>(null);
     const [comments, setComments] = useState<CommentListType[]>([]);
 
     useEffect(() => {

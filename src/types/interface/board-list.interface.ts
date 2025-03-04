@@ -1,4 +1,4 @@
-export interface BoardListType {
+export interface BoardType {
     boardIdx?: number;
     boardNum: string | number;
     title: string;
@@ -12,6 +12,18 @@ export interface BoardListType {
     updateAtFormat: string | "";
     status: boolean | true;
 };
+
+export interface BoardListType {
+    boardList: BoardType[],
+    pageData: {
+        page: number,
+        totalPages: number,
+        currentSection: number,
+        firstPageNumber: number,
+        lastPageNumber: number,
+        totalElements: number
+    }
+}
 
 export interface BoardWriteType {
     title: string;

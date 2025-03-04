@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import 'styles/board-style.css';
-import { BoardListType } from 'types/interface';
+import { BoardType } from 'types/interface';
 import { BOARD_DETAIL_PATH, BOARD_PATH, BOARD_UPDATE_PATH, BOARD_WRITE_PATH } from 'constant';
 import Input from 'components/common/Input';
 import Button from 'components/common/Button';
@@ -10,7 +10,7 @@ import useUserStore from 'stores/useUserStore';
 interface Props {
   title: string;
   tableHeader: string[];
-  boardList: BoardListType[];
+  boardList: BoardType[];
   category: {value: number, name: string}[];
   onChangeSelect: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   selected: number;

@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import './style.css'
 import BoardWriteCom from 'components/board/BoardWrite'
-import { BoardListType } from 'types/interface';
+import { BoardType } from 'types/interface';
 import { putUpdateBoardApi, getDetailBoardApi } from 'api/board';
 import { useNavigate, useParams } from 'react-router-dom';
 import useUserStore from 'stores/useUserStore';
@@ -13,7 +13,7 @@ export default function BoardUpdate() {
   const [content, setContent] = useState("");
   const [writer, setWriter] = useState("");
   const [writerEmail, setWriterEmail] = useState("");
-  const [board, setBoard] = useState<BoardListType>({
+  const [board, setBoard] = useState<BoardType>({
     boardNum: "",
     title: "",
     content: "",
@@ -59,7 +59,7 @@ export default function BoardUpdate() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const payload: BoardListType = {
+      const payload: BoardType = {
         ...board,
         title: title,
         content: content

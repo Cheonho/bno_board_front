@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import './style.css'
 import { getBoardListApi, getSearchBoardListApi, patchViewCountApi} from 'api/board';
 import Pagination from 'components/Pagination';
-import { BoardListType } from 'types/interface';
+import { BoardListType, BoardType } from 'types/interface';
 import { customFormatDate } from 'utils/dateUtil';
 import BoardTable from 'components/board/BoardTable';
 import { BOARD_DETAIL_PATH, BOARD_PATH, BOARD_UPDATE_PATH, BOARD_WRITE_PATH } from 'constant';
@@ -25,7 +25,7 @@ export default function Main() {
 
   const [selected, setSelected] = useState(1);
   const [searchWord, setSearchWord] = useState("");
-  const [boardList, setBoardList] = useState<BoardListType[]>([]);
+  const [boardList, setBoardList] = useState<BoardType[]>([]);
 
   const pathList = [
     {name: 'write', value: `${BOARD_PATH()}/${BOARD_WRITE_PATH()}`},
@@ -66,9 +66,9 @@ export default function Main() {
     try {
       const res = await getBoardListApi(page-1)
       
-      if (res.data) {
-        const resData = res.data
-        const newBoardList = resData.boardList.map((item: BoardListType, index: number) => {
+      if (res) {
+        const resData = res
+        const newBoardList = resData.boardList.map((item: BoardType, index: number) => {
           const createAtFormat = customFormatDate(item.createAt);
           const boardIdx = index + 1 + ((page - 1) * pageNumberSize)
           if (item.updateAt) {
@@ -78,7 +78,7 @@ export default function Main() {
           return {...item, boardIdx: boardIdx, createAtFormat: createAtFormat}
         })
         setBoardList(newBoardList)
-        getPageData(res.data.etcObj);
+        getPageData(res.pageData);
       }
     } catch (err) {
       console.log(err)
@@ -89,7 +89,7 @@ export default function Main() {
     try{ // try 보다 if 사용하는게 좋아보임
       const res = await getSearchBoardListApi(selected, searchWord, page-1)
       const resData = res.data
-      const newBoardList = resData.boardSearchList.map((item: BoardListType, index: number) => {
+      const newBoardList = resData.boardSearchList.map((item: BoardType, index: number) => {
         const createAtFormat = customFormatDate(item.createAt);
         const boardIdx = index + 1 + ((currentSection - 1) * pageNumberSize)
         if (item.updateAt) {

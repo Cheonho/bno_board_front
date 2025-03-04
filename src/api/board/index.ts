@@ -1,13 +1,25 @@
-import { authInstance } from "utils/interceptor";
-import { BoardListType, CommentListType, BoardWriteType } from "types/interface";
+import { authInstance, useApi } from "utils/interceptor";
+import { BoardListType, CommentListType, BoardWriteType, BoardType } from "types/interface";
 
-export async function getBoardListApi(page: number) {
+export async function getBoardListApi(page: number): Promise<BoardListType> {
   const res = await authInstance.get(`/board/board-list`, {
     params: {page}
   });
+  return res.data;
+}
+
+export async function useGetBoardListApi(page:number) {
+  const res = await useApi<BoardListType>(
+    `/board/board-list`,
+    {
+      method: `GET`,
+      params: {page}
+    }
+  )
   return res;
 }
 
+// function getSearchBoardListApi<T> 이런식으로 명시해 줘야함
 export async function getSearchBoardListApi(category: number, searchWord: string, page: number) {
   const res = await authInstance.get(`/board/search-list/${category}/${searchWord}`, {
     params: {page}
@@ -37,7 +49,7 @@ export async function getDetailBoardApi(boardNum: number | string) {
   return res;
 }
 
-export const getBoard = async (id: number): Promise<BoardListType> => {
+export const getBoard = async (id: number): Promise<BoardType> => {
   const response = await authInstance.get(`/${id}`);
   return response.data;
 };

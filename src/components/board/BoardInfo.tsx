@@ -1,8 +1,8 @@
 import styles from "styles/boardDetail.module.css";
-import {BoardListType} from "types/interface";
+import {BoardType} from "types/interface";
 
 interface BoardInfoProps {
-    board: BoardListType;
+    board: BoardType;
     id?: number;
     deleteBoard: () => void;
 }
