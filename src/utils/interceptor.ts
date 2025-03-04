@@ -39,25 +39,30 @@ authInstance.interceptors.response.use(
     return {...response, data: {...response.data, pageData: etcObj}};
   },
   async (error: AxiosError) => {
-    if (error.response) {
+    let returnErrorMessage;
+
+    if (error.response?.status !== 200) {
       const errorMessage = {
         status: error.response?.status,
         message: error.response?.data
       }
   
-      console.log(`[Api] : ${errorMessage} 오류 발생`)
+      console.log(`[Api] : status: ${errorMessage.status} 오류 발생`)
   
       if (errorMessage.status === 401) {
         window.location.href = "/login";
       }
+      returnErrorMessage = errorMessage
     } else {
       console.log(`[Error] : ${error}`)
+      returnErrorMessage = error
     }
 
-    return Promise.reject(error);
+    return Promise.reject(returnErrorMessage);
   }
 );
 
+// 만들기만 하고 사용 X
 export const useApi = async <T>(
   apiUrl: string,
   opts: {
