@@ -26,9 +26,18 @@ export const authInstance = axios.create({
 //   }
 // );
 
+// type 선언
 authInstance.interceptors.response.use(
   (response) => {
-    return response;
+    const etcObj: any = {}
+    if (response.headers['x-total-elements']) { etcObj.totalElements = response.headers['x-total-elements'] }
+    if (response.headers['x-total-page']) { etcObj.totalPage = response.headers['x-total-page'] }
+    if (response.headers['x-page-size']) { etcObj.pageSize = response.headers['x-page-size'] }
+    if (response.headers['x-page-number']) { etcObj.pageNumber = response.headers['x-page-number'] }
+    if (response.headers['x-last-page-number']) { etcObj.lastPageNumber = response.headers['x-last-page-number'] }
+    if (response.headers['x-first-page-number']) { etcObj.firstPageNumber = response.headers['x-first-page-number'] }
+    if (response.headers['x-current-section']) { etcObj.currentSection = response.headers['x-current-section'] }
+    return {...response, data: {...response.data, etcObj}};
   },
   async (error) => {
     const originalRequest = error.config;

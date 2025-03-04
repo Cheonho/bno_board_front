@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import './style.css'
 import { getBoardListApi, getSearchBoardListApi, patchViewCountApi} from 'api/board';
 import Pagination from 'components/Pagination';
@@ -15,13 +15,13 @@ export default function Main() {
     {value:4, name:"내용"},
   ]
   const tableHeader = ['번호', '제목', '작성자', '작성일', '조회수', '수정']
-  const [page, setPage] = useState(1); // 페이지 번호
-  const [totalPages, setTotalPages] = useState(0); // 전체 페이지 수
-  const [totalElements, setTotalElements] = useState(0); // 전체 데이터 수
-  const [currentSection, setCurrentSection] = useState(1);
-  const [firstPageNumber, setFirstPageNumber] = useState(1);
-  const [lastPageNumber, setLastPageNumber] = useState(1);
-  const [pageNumberSize, setPageNumberSize] = useState(5);
+  const [page, setPage] = useState<number>(1); // 페이지 번호
+  const [totalPages, setTotalPages] = useState<number>(0); // 전체 페이지 수
+  const [totalElements, setTotalElements] = useState<number>(0); // 전체 데이터 수
+  const [currentSection, setCurrentSection] = useState<number>(1);
+  const [firstPageNumber, setFirstPageNumber] = useState<number>(1);
+  const [lastPageNumber, setLastPageNumber] = useState<number>(1);
+  const [pageNumberSize, setPageNumberSize] = useState<number>(5);
 
   const [selected, setSelected] = useState(1);
   const [searchWord, setSearchWord] = useState("");
@@ -53,16 +53,16 @@ export default function Main() {
   }
 
   const getPageData = (resData: any) => {
-    setPage(resData.pageNumber + 1)
-    setTotalPages(resData.totalPage)
-    setTotalElements(resData.totalElements)
-    setCurrentSection(resData.currentSection)
-    setFirstPageNumber(resData.firstPageNumber)
-    setLastPageNumber(resData.lastPageNumber)
-    setPageNumberSize(resData.pageNumberSize ? resData.pageNumberSize : 5)
+    setPage(Number(resData.pageNumber) + 1)
+    setTotalPages(Number(resData.totalPage))
+    setTotalElements(Number(resData.totalElements))
+    setCurrentSection(Number(resData.currentSection))
+    setFirstPageNumber(Number(resData.firstPageNumber))
+    setLastPageNumber(Number(resData.lastPageNumber))
+    setPageNumberSize(resData.pageNumberSize ? Number(resData.pageNumberSize) : 5)
   }
 
-  const getBoardList = async () => {
+  const getBoardList = useCallback(async () => {
     try {
       const res = await getBoardListApi(page-1)
       
@@ -78,15 +78,15 @@ export default function Main() {
           return {...item, boardIdx: boardIdx, createAtFormat: createAtFormat}
         })
         setBoardList(newBoardList)
-        getPageData(resData);
+        getPageData(res.data.etcObj);
       }
     } catch (err) {
       console.log(err)
     }
-  }
+  }, [page, pageNumberSize])
 
-  const getSearchBoardList = async () => {
-    try{
+  const getSearchBoardList = useCallback( async() => {
+    try{ // try 보다 if 사용하는게 좋아보임
       const res = await getSearchBoardListApi(selected, searchWord, page-1)
       const resData = res.data
       const newBoardList = resData.boardSearchList.map((item: BoardListType, index: number) => {
@@ -104,7 +104,7 @@ export default function Main() {
     } catch (err) {
       console.log(err)
     }
-  }
+  }, [currentSection, page, pageNumberSize, searchWord, selected])
 
   useEffect(() => { 
     if (searchWord && selected) {
@@ -112,7 +112,7 @@ export default function Main() {
     } else {
       getBoardList();
     }
-  },[page, searchWord, selected])
+  },[page, searchWord, selected, getSearchBoardList, getBoardList]) // getSearchBoardList, getBoardList 이런식으로 넣어 주던지 usecall로 선언
 
   return (
     <div>
