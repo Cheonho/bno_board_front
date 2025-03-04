@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { Axios, AxiosError } from "axios";
 // import { getSession } from "next-auth/react";
 
 axios.defaults.baseURL = process.env.REACT_APP_SERVER_URL;
@@ -39,15 +39,22 @@ authInstance.interceptors.response.use(
     if (response.headers['x-current-section']) { etcObj.currentSection = response.headers['x-current-section'] }
     return {...response, data: {...response.data, etcObj}};
   },
-  async (error) => {
-    const originalRequest = error.config;
-    if (error.response.status === 401 && !originalRequest._retry) {
-      window.location.href = "/login";
-    } else if (error.response.status === 404) {
-      console.log("데이터가 없습니다. interceptor")
-    } else if (error.response.status === 500) {
-      console.log("")
+  async (error: AxiosError) => {
+    if (error.response) {
+      const errorMessage = {
+        status: error.response?.status,
+        message: error.response?.data
+      }
+  
+      console.log(`[Api] : ${errorMessage} 오류 발생`)
+  
+      if (errorMessage.status === 401) {
+        window.location.href = "/login";
+      }
+    } else {
+      console.log(`[Error] : ${error}`)
     }
+
     return Promise.reject(error);
   }
 );
