@@ -8,8 +8,8 @@ import { LOGIN_PATH, MAIN_PATH, FIND_ID_PW_PATH } from 'constant';
 
 export default function Header() {
   const navigate = useNavigate();
-  const clearUser = useUserStore((state) => state.clearUser);
-  const userState = useUserStore((state) => state.user);
+  const {clearUser, user: userState} = useUserStore();
+  // const userState = useUserStore((state) => state.user);
   const location = useLocation().pathname;
   const exceptionPath = [LOGIN_PATH(), FIND_ID_PW_PATH()]
   const buttonCheck = exceptionPath.includes(location);
