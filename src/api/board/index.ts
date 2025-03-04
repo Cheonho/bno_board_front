@@ -8,7 +8,7 @@ export async function getBoardListApi(page: number): Promise<BoardListType> {
   return res.data;
 }
 
-export async function useGetBoardListApi(page:number) {
+export async function useGetBoardListApi(page:number): Promise<BoardListType> {
   const res = await useApi<BoardListType>(
     `/board/board-list`,
     {
@@ -16,7 +16,7 @@ export async function useGetBoardListApi(page:number) {
       params: {page}
     }
   )
-  return res;
+  return res.data;
 }
 
 // function getSearchBoardListApi<T> 이런식으로 명시해 줘야함
