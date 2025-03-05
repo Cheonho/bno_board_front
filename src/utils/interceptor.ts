@@ -29,13 +29,13 @@ export const authInstance = axios.create({
 authInstance.interceptors.response.use(
   (response) => {
     const etcObj: any = {}
-    if (response.headers['x-total-elements']) { etcObj.totalElements = response.headers['x-total-elements'] }
-    if (response.headers['x-total-page']) { etcObj.totalPage = response.headers['x-total-page'] }
-    if (response.headers['x-page-size']) { etcObj.pageSize = response.headers['x-page-size'] }
-    if (response.headers['x-page-number']) { etcObj.pageNumber = response.headers['x-page-number'] }
-    if (response.headers['x-last-page-number']) { etcObj.lastPageNumber = response.headers['x-last-page-number'] }
-    if (response.headers['x-first-page-number']) { etcObj.firstPageNumber = response.headers['x-first-page-number'] }
-    if (response.headers['x-current-section']) { etcObj.currentSection = response.headers['x-current-section'] }
+    if (response.headers['x-total-elements']) { etcObj.totalElements = Number(response.headers['x-total-elements']) }
+    if (response.headers['x-total-page']) { etcObj.totalPage = Number(response.headers['x-total-page']) }
+    if (response.headers['x-page-size']) { etcObj.pageSize = Number(response.headers['x-page-size']) }
+    if (response.headers['x-page-number']) { etcObj.pageNumber = Number(response.headers['x-page-number']) }
+    if (response.headers['x-last-page-number']) { etcObj.lastPageNumber = Number(response.headers['x-last-page-number']) }
+    if (response.headers['x-first-page-number']) { etcObj.firstPageNumber = Number(response.headers['x-first-page-number']) }
+    if (response.headers['x-current-section']) { etcObj.currentSection = Number(response.headers['x-current-section']) }
     return {...response, data: {...response.data, pageData: etcObj}};
   },
   async (error: AxiosError) => {
@@ -62,8 +62,7 @@ authInstance.interceptors.response.use(
   }
 );
 
-// 만들기만 하고 사용 X
-export const useApi = async <T>(
+const customApi = async <T>(
   apiUrl: string,
   opts: {
     method: Method;
@@ -87,3 +86,5 @@ export const useApi = async <T>(
     // responseType: etc?.responseType ? etc?.responseType : 'json',
   })
 }
+
+export default customApi;
