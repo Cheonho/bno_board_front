@@ -16,7 +16,7 @@ export interface BoardType {
 export interface BoardListType {
     boardList: BoardType[],
     pageData: {
-        page: number,
+        pageNumber: number,
         totalPages: number,
         currentSection: number,
         firstPageNumber: number,

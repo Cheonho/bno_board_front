@@ -1,11 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import './style.css'
-import { getBoardListApi, getSearchBoardListApi, patchViewCountApi} from 'api/board';
+import {patchViewCountApi} from 'api/board';
 import Pagination from 'components/Pagination';
 import { BoardListType, BoardType } from 'types/interface';
 import { customFormatDate } from 'utils/dateUtil';
 import BoardTable from 'components/board/BoardTable';
 import { BOARD_DETAIL_PATH, BOARD_PATH, BOARD_UPDATE_PATH, BOARD_WRITE_PATH } from 'constant';
+import { useGetBoardListApiQuery, useGetSearchBoardListApiQuery } from 'api/queries/board/boardQuery';
 
 export default function Main() {
   const category = [
@@ -15,9 +16,10 @@ export default function Main() {
     {value:4, name:"내용"},
   ]
   const tableHeader = ['번호', '제목', '작성자', '작성일', '조회수', '수정']
-  const [page, setPage] = useState<number>(1); // 페이지 번호
-  const [totalPages, setTotalPages] = useState<number>(0); // 전체 페이지 수
-  const [totalElements, setTotalElements] = useState<number>(0); // 전체 데이터 수
+  const [isPage, setIsPage] = useState<boolean>(true);
+  const [page, setPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(0);
+  const [totalElements, setTotalElements] = useState<number>(0);
   const [currentSection, setCurrentSection] = useState<number>(1);
   const [firstPageNumber, setFirstPageNumber] = useState<number>(1);
   const [lastPageNumber, setLastPageNumber] = useState<number>(1);
@@ -25,7 +27,7 @@ export default function Main() {
 
   const [selected, setSelected] = useState(1);
   const [searchWord, setSearchWord] = useState("");
-  const [boardList, setBoardList] = useState<BoardType[]>([]);
+  const [viewBoardList, setViewBoardList] = useState<BoardType[]>([]);
 
   const pathList = [
     {name: 'write', value: `${BOARD_PATH()}/${BOARD_WRITE_PATH()}`},
@@ -33,6 +35,9 @@ export default function Main() {
     {name: 'update', value: (boardNum: number) => `${BOARD_PATH()}/${BOARD_UPDATE_PATH(boardNum)}`}
   ]
 
+  const {data : totalBoardList} = useGetBoardListApiQuery(page, searchWord)
+  const {data : searchBoardList} = useGetSearchBoardListApiQuery(selected, searchWord, page)
+  
   const handleSelect = (event: any) => {
     setSelected(event?.target.value)
     setPage(1)
@@ -52,8 +57,13 @@ export default function Main() {
     }
   }
 
-  const getPageData = (resData: any) => {
-    setPage(Number(resData.pageNumber) + 1)
+  const setPageData = (resData: any) => {
+    if (!resData || Object.keys(resData).length === 0) {
+      setIsPage(false)
+      return 
+    }
+    setIsPage(true)
+    setPage(Number(resData.pageNumber))
     setTotalPages(Number(resData.totalPage))
     setTotalElements(Number(resData.totalElements))
     setCurrentSection(Number(resData.currentSection))
@@ -62,49 +72,39 @@ export default function Main() {
     setPageNumberSize(resData.pageNumberSize ? Number(resData.pageNumberSize) : 5)
   }
 
-  const getBoardList = useCallback(async () => {
-    try {
-      const res = await getBoardListApi(page-1)
-      
-      if (res) {
-        const resData = res
-        const newBoardList = resData.boardList.map((item: BoardType, index: number) => {
-          const createAtFormat = customFormatDate(item.createAt);
-          const boardIdx = index + 1 + ((page - 1) * pageNumberSize)
-          if (item.updateAt) {
-            const updateAtFormat = customFormatDate(item.updateAt);
-            return {...item, boardIdx: boardIdx, createAtFormat: createAtFormat, updateAtFormat: updateAtFormat}
-          }
-          return {...item, boardIdx: boardIdx, createAtFormat: createAtFormat}
-        })
-        setBoardList(newBoardList)
-        getPageData(res.pageData);
+  const dataProcessing = useCallback((listData: BoardListType) => {
+    if (!listData || !listData.boardList || listData.boardList?.length === 0) return
+
+    const boardList = listData.boardList
+    const pageData = listData.pageData
+
+    const newBoardList = boardList.map((item, index: number) => {
+      const createAtFormat = customFormatDate(item.createAt);
+      const boardIdx = pageData.pageNumber ? index + 1 + ((pageData.pageNumber - 1) * pageNumberSize) : 0
+      if (item.updateAt) {
+        const updateAtFormat = customFormatDate(item.updateAt);
+        return {...item, boardIdx: boardIdx, createAtFormat: createAtFormat, updateAtFormat: updateAtFormat};
       }
-    } catch (err) {
-      console.log(err)
-    }
-  }, [page, pageNumberSize])
+      return {...item, boardIdx: boardIdx, createAtFormat: createAtFormat}
+    })
 
-  const getSearchBoardList = useCallback( async() => {
-    try{ // try 보다 if 사용하는게 좋아보임
-      const res = await getSearchBoardListApi(selected, searchWord, page-1)
-      const resData = res.data
-      const newBoardList = resData.boardSearchList.map((item: BoardType, index: number) => {
-        const createAtFormat = customFormatDate(item.createAt);
-        const boardIdx = index + 1 + ((currentSection - 1) * pageNumberSize)
-        if (item.updateAt) {
-          const updateAtFormat = customFormatDate(item.updateAt);
-          return {...item, boardIdx: boardIdx, createAtFormat: createAtFormat, updateAtFormat: updateAtFormat}
-        }
-        return {...item, boardIdx: boardIdx, createAtFormat: createAtFormat}
-      })
-      setBoardList(newBoardList)
+    return newBoardList;
+  }, [pageNumberSize])
 
-      if (resData) getPageData(resData);
-    } catch (err) {
-      console.log(err)
-    }
-  }, [currentSection, page, pageNumberSize, searchWord, selected])
+  const getBoardList = useCallback(() => {
+    if (!totalBoardList) return 
+    const newBoardList = dataProcessing(totalBoardList)
+    setViewBoardList(newBoardList || [])
+    setPageData(totalBoardList.pageData)
+  }, [dataProcessing, totalBoardList])
+
+  const getSearchBoardList = useCallback(() => {
+    console.log(searchBoardList)
+    if (!searchBoardList) return 
+    const newBoardList = dataProcessing(searchBoardList)
+    setViewBoardList(newBoardList || [])
+    setPageData(searchBoardList.pageData)
+  }, [dataProcessing, searchBoardList])
 
   useEffect(() => { 
     if (searchWord && selected) {
@@ -112,14 +112,14 @@ export default function Main() {
     } else {
       getBoardList();
     }
-  },[page, searchWord, selected, getSearchBoardList, getBoardList]) // getSearchBoardList, getBoardList 이런식으로 넣어 주던지 usecall로 선언
+  },[page, searchWord, selected, getSearchBoardList, getBoardList])
 
   return (
     <div>
       <BoardTable 
         title={"게시판"}
         tableHeader={tableHeader}
-        boardList={boardList} 
+        boardList={viewBoardList} 
         category={category} 
         onChangeSelect={handleSelect} 
         selected={selected}
@@ -129,7 +129,7 @@ export default function Main() {
         handleSearch={handleSearchWord}
         handleViewCount={handleViewCount}
       />
-      {totalPages ? 
+      {isPage ? 
         <Pagination
           currentPage={page}
           currentSection={currentSection}

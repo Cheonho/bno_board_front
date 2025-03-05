@@ -1,15 +1,15 @@
-import { authInstance, useApi } from "utils/interceptor";
+import customApi, { authInstance } from "utils/interceptor";
 import { BoardListType, CommentListType, BoardWriteType, BoardType } from "types/interface";
 
-export async function getBoardListApi(page: number): Promise<BoardListType> {
-  const res = await authInstance.get(`/board/board-list`, {
-    params: {page}
-  });
-  return res.data;
-}
+// export async function getBoardListApi(page: number): Promise<BoardListType> {
+//   const res = await authInstance.get(`/board/board-list`, {
+//     params: {page}
+//   });
+//   return res.data;
+// }
 
-export async function useGetBoardListApi(page:number): Promise<BoardListType> {
-  const res = await useApi<BoardListType>(
+export async function getBoardListApi(page:number): Promise<BoardListType> {
+  const res = await customApi<BoardListType>(
     `/board/board-list`,
     {
       method: `GET`,
@@ -19,12 +19,22 @@ export async function useGetBoardListApi(page:number): Promise<BoardListType> {
   return res.data;
 }
 
-// function getSearchBoardListApi<T> 이런식으로 명시해 줘야함
-export async function getSearchBoardListApi(category: number, searchWord: string, page: number) {
-  const res = await authInstance.get(`/board/search-list/${category}/${searchWord}`, {
-    params: {page}
-  });
-  return res;
+// export async function getSearchBoardListApi(category: number, searchWord: string, page: number) {
+//   const res = await authInstance.get(`/board/search-list/${category}/${searchWord}`, {
+//     params: {page}
+//   });
+//   return res;
+// }
+
+export async function getSearchBoardListApi(category: number, searchWord: string, page: number): Promise<BoardListType> {
+  const res = await customApi<BoardListType>(
+    `/board/search-list/${category}/${searchWord}`,
+    {
+      method: 'GET',
+      params: {page}
+    }
+  )
+  return res.data;
 }
 
 export async function postWriteBoardApi(board: BoardWriteType) {

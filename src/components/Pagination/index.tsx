@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import React, { Dispatch, SetStateAction, useCallback, useEffect, useState } from 'react'
 import './style.css'
 
 interface Props {
@@ -31,18 +31,18 @@ export default function Pagination(props: Props) {
     setCurrentPage(currentSection * pageNumberSize + 1)
   }
 
-  const getViewPageList = () => {
+  const getViewPageList = useCallback(() => {
     const newViewPageList = Array.from(
       { length: lastPageNumber - firstPageNumber + 1 },
       (_, i) => i + firstPageNumber
     );
 
     setViewPageList(newViewPageList);
-  }
+  }, [firstPageNumber, lastPageNumber])
 
   useEffect(() => {
     getViewPageList()
-  }, [currentSection, totalPages])
+  }, [currentSection, totalPages, getViewPageList])
 
   return (
     <div>
