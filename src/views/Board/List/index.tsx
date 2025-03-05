@@ -1,12 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import './style.css'
-import {patchViewCountApi} from 'api/board';
 import Pagination from 'components/Pagination';
 import { BoardListType, BoardType } from 'types/interface';
 import { customFormatDate } from 'utils/dateUtil';
 import BoardTable from 'components/board/BoardTable';
 import { BOARD_DETAIL_PATH, BOARD_PATH, BOARD_UPDATE_PATH, BOARD_WRITE_PATH } from 'constant';
-import { useGetBoardListApiQuery, useGetSearchBoardListApiQuery } from 'api/queries/board/boardQuery';
+import { useGetBoardListApiQuery, useGetSearchBoardListApiQuery, usePatchViewCountApiQuery } from 'api/queries/board/boardQuery';
 
 export default function Main() {
   const category = [
@@ -35,9 +34,12 @@ export default function Main() {
     {name: 'update', value: (boardNum: number) => `${BOARD_PATH()}/${BOARD_UPDATE_PATH(boardNum)}`}
   ]
 
-  const {data : totalBoardList} = useGetBoardListApiQuery(page, searchWord)
+  const {data : totalBoardList, isLoading: boardLoading, error} = useGetBoardListApiQuery(page, searchWord)
   const {data : searchBoardList} = useGetSearchBoardListApiQuery(selected, searchWord, page)
-  
+  const viewCountApi = usePatchViewCountApiQuery()
+
+  const loading = boardLoading || error
+
   const handleSelect = (event: any) => {
     setSelected(event?.target.value)
     setPage(1)
@@ -50,8 +52,7 @@ export default function Main() {
 
   const handleViewCount = async (boardNum: number | string) => {
     try{
-      const res = await patchViewCountApi(boardNum)
-      console.log(res.status)
+      viewCountApi.mutate(boardNum)
     } catch (err) {
       console.log(err)
     }
@@ -94,12 +95,11 @@ export default function Main() {
   const getBoardList = useCallback(() => {
     if (!totalBoardList) return 
     const newBoardList = dataProcessing(totalBoardList)
-    setViewBoardList(newBoardList || [])
+    setViewBoardList((prev) => newBoardList || prev)
     setPageData(totalBoardList.pageData)
   }, [dataProcessing, totalBoardList])
 
   const getSearchBoardList = useCallback(() => {
-    console.log(searchBoardList)
     if (!searchBoardList) return 
     const newBoardList = dataProcessing(searchBoardList)
     setViewBoardList(newBoardList || [])
@@ -107,12 +107,14 @@ export default function Main() {
   }, [dataProcessing, searchBoardList])
 
   useEffect(() => { 
-    if (searchWord && selected) {
+    if (loading) {
+      setViewBoardList((prev) => prev)
+    } else if (searchWord && selected) {
       getSearchBoardList();
     } else {
       getBoardList();
     }
-  },[page, searchWord, selected, getSearchBoardList, getBoardList])
+  },[loading, page, searchWord, selected, getSearchBoardList, getBoardList])
 
   return (
     <div>

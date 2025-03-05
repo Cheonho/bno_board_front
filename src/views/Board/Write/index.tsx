@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import './style.css'
 import BoardWriteCom from 'components/board/BoardWrite'
 import { BoardWriteType } from 'types/interface';
-import { useNavigate } from 'react-router-dom';
 import useUserStore from 'stores/useUserStore';
 import { usePostWriteBoardListApiQuery } from 'api/queries/board/boardQuery';
 
@@ -11,7 +10,6 @@ export default function BoardWrite() {
   const [content, setContent] = useState("");
   const [writer, setWriter] = useState("");
   const [writerEmail, setWriterEmail] = useState("");
-  const navigate = useNavigate();
   const userInfo = useUserStore((state) => state.user)
 
   const {mutateAsync: postWriteBoard} = usePostWriteBoardListApiQuery();
@@ -32,12 +30,7 @@ export default function BoardWrite() {
       writerEmail: writerEmail,
     }
 
-    const res = await postWriteBoard(payload)
-    if (res.code === "SU") {
-      navigate("/");
-    } else {
-
-    }
+    postWriteBoard(payload)
   };
 
   useEffect(() => {

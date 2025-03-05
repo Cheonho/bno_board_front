@@ -1,6 +1,8 @@
-import { getBoardListApi, getSearchBoardListApi, postWriteBoardApi } from "api/board";
+import { getBoardListApi, getDetailBoardApi, getSearchBoardListApi, patchViewCountApi, postWriteBoardApi, putUpdateBoardApi } from "api/board";
 import { useMutation, useQuery, useQueryClient, UseQueryResult } from "react-query";
+import { useNavigate } from "react-router-dom";
 import { BoardListType, BoardWriteType } from "types/interface";
+import { DetailBoardType } from "types/interface/board-list.interface";
 
 export const useGetBoardListApiQuery = (
   param: number,
@@ -9,7 +11,10 @@ export const useGetBoardListApiQuery = (
   return useQuery<BoardListType>({
     queryKey: ['BoardList', param],
     queryFn: () => getBoardListApi(param),
-    enabled: !searchWord
+    enabled: !searchWord,
+    onError: (error) => {
+      console.log(`[BoardListApi - queryError] : `, error)
+    }
   });
 };
 
@@ -21,20 +26,67 @@ export const useGetSearchBoardListApiQuery = (
   return useQuery<BoardListType>({
     queryKey: ['SearchList', category, searchWord, param],
     queryFn: () => getSearchBoardListApi(category, searchWord, param),
-    enabled: !!searchWord
+    enabled: !!searchWord,
+    onError: (error) => {
+      console.log(`[SearchListApi - queryError] : `, error)
+    }
   })
 }
 
 export const usePostWriteBoardListApiQuery = () => {
   const queryClient = useQueryClient()
+  const navigate = useNavigate();
 
   return useMutation({
     mutationFn: (board: BoardWriteType) => postWriteBoardApi(board),
     onSuccess: () => {
       queryClient.invalidateQueries(["BoardList"]);
+      navigate('/');
     },
     onError: (error) => {
-      console.log(`[queryError] : `, error)
+      console.log(`[WriteBoardApi - queryError] : `, error)
+    }
+  })
+}
+
+export const usePatchViewCountApiQuery = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation(patchViewCountApi, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(["BoardList"]);
+    },
+    onError: (error) => {
+      console.log(`[ViewCountApi - queryError] : `, error)
+    }
+  })
+}
+
+export const usePutUpdateBoardApiQuery = () => {
+  const queryClient = useQueryClient();
+  
+  return useMutation({
+    mutationFn: (board:BoardWriteType) => putUpdateBoardApi(board),
+    onSuccess: () => {
+      console.log("update 성공")
+      queryClient.invalidateQueries(["BoardList"])
+      queryClient.removeQueries({ queryKey: "DetailBoard" });
+    },
+    onError: (error) => {
+      console.log(`[UpdateApi - queryError] : `, error)
+    }
+  })
+}
+
+export const useGetDetailBoardApiQuery = (
+  param:number | string
+): UseQueryResult<DetailBoardType> => {
+  return useQuery<DetailBoardType>({
+    queryKey: ['DetailBoard', param],
+    queryFn: () => getDetailBoardApi(param),
+    enabled: !!param,
+    onError: (error) => {
+      console.log(`[DetailApi - queryError] : `, error)
     }
   })
 }

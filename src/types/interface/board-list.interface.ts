@@ -1,3 +1,8 @@
+export interface ResType {
+    code: string;
+    message: string;
+}
+
 export interface BoardType {
     boardIdx?: number;
     boardNum: string | number;
@@ -13,7 +18,7 @@ export interface BoardType {
     status: boolean | true;
 };
 
-export interface BoardListType {
+export interface BoardListType extends ResType {
     boardList: BoardType[],
     pageData: {
         pageNumber: number,
@@ -23,6 +28,10 @@ export interface BoardListType {
         lastPageNumber: number,
         totalElements: number
     }
+}
+
+export interface DetailBoardType extends ResType {
+    detailBoard: BoardType,
 }
 
 export interface BoardWriteType {

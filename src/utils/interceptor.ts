@@ -48,7 +48,7 @@ authInstance.interceptors.response.use(
         message: error.response?.data
       }
   
-      console.log(`[Api] : status: ${errorMessage.status} 오류 발생`)
+      console.log(`[Api] - status: ${errorMessage.status} 오류 발생`)
   
       if (errorMessage.status === 401) {
         window.location.href = "/login";
@@ -66,7 +66,7 @@ authInstance.interceptors.response.use(
 const customApi = async <T>(
   apiUrl: string,
   method: Method,
-  opts: {
+  opts?: {
     data?: { [key: string]: any } | any;
     params?: any;
     headers?: any;
@@ -74,7 +74,7 @@ const customApi = async <T>(
   etc?: { isAuth?: boolean; responseType?: ResponseType }
 ) => {
   
-  const headers = opts.headers
+  const headers = opts?.headers
     ? { ...opts.headers }
     : { 'Content-Type': 'application/json' }
 
@@ -82,8 +82,8 @@ const customApi = async <T>(
     method: method,
     url: apiUrl,
     headers: headers,
-    data: opts.data,
-    params: opts.params,
+    data: opts?.data,
+    params: opts?.params,
     // responseType: etc?.responseType ? etc?.responseType : 'json',
   })
 }
