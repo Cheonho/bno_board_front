@@ -10,3 +10,9 @@ export default interface CommentList {
     createAt: Date;
     updateAt: Date | null;
 }
+
+export interface GetCommentListResponse {
+    code: string;
+    message: string;
+    commentList: CommentList[];
+}

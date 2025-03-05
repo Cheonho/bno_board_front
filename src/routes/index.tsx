@@ -5,8 +5,6 @@ import {boardRoutes} from "./BoardsRoutes"
 import {userRoutes} from "./UsersRoute"
 import { BOARD_LIST_PATH, BOARD_PATH, MAIN_PATH } from "constant"
 import Main from 'views/Main'
-import { getPathListApi } from "api/path"
-import { useEffect, useState } from "react"
 
 const RouterSetting = () => {
   // const [totalPathList, setTotalPathList] = useState<any[]>([])

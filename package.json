@@ -1,6 +1,7 @@
 {
   "name": "board-front",
   "version": "0.1.0",
+  "proxy": "http://localhost:8080",
   "private": true,
   "dependencies": {
     "@testing-library/dom": "^10.4.0",
@@ -15,10 +16,11 @@
     "date-fns": "^4.1.0",
     "http-proxy-middleware": "^3.0.3",
     "next-auth": "^4.24.11",
-    "react": "^19.0.0",
+    "react": "^18.3.1",
     "react-datepicker": "^8.0.0",
     "react-daum-postcode": "^3.2.0",
-    "react-dom": "^19.0.0",
+    "react-dom": "^18.3.1",
+    "react-query": "^3.39.3",
     "react-router-dom": "^7.1.5",
     "react-scripts": "^5.0.1",
     "recoil": "^0.7.7",

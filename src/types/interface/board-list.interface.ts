@@ -1,4 +1,9 @@
-export interface BoardListType {
+export interface ResType {
+    code: string;
+    message: string;
+}
+
+export interface BoardType {
     boardIdx?: number;
     boardNum: string | number;
     title: string;
@@ -13,6 +18,21 @@ export interface BoardListType {
     status: boolean | true;
 };
 
+export interface BoardListType extends ResType {
+    boardList: BoardType[],
+    pageData: {
+        pageNumber: number,
+        totalPages: number,
+        currentSection: number,
+        firstPageNumber: number,
+        lastPageNumber: number,
+        totalElements: number
+    }
+}
+
+export interface DetailBoardType extends ResType {
+    detailBoard: BoardType,
+}
 
 export interface BoardWriteType {
     title: string;

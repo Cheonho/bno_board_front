@@ -1,19 +1,19 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import './style.css'
 import BoardWriteCom from 'components/board/BoardWrite'
-import { BoardListType } from 'types/interface';
-import { putUpdateBoardApi, getDetailBoardApi } from 'api/board';
+import { BoardType } from 'types/interface';
 import { useNavigate, useParams } from 'react-router-dom';
 import useUserStore from 'stores/useUserStore';
 import Modal from 'components/common/Modal'
 import { LOGIN_PATH } from 'constant';
+import { useGetDetailBoardApiQuery, usePutUpdateBoardApiQuery } from 'api/queries/board/boardQuery';
 
 export default function BoardUpdate() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [writer, setWriter] = useState("");
   const [writerEmail, setWriterEmail] = useState("");
-  const [board, setBoard] = useState<BoardListType>({
+  const [board, setBoard] = useState<BoardType>({
     boardNum: "",
     title: "",
     content: "",
@@ -31,22 +31,24 @@ export default function BoardUpdate() {
   const userInfo = useUserStore((state) => state.user)
   const [isModalOpen, setIsModalOpen] = useState(false)
 
+  const {mutate: updateApi} = usePutUpdateBoardApiQuery();
+  const {data: detailBoard, isLoading} = useGetDetailBoardApiQuery(params.boardNum || 0);
+
   const modalClose = () => {
     setIsModalOpen(false);
     navigate(LOGIN_PATH())
   };
 
-  const getBoardData = async () => {
-    if (params.boardNum) {
-      const res = await getDetailBoardApi(params.boardNum)
-      const boardData = res.data.boardListView
-      setBoard(boardData)
-      setTitle(boardData.title)
-      setContent(boardData.content)
-      setWriter(boardData.writerNickname)
-      setWriterEmail(boardData.writerEmail)
+  const getBoardData = useCallback( async () => {
+    if (detailBoard) {
+      const newBoard = detailBoard.detailBoard
+      setBoard(newBoard)
+      setTitle(newBoard.title)
+      setContent(newBoard.content)
+      setWriter(newBoard.writerNickname)
+      setWriterEmail(newBoard.writerEmail)
     }
-  }
+  }, [detailBoard])
 
   const onChangeTitle = (e: any) => {
     setTitle(e.target.value)
@@ -59,14 +61,13 @@ export default function BoardUpdate() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const payload: BoardListType = {
+      const payload: BoardType = {
         ...board,
         title: title,
         content: content
       }
 
-      const res = await putUpdateBoardApi(payload)
-      console.log(res.status)
+      updateApi(payload)
     } catch (err) {
       console.log(err)
     }
@@ -79,7 +80,7 @@ export default function BoardUpdate() {
     } else {
       setIsModalOpen(true)
     }
-  }, [])
+  }, [getBoardData, userInfo])
 
   return (
     <div>

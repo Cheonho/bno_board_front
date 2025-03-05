@@ -1,24 +1,24 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import 'styles/board-style.css';
-import { BoardListType } from 'types/interface';
+import { BoardType } from 'types/interface';
 import { format } from 'date-fns'
 
 interface Props {
-  boardListType: BoardListType
+  BoardType: BoardType
 }
 
 // component: Board List 컴포넌트
-export default function BoardItem({ boardListType }: Props) {
+export default function BoardItem({ BoardType }: Props) {
 
   const formatDate = (date: Date) => {
     return format(date, "yyyy.MM.dd");
   }
 
   // properties
-  const { boardNum, title, content, writerEmail } = boardListType;
-  const { viewCount } = boardListType;
-  const { createAt, updateAt } = boardListType;
+  const { boardNum, title, content, writerNickname } = BoardType;
+  const { viewCount } = BoardType;
+  const { createAt, updateAt } = BoardType;
 
   const createAtForm = formatDate(createAt);
   const updateAtForm = updateAt ? formatDate(updateAt) : null;
