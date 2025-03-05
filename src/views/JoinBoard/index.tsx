@@ -1,19 +1,19 @@
-import React, { useState } from "react";
-import { join, checkUserId, checkUserName } from "../../api/JoinBoard";
-import { isValidPassword } from "../../utils/Join/validation";
-import { mergeAddress } from "../../utils/Join/address";
+import React, {useState} from "react";
+import {checkUserId, checkUserName, join} from "../../api/JoinBoard";
+import {emailPattern, isValidPassword} from "../../utils/Join/validation";
+import {mergeAddress} from "../../utils/Join/address";
 import JoinForm from "../../components/Join/joinForm";
-import { useNavigate } from "react-router-dom";
-import styles from "../../assets/Join.module.css"
-import {emailPattern} from "../../utils/Join/validation";
+import {useNavigate} from "react-router-dom";
+import styles from "../../styles/join.module.css"
+import {AxiosError} from "axios";
 
 const Join: React.FC = () => {
     const navigate = useNavigate();
 
     const [form, setForm] = useState({
-        userId: "",
-        userPw: "",
-        userName: "",
+        email: "",
+        password: "",
+        userNickname: "",
         address: "",
         detail: "",
         code: "",
@@ -40,13 +40,13 @@ const Join: React.FC = () => {
             const updatedForm = { ...prev, [name]: value };
 
             // 비밀번호가 변경될 때마다 유효성 검사
-            if (name === "userPw") {
-                handlePwCheck(updatedForm.userPw);
+            if (name === "password") {
+                handlePwCheck(updatedForm.password);
             } return updatedForm;
         });
 
-        if(name === "userId") {
-            if(!emailPattern(form.userId)) {
+        if(name === "email") {
+            if(!emailPattern(form.email)) {
                 setCheckMailMessage("이메일 형식이 올바르지 않습니다.")
                 setCheckMailMessageType("error") ;
             } else {
@@ -57,39 +57,45 @@ const Join: React.FC = () => {
 
     };
 
-    const handleIdCheck = async (field: "userId" ) => {
+    const handleIdCheck = async (field: "email") => {
+        try {
         const checkFn = checkUserId
-        const isAvailable = await checkFn(form[field]);
+        const response = await checkFn(form[field]);
 
-        if (isAvailable) {
-            setCheckIdMessage("사용 가능합니다.");
-            setCheckIdMessageType("success");
-        } else {
-            setCheckIdMessage("이미 사용 중입니다.");
-            setCheckIdMessageType("error");
+            if (response.status === 200) {
+                setCheckIdMessage(response.data.message);
+                setCheckIdMessageType("success");
         }
-    };
+      } catch (error : any) {
+                setCheckIdMessage(error.response.data.body.message);
+                setCheckIdMessageType("error");
 
-    const handleNameCheck = async (field : "userName") => {
+            }
+        }
+
+
+    const handleNameCheck = async (field : "userNickname") => {
+        try {
         const checkNameFn = checkUserName
-        const isAvailable = await checkNameFn(form[field]);
-        if (isAvailable) {
-            setCheckNameMessage("사용 가능합니다.");
+        const response = await checkNameFn(form[field]);
+        if (response.status === 200) {
+            setCheckNameMessage(response.data.message);
             setCheckNameMessageType("success");
-        } else {
-            setCheckNameMessage("이미 사용 중입니다.");
+        }
+    } catch (error : any) {
+            setCheckNameMessage(error.response.data.body.message);
             setCheckNameMessageType("error");
         }
     };
 
-const handlePwCheck = (userPw : string) => {
-    if (userPw.length < 8 || userPw.length > 16) {
+const handlePwCheck = (password : string) => {
+    if (password.length < 8 || password.length > 16) {
         setCheckPwMessage('비밀번호는 8자 이상 16자 이하로 입력해주세요.');
         setCheckPwMessageType("error");
         return;
     }
     // 정규식 검사
-    if (!isValidPassword(userPw)) {
+    if (!isValidPassword(password)) {
         setCheckPwMessage ('최소 하나의 문자, 숫자, 특수문자가 포함되어야 합니다.');
         setCheckPwMessageType("error");
     } else {
@@ -103,27 +109,18 @@ const handlePwCheck = (userPw : string) => {
 
         try {
             const address = mergeAddress(form.firstaddress, form.detail, form.code);
-            // 🔹 상태값을 이용한 유효성 검사
-            if ((form.userId).length < 1 ) {
-                alert("아이디를 입력해 주세요.") ;
-            } else if(checkIdMessageType !== "success") {
-                alert("아이디를 체크해 주세요") ;
-                } else if((form.userPw).length < 1) {
-                    alert("비밀번호를 입력해 주세요") ;
-                    } else if(checkPwMessageType !== "success") {
-                        alert("비밀번호를 체크해 주세요") ;
-                        } else  if((form.userName).length < 1 ) {
-                            alert("닉네임을 입력해 주세요")
-                             } else if(checkNameMessageType !== "success") {
-                                alert("닉네임을 체크해 주세요")
-                                } else {
-                await join({ ...form, address });
-                alert("회원가입 완료");
-                navigate("/");
+            const response =  await join({ ...form, address });
 
-            }  } catch (error) {
-            alert("회원가입 실패");
-        }
+                    if(response.status === 200) {
+                    alert(response.data.message)
+                    navigate("/");
+                }
+            } catch (error:any) {
+            console.log(error)
+                    const errorMessage = error.response.data.body.message
+                    alert(errorMessage);
+            }
+
     };
 
     const handleAddressChange = (field: string, value: string) => {

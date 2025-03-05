@@ -1,8 +1,8 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import 'styles/board-style.css';
-import { BoardListType } from 'types/interface';
-import { BOARD_DETAIL_PATH, BOARD_PATH, BOARD_WRITE_PATH, LOGIN_PATH } from 'constant';
+import {BoardListType} from 'types/interface';
+import {BOARD_DETAIL_PATH, BOARD_PATH, BOARD_WRITE_PATH, LOGIN_PATH} from 'constant';
 
 interface Props {
   boardList: BoardListType[];

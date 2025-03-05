@@ -1,5 +1,5 @@
-import React, {useState} from "react";
-import styles from "../../assets/Join.module.css" ;
+import React from "react";
+import styles from "../../styles/join.module.css"
 import AddressForm from "../../components/Join/AddressForm";
 
 
@@ -7,8 +7,8 @@ interface JoinFormProps {
     form: any;
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     onSubmit: (e: React.FormEvent) => void;
-    onIdCheck: (field: "userId") => void;
-    onNameCheck: (field: "userName") => void;
+    onIdCheck: (field: "email") => void;
+    onNameCheck: (field: "userNickname") => void;
 
     checkIdMessage: string;
     checkIdMessageType: "success" | "error" | "";
@@ -29,35 +29,35 @@ const JoinForm: React.FC<JoinFormProps> = ({ form, onChange, onSubmit, checkIdMe
         <form onSubmit={onSubmit}>
             <input
     type="email"
-    name="userId"
+    name="email"
     placeholder="이메일"
-    value={form.userId}
+    value={form.email}
     required // 필수입력
     onChange={onChange}
     />
-    <button className={styles.check_button} type="button" onClick={() => onIdCheck("userId")}>
+    <button className={styles.check_button} type="button" onClick={() => onIdCheck("email")}>
     중복 확인
     </button>
-            {(form.userId).length > 0 && checkMailMessage && (
+            {(form.email).length > 0 && checkMailMessage && (
                 <div className={styles.check_message} style={{ color: checkMailMessageType === "error" ? "red" : "green" }}>
                     {checkMailMessage}
                 </div>
             )}
-            {(form.userId).length > 0 && checkIdMessage && (
+            {(form.email).length > 0 && checkIdMessage && (
                 <div className={styles.check_message} style={{ color: checkIdMessageType === "error" ? "red" : "green" }}>
                     {checkIdMessage}
                 </div>
             )}
         <br />
             <input
-                name="userPw"
+                name="password"
                 placeholder="비밀번호"
                 type="password"
                 required
-                value={form.userPw}
+                value={form.password}
                 onChange={onChange}
             />
-            {(form.userPw).length > 0 && checkPwMessage && (
+            {(form.password).length > 0 && checkPwMessage && (
                 <div className={styles.check_message} style={{ color: checkPwMessageType === "error" ? "red" : "green" }}>
                     {checkPwMessage}
                 </div>
@@ -75,7 +75,7 @@ const JoinForm: React.FC<JoinFormProps> = ({ form, onChange, onSubmit, checkIdMe
                 onChange={onChange}
             />
 
-            {(form.userCheckPw).length > 0 && form.userPw !== form.userCheckPw && (
+            {(form.userCheckPw).length > 0 && form.password !== form.userCheckPw && (
                 <div className={styles.check_message} style={{ color: "red" }}>
                     비밀번호가 일치하지 않습니다.
                 </div>
@@ -83,24 +83,21 @@ const JoinForm: React.FC<JoinFormProps> = ({ form, onChange, onSubmit, checkIdMe
 
             <br />
     <input
-    name="userName"
+    name="userNickname"
     placeholder="닉네임"
     required
-    value={form.userName}
+    value={form.userNickname}
     onChange={onChange}
     />
-<<<<<<< HEAD
-    <button className={styles.check_button } type="button" onClick={() => onNameCheck("userName")}>
-=======
-    <button type="button" className="btn" onClick={() => onCheck("userName")}>
->>>>>>> 6d5f2275eb4f7587aa90a940fb3899ae2047afa7
+    <button className={styles.check_button } type="button" onClick={() => onNameCheck("userNickname")}>
     중복 확인
     </button>
-            {(form.userName).length>0 && checkNameMessage && (
+            {(form.userNickname).length>0 && checkNameMessage && (
                 <div className={styles.check_message} style={{ color: checkNameMessageType === "error" ? "red" : "green" }}>
                     {checkNameMessage}
                 </div>
             )}
+
             <AddressForm
                 firstaddress={form.firstaddress}
                 code={form.code}

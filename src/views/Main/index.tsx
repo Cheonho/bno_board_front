@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, {useEffect, useState} from 'react'
 import './style.css'
-import { getBoardListApi, getSearchBoardListApi} from 'api/board';
+import {getBoardListApi, getSearchBoardListApi} from 'api/board';
 import Pagination from 'components/Pagination';
-import { BoardListType } from 'types/interface';
-import { customFormatDate } from 'utils/dateUtil';
+import {BoardListType} from 'types/interface';
+import {customFormatDate} from 'utils/dateUtil';
 import BoardTable from 'components/board/BoardTable';
 
 export default function Main() {

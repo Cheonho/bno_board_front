@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import DaumPostcode from "react-daum-postcode";
-import styles from "../../assets/Join.module.css"
+import styles from "../../styles/join.module.css"
 
 interface AddressFormProps {
     firstaddress: string;

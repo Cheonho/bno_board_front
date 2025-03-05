@@ -1,9 +1,8 @@
-import React, {useCallback, useEffect, useState} from "react";
+import React, {useCallback, useState} from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import styles from "styles/join.module.css"
 import DaumPostcode from 'react-daum-postcode';
-import {UserModel} from "../common/UserModel";
 
 function Join() {
 
@@ -216,7 +215,6 @@ function Join() {
                             <span className={`message ${IsPwConfirm ? 'success' : 'error'}`}>{PwConfirmMsg}</span>
                         )}
                     </div>
-<<<<<<< HEAD
                     <div>이름</div>
                     <div className={styles.input_container} >
                         <input
@@ -262,7 +260,6 @@ function Join() {
                     </div>
                     <br />
                     <button type = "submit">회원가입</button>
-=======
                 <div>이름</div>
                 <div className={styles.input_container} >
                     <input
@@ -308,7 +305,6 @@ function Join() {
                 </div>
 <br />
                 <button type = "submit" className={styles.btn}>회원가입</button>
->>>>>>> 6d5f2275eb4f7587aa90a940fb3899ae2047afa7
 
                 </div>
             </form>

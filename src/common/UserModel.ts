@@ -1,9 +1,16 @@
 export interface UserModel {
     id: number;
-    userId: string;
-    userName: string;
-    userPw: string;
-    salt: string;
+    email: string;
+    userNickname: string;
+    password: string;
     address: string;
     role: string;
 }
+
+export interface LoginModel {
+    id: number;
+    email: string;
+    userNickname: string;
+    role: string;
+}
+

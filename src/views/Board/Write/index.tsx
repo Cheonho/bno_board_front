@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import React, {useState} from 'react'
 import './style.css'
 import BoardWriteCom from 'components/board/BoardWrite'
-import { BoardWriteType } from 'types/interface';
-import { postWriteBoardApi } from 'api/board';
-import { useNavigate } from 'react-router-dom';
+import {BoardWriteType} from 'types/interface';
+import {postWriteBoardApi} from 'api/board';
+import {useNavigate} from 'react-router-dom';
 
 export default function BoardWrite() {
   const [title, setTitle] = useState("");

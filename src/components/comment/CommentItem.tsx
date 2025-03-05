@@ -1,6 +1,6 @@
-import { CommentListType } from "types/interface";
+import {CommentListType} from "types/interface";
 import styles from "styles/boardDetail.module.css";
-import { useState } from "react";
+import {useState} from "react";
 import CommentForm from "./CommentForm";
 
 
