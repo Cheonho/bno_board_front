@@ -1,4 +1,4 @@
-import axios, { Axios, AxiosError, Method } from "axios";
+import axios, { AxiosError, Method } from "axios";
 // import { getSession } from "next-auth/react";
 
 axios.defaults.baseURL = process.env.REACT_APP_SERVER_URL;
@@ -36,6 +36,7 @@ authInstance.interceptors.response.use(
     if (response.headers['x-last-page-number']) { etcObj.lastPageNumber = Number(response.headers['x-last-page-number']) }
     if (response.headers['x-first-page-number']) { etcObj.firstPageNumber = Number(response.headers['x-first-page-number']) }
     if (response.headers['x-current-section']) { etcObj.currentSection = Number(response.headers['x-current-section']) }
+    if (Object.keys(etcObj).length === 0) return {...response, data: {...response.data}}
     return {...response, data: {...response.data, pageData: etcObj}};
   },
   async (error: AxiosError) => {
@@ -64,8 +65,8 @@ authInstance.interceptors.response.use(
 
 const customApi = async <T>(
   apiUrl: string,
+  method: Method,
   opts: {
-    method: Method;
     data?: { [key: string]: any } | any;
     params?: any;
     headers?: any;
@@ -78,7 +79,7 @@ const customApi = async <T>(
     : { 'Content-Type': 'application/json' }
 
   return await authInstance<T>({
-    method: opts.method,
+    method: method,
     url: apiUrl,
     headers: headers,
     data: opts.data,

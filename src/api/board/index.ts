@@ -11,8 +11,8 @@ import { BoardListType, CommentListType, BoardWriteType, BoardType } from "types
 export async function getBoardListApi(page:number): Promise<BoardListType> {
   const res = await customApi<BoardListType>(
     `/board/board-list`,
+    `GET`,
     {
-      method: `GET`,
       params: {page}
     }
   )
@@ -29,17 +29,28 @@ export async function getBoardListApi(page:number): Promise<BoardListType> {
 export async function getSearchBoardListApi(category: number, searchWord: string, page: number): Promise<BoardListType> {
   const res = await customApi<BoardListType>(
     `/board/search-list/${category}/${searchWord}`,
+    'GET',
     {
-      method: 'GET',
       params: {page}
     }
   )
   return res.data;
 }
 
+// export async function postWriteBoardApi(board: BoardWriteType) {
+//   const res = await authInstance.post(`/board/write`, board)
+//   return res;
+// }
+
 export async function postWriteBoardApi(board: BoardWriteType) {
-  const res = await authInstance.post(`/board/write`, board)
-  return res;
+  const res = await customApi<any>(
+    `/board/write`,
+    'POST',
+    {
+      data: board
+    }
+  )
+  return res.data;
 }
 
 export async function patchViewCountApi(boardNum: number | string) {

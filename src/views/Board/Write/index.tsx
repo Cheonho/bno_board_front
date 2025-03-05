@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react'
 import './style.css'
 import BoardWriteCom from 'components/board/BoardWrite'
 import { BoardWriteType } from 'types/interface';
-import { postWriteBoardApi } from 'api/board';
 import { useNavigate } from 'react-router-dom';
 import useUserStore from 'stores/useUserStore';
+import { usePostWriteBoardListApiQuery } from 'api/queries/board/boardQuery';
 
 export default function BoardWrite() {
   const [title, setTitle] = useState("");
@@ -13,6 +13,8 @@ export default function BoardWrite() {
   const [writerEmail, setWriterEmail] = useState("");
   const navigate = useNavigate();
   const userInfo = useUserStore((state) => state.user)
+
+  const {mutateAsync: postWriteBoard} = usePostWriteBoardListApiQuery();
 
   const onChangeTitle = (e: any) => {
     setTitle(e.target.value)
@@ -23,20 +25,20 @@ export default function BoardWrite() {
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
-      e.preventDefault();
-      try {
-        const payload: BoardWriteType = {
-          title: title,
-          content: content,
-          writerEmail: writerEmail,
-        }
+    e.preventDefault();
+    const payload: BoardWriteType = {
+      title: title,
+      content: content,
+      writerEmail: writerEmail,
+    }
 
-        const res = await postWriteBoardApi(payload)
-      } catch (err) {
-        console.log(err)
-      }
+    const res = await postWriteBoard(payload)
+    if (res.code === "SU") {
       navigate("/");
-    };
+    } else {
+
+    }
+  };
 
   useEffect(() => {
     if (userInfo) {
