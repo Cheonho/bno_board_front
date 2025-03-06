@@ -50,6 +50,7 @@ authInstance.interceptors.response.use(
       }
   
       console.log(`[Api] - status: ${errorMessage.status} 오류 발생`)
+      console.log(error)
   
       if (errorMessage.status === 401) {
         window.location.href = "/login";

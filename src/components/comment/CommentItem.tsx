@@ -47,7 +47,7 @@ export default function CommentItem({ comment, openFormId, setOpenFormId, setCom
 
     const isEditing = openEditFormId === comment.commentNum;
     const handleEdit = () => {
-        setOpenEditFormId(comment.commentNum);
+        setOpenEditFormId(Number(comment.commentNum));
         setOpenFormId(null);
     }
     const cancleEdit = () => setOpenEditFormId(null);
@@ -95,13 +95,13 @@ export default function CommentItem({ comment, openFormId, setOpenFormId, setCom
             {isOpen && (
                 <CommentForm
                     boardNum={comment.boardNum}
-                    commentNum={comment.commentNum}
+                    commentNum={Number(comment.commentNum)}
                     onSubmitSuccess={() => {
                         setOpenFormId(null);
                         onSubmitSuccess();
                     }}
                     onCancel={cancleEdit}
-                    parentNum={comment.commentNum}
+                    parentNum={Number(comment.commentNum)}
                 />
             )}
 

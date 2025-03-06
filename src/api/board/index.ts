@@ -14,9 +14,7 @@ export async function getBoardListApi(page:number): Promise<BoardListType> {
   const res = await customApi<BoardListType>(
     `/board/board-list`,
     `GET`,
-    {
-      params: {page}
-    }
+    {params: {page}}
   )
   return res.data;
 }
@@ -94,7 +92,7 @@ export async function getDetailBoardApi(boardNum: number | string): Promise<Deta
   return res.data
 }
 
-export const getBoard = async (boardNum:number | string): Promise<BoardType> => {
+export const getBoardApi = async (boardNum:number | string): Promise<BoardType> => {
   const response = await authInstance.get(`/board/${boardNum}`);
   return response.data;
 };
