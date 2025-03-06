@@ -16,7 +16,7 @@ export default function CommentItem({ comment, openFormId, setOpenFormId, setCom
     const isOpen = openFormId === comment.commentNum;
 
     const ReplyFormOpen = () => {
-        setOpenFormId(isOpen ? null : comment.commentNum);
+        setOpenFormId(isOpen ? null : Number(comment.commentNum));
     };
 
     const onDeleteComment = async (boardNum: number, commentNum: number) => {
@@ -49,8 +49,8 @@ export default function CommentItem({ comment, openFormId, setOpenFormId, setCom
                 {isEditing ? (
                     <div className={styles.CommentEditContainer}>
                         <CommentForm
-                            boardNum={comment.boardNum}
-                            commentNum={comment.commentNum}
+                            boardNum={Number(comment.boardNum)}
+                            commentNum={Number(comment.commentNum)}
                             isEdit={true}
                             initialContent={comment.content}
                             onSubmitSuccess={() => setIsEditing(false)}
@@ -64,7 +64,7 @@ export default function CommentItem({ comment, openFormId, setOpenFormId, setCom
                             {comment.content}
                             <div className={styles.comment2}>
                                 <button className={styles.btn} onClick={handleEdit}>✏️</button>
-                                <button className={styles.btn} onClick={() => onDeleteComment(comment.boardNum, comment.commentNum)}>❌</button>
+                                <button className={styles.btn} onClick={() => onDeleteComment(Number(comment.boardNum), Number(comment.commentNum))}>❌</button>
                             </div>
                         </div>
 
@@ -81,8 +81,8 @@ export default function CommentItem({ comment, openFormId, setOpenFormId, setCom
 
             {isOpen && (
                 <CommentForm
-                    boardNum={comment.boardNum}
-                    commentNum={comment.commentNum}
+                    boardNum={Number(comment.boardNum)}
+                    commentNum={Number(comment.commentNum)}
                     onSubmitSuccess={() => setOpenFormId(null)}
                 />
             )}

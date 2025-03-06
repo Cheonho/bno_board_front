@@ -11,11 +11,11 @@ interface Props {
 
 const LoginForm: React.FC<Props> = ({email, password, onEmailChange, onPwChange, onSubmit}) => {
     return (
-        <form className="login-form" onSubmit={onSubmit}>
+        <form className={styles.login_form} onSubmit={onSubmit}>
             <h2 className={styles.title}>로그인</h2>
             <div>이메일 주소</div>
             <input
-                className={styles.email}
+                className={styles.input_field}
                 value={email}
                 placeholder="youremail@example.com"
                 type="email"
@@ -23,14 +23,14 @@ const LoginForm: React.FC<Props> = ({email, password, onEmailChange, onPwChange,
             />
             <div>비밀번호</div>
             <input
-                className={styles.pw}
+                className={styles.input_field}
                 value={password}
                 placeholder="*******"
                 type="password"
                 onChange={onPwChange}
             />
 
-            <button className={styles.btn} type="submit">
+            <button className={styles.login_button} type="submit">
                 로그인
             </button>
         </form>

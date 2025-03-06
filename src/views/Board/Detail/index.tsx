@@ -17,7 +17,7 @@ export default function BoardDetail() {
 
     useEffect(() => {
         if (!boardNum) return;
-        getBoard(boardNum)
+        getBoard(Number(boardNum))
             .then(data => {
                 setBoard(data);
             })

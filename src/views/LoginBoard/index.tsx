@@ -8,10 +8,12 @@ import { AxiosError } from 'axios'
 // @ts-ignore
 import Session from "react-session-api";
 import {saveSession} from "../../utils/Login/LoginSession";
+import useUserStore from "stores/useUserStore";
 
 const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const {setUser} = useUserStore();
     const navigate = useNavigate();
 
     const join = () => navigate("/join");
@@ -26,8 +28,9 @@ const Login = () => {
             if (response.status === 200) {
                 const loginmodel: LoginModel = response.data.loginResponseDto;
                 saveSession(loginmodel.id, loginmodel.userNickname, loginmodel.role, loginmodel.email);
+                setUser({email: loginmodel.email, role: loginmodel.role, nickname: loginmodel.userNickname})
                 alert(response.data.message);
-                navigate("/mypage");
+                navigate("/");
             }
         } catch (error) {
             if (error instanceof AxiosError && error.response) {

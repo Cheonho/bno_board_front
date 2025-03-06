@@ -3,10 +3,11 @@ import axios from "axios";
 import {useNavigate} from "react-router-dom";
 import styles from "styles/join.module.css"
 import DaumPostcode from 'react-daum-postcode';
+import { checkUserId, checkUserName } from "api/JoinBoard";
 
 function Join() {
 
-    const [userEmail, setUserEmail] = useState("");
+    const [userId, setUserEmail] = useState("");
     const [userName, setUserName] = useState("");
     const [userPw, setUserPw] = useState("");
     const [userCheckPw, setUserCheckPw] = useState("");
@@ -57,9 +58,9 @@ function Join() {
     const onClickButton
         = async (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
         try {
-            const response = await checkUserId(userEmail);
+            const response = await checkUserId(userId);
             // if (response.data.isAvailable === true) {
-            if (response === true) {
+            if (response.data === true) {
                 setIdConfirmMsg("사용 가능한 아이디입니다.")
                 setIsIdConfirm(true)
             } else {
@@ -118,7 +119,7 @@ function Join() {
             const response = await checkUserName(userName);
 
             // if (response.data.isAvailable === true) {
-            if (response === true) {
+            if (response.data === true) {
                 setIsNamewConfirm(true)
                 setNameConfirmMsg("사용 가능한 닉네임입니다.")
             } else {
@@ -167,7 +168,7 @@ function Join() {
 
     return(
         <div className={styles.join_page}>
-            <form className="join-form" onSubmit={onClickLJoin}>
+            <form className={styles.join_form} onSubmit={onClickLJoin}>
                 <h2 className={styles.title}>회원가입</h2>
                 <div>이메일 주소</div>
                 <div>

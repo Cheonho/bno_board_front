@@ -54,7 +54,7 @@ h2 {
     margin-top: 20px;
 }
 
-button {
+.btn {
     padding: 2px 3px; /* 버튼 크기 증가 */
     border: none;
     border-radius: 6px;
@@ -66,7 +66,7 @@ button {
     transition: 0.3s;
 }
 
-button:hover {
+.btn:hover {
     background-color: #029c47;
 }
 

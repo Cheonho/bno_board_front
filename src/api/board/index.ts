@@ -94,7 +94,7 @@ export async function getDetailBoardApi(boardNum: number | string): Promise<Deta
   return res.data
 }
 
-export const getBoard = async (id: number): Promise<BoardListType> => {
+export const getBoard = async (id: number): Promise<BoardType> => {
   const response = await authInstance.get(`/${id}`);
   return response.data;
 };

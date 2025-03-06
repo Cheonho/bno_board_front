@@ -28,7 +28,7 @@ export default function BoardUpdate() {
   })
   const navigate = useNavigate();
   const params = useParams();
-  const userInfo = useUserStore((state) => state.user)
+  const {user: userInfo} = useUserStore();
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   const {mutate: updateApi} = usePutUpdateBoardApiQuery();

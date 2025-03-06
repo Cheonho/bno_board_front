@@ -41,6 +41,7 @@ export default function BoardTable({ title, tableHeader, boardList, category, on
     return path
   }
   const userState = useUserStore((state) => state.user)
+  const userId = sessionStorage.getItem('id')
 
   const handleDetailPath = (event: any, boardNum: number | string) => {
     if (typeof(handleViewCount) == 'function') {
@@ -65,7 +66,7 @@ export default function BoardTable({ title, tableHeader, boardList, category, on
           <div className='board-top'>
             <Input type="text" id="search-input" value={searchWord} onChange={handleSearch} />
             <div className='btn-box'>
-              {userState ? <Button text={"글쓰기"} onClick={() => navigate(writePath)} /> : ""}
+              {userState && userId ? <Button text={"글쓰기"} onClick={() => navigate(writePath)} /> : ""}
             </div>
           </div>
         </div>

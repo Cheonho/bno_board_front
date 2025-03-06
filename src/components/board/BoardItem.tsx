@@ -37,7 +37,7 @@ export default function BoardItem({ BoardType }: Props) {
             <div className='board-list-profile-image' style={{backgroundColor: `rgba(255, 255, 255, 5)`}}></div>
           </div>
           <div className='board-list-write-box'>
-            <div className='board-list-nickname'>{writerEmail}</div>
+            <div className='board-list-nickname'>{writerNickname}</div>
             <div className='board-list-write-date'>{createAtForm}</div>
           </div>
         </div>
