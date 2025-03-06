@@ -1,3 +1,4 @@
+
 import { CommentListType } from "types/interface";
 import styles from "styles/boardDetail.module.css";
 import { useState } from "react";
@@ -10,14 +11,17 @@ interface CommentListProps {
     setOpenFormId: (boardNum: number | null) => void;
     setComments: React.Dispatch<React.SetStateAction<CommentListType[]>>;
     onSubmitSuccess: () => void;
+    openEditFormId: number | null;
+    setOpenEditFormId: (boardNum: number | null) => void;
 }
 
-export default function CommentItem({ comment, openFormId, setOpenFormId, setComments, onSubmitSuccess }: CommentListProps) {
+export default function CommentItem({ comment, openFormId, setOpenFormId, setComments, onSubmitSuccess, openEditFormId, setOpenEditFormId }: CommentListProps) {
 
     const isOpen = openFormId === comment.commentNum;
 
     const ReplyFormOpen = () => {
         setOpenFormId(isOpen ? null : comment.commentNum);
+        setOpenEditFormId(null);
     };
 
     const onDeleteComment = async (boardNum: number, commentNum: number) => {
@@ -27,9 +31,14 @@ export default function CommentItem({ comment, openFormId, setOpenFormId, setCom
         try {
             await deleteCommentApi(boardNum, commentNum);
             setComments(prevComments =>
-                prevComments.filter(comment => comment.commentNum !== commentNum)
+                prevComments
+                    .map(comment =>
+                        comment.commentNum === commentNum || comment.parentNum === commentNum
+                            ? { ...comment, status: false }
+                            : comment
+                    )
+                    .filter(comment => comment.status)
             );
-
             alert("댓글이 성공적으로 삭제되었습니다!");
         } catch (error) {
             console.error("댓글 삭제 중 오류 발생:", error);
@@ -37,12 +46,13 @@ export default function CommentItem({ comment, openFormId, setOpenFormId, setCom
         }
     };
 
-    const [isEditing, setIsEditing] = useState(false);
-    const handleEdit = () => setIsEditing(true);
-    const cancleEdit = () => setIsEditing(false);
+    const isEditing = openEditFormId === comment.commentNum;
+    const handleEdit = () => {
+        setOpenEditFormId(comment.commentNum);
+        setOpenFormId(null);
+    }
+    const cancleEdit = () => setOpenEditFormId(null);
 
-
-    
 
 
     return (
@@ -57,7 +67,7 @@ export default function CommentItem({ comment, openFormId, setOpenFormId, setCom
                             commentNum={comment.commentNum}
                             isEdit={true}
                             defaultContent={comment.content}
-                            onSubmitSuccess={onSubmitSuccess} 
+                            onSubmitSuccess={onSubmitSuccess}
                             onCancel={cancleEdit}
                         />
                     </div>
@@ -76,8 +86,8 @@ export default function CommentItem({ comment, openFormId, setOpenFormId, setCom
                             [{comment.writerEmail}]
                             <div className={styles.comment4}>{new Date(comment.createAt).toLocaleString()}</div>
                             <div className={styles.comment4}>
-                            <button className={styles.btn} onClick={ReplyFormOpen}>{isOpen ? "닫기" : "답글달기"}</button>
-                        </div>
+                                <button className={styles.btn} onClick={ReplyFormOpen}>{isOpen ? "닫기" : "답글달기"}</button>
+                            </div>
                         </div>
                     </>
                 )}
@@ -87,12 +97,40 @@ export default function CommentItem({ comment, openFormId, setOpenFormId, setCom
                 <CommentForm
                     boardNum={comment.boardNum}
                     commentNum={comment.commentNum}
-                    onSubmitSuccess={() => setOpenFormId(null)}
+                    onSubmitSuccess={() => {
+                        setOpenFormId(null);
+                        onSubmitSuccess();
+                    }}
+                    onCancel={cancleEdit}
+                    parentNum={comment.commentNum}
                 />
             )}
+
+
+            {comment.replies && Array.isArray(comment.replies) && comment.replies.length > 0 && (
+                <div className={styles.repliesContainer}>
+                    {comment.replies.map((reply) => {
+                        console.log("Reply: ", reply);
+                        return (
+                            <CommentItem
+                                key={reply.commentNum}
+                                comment={reply}
+                                openFormId={openFormId}
+                                setOpenFormId={setOpenFormId}
+                                setComments={setComments}
+                                onSubmitSuccess={onSubmitSuccess}
+                                openEditFormId={openEditFormId}
+                                setOpenEditFormId={setOpenEditFormId}
+                            />
+                        );
+                    })}
+                </div>
+            )}
+
+
         </>
     );
-   
+
 
 
 }

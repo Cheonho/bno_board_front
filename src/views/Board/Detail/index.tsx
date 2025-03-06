@@ -5,6 +5,8 @@ import { BoardListType, CommentListType } from "types/interface";
 import BoardInfo from "components/board/BoardInfo";
 import { getBoardApi, getCommentsApi, deleteBoardApi, deleteCommentApi } from "api/board";
 import CommentItem from "components/comment/CommentItem";
+import CommentForm from "components/comment/CommentForm";
+import CommentList from "components/comment/CommentList";
 
 export default function BoardDetail() {
     let navigate = useNavigate();
@@ -13,6 +15,8 @@ export default function BoardDetail() {
     const [board, setBoard] = useState<BoardListType | null>(null);
     const [comments, setComments] = useState<CommentListType[]>([]);
     const [openFormId, setOpenFormId] = useState<number | null>(null);
+    const [openEditFormId, setOpenEditFormId] = useState<number | null>(null)
+
 
     useEffect(() => {
         if (!boardNum) return;
@@ -33,6 +37,7 @@ export default function BoardDetail() {
         if (!boardNum) return;
         getCommentsApi(boardNum)
             .then((data) => {
+                console.log("getCommentsApi : ", data.code, data.message);
                 setComments(Array.isArray(data.commentList) ? data.commentList : []);
             })
             .catch(error => {
@@ -45,7 +50,7 @@ export default function BoardDetail() {
         if (!boardNum) return;
         const isConfirmed = window.confirm("정말로 삭제하시겠습니까?");
         if (!isConfirmed) return;
-    
+
         try {
             await deleteBoardApi(boardNum);
             alert("게시글이 성공적으로 삭제되었습니다!");
@@ -55,12 +60,13 @@ export default function BoardDetail() {
             alert("게시글 삭제에 실패했습니다. 다시 시도해주세요.");
         }
     };
-    
+
 
     const refreshComments = () => {
         if (!boardNum) return;
         getCommentsApi(boardNum)
             .then((data) => {
+                console.log(data.commentList);
                 setComments(Array.isArray(data.commentList) ? data.commentList : []);
             })
             .catch(error => {
@@ -82,16 +88,20 @@ export default function BoardDetail() {
                         <h2>댓글목록</h2>
                         <h3>총 댓글 수 : {comments.length}개</h3>
 
-                        {comments.map((comment, index) => (
-                            <CommentItem
-                                key={index}
-                                setComments={setComments}
-                                comment={comment}
-                                openFormId={openFormId}
-                                setOpenFormId={setOpenFormId}
-                                onSubmitSuccess={refreshComments}
-                            />
-                        ))}
+                        <CommentForm
+                            boardNum={board.boardNum}
+                            onSubmitSuccess={refreshComments} onCancel={function (): void {
+                                throw new Error("Function not implemented.");
+                            } }                        />
+                        <CommentList
+                            comments={comments}
+                            openFormId={openFormId}
+                            setOpenFormId={setOpenFormId}
+                            setComments={setComments}
+                            onSubmitSuccess={refreshComments}
+                            openEditFormId={openEditFormId}
+                            setOpenEditFormId={setOpenEditFormId}
+                        />
                     </div>
                 </div>
             ) : (

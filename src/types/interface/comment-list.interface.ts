@@ -7,6 +7,7 @@ export default interface CommentList {
     createAt: Date;
     updateAt: Date | null;
     status: boolean;
+    replies?: CommentList[];
 }
 
 export interface GetCommentListResponse {

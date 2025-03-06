@@ -22,7 +22,6 @@ export async function postWriteBoardApi(board: BoardWriteType) {
 }
 
 export const getBoardApi = async (boardNum:number | string): Promise<BoardListType> => {
-  console.log('요청 URL:', `/board/${boardNum}`);
   const response = await authInstance.get(`/board/${boardNum}`);
   return response.data;
 };
@@ -44,3 +43,8 @@ export const deleteCommentApi = async (boardNum: number, commentNum: number): Pr
  export const modifyCommentApi = async (boardNum:number | string, commentNum: number, content: string): Promise<void> => {
      await authInstance.patch(`/board/${boardNum}/comment/${commentNum}`, { content });
  };
+
+ export const addCommentApi = async (boardNum:number | string, parentNum: number | null, content: string): Promise<void> => {
+  await authInstance.post(`/board/${boardNum}/comment`, { parentNum, content });
+};
+

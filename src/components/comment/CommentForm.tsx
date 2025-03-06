@@ -1,17 +1,18 @@
 import { useState } from "react";
 import styles from "styles/boardDetail.module.css";
-import { modifyCommentApi } from "api/board";
+import { modifyCommentApi, addCommentApi } from "api/board";
 
 interface CommentFormProps {
-    boardNum: number|string;
-    commentNum: number;
+    boardNum: number | string;
+    commentNum?: number;
+    parentNum?: number | null;
     isEdit?: boolean;
     defaultContent?: string;
     onSubmitSuccess: () => void;
-    onCancel?: () => void;
+    onCancel: () => void;
 }
 
-export default function CommentForm({ boardNum, commentNum, isEdit = false, defaultContent = "", onSubmitSuccess, onCancel }: CommentFormProps) {
+export default function CommentForm({ boardNum, commentNum, parentNum, isEdit = false, defaultContent = "", onSubmitSuccess, onCancel }: CommentFormProps) {
     const [content, setContent] = useState(defaultContent);
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -24,15 +25,25 @@ export default function CommentForm({ boardNum, commentNum, isEdit = false, defa
             return;
         }
 
+        if (content.trim() === defaultContent) {
+            alert("수정사항이 존재하지 않습니다.");
+            return;
+        }
+
         try {
-            if (isEdit) {
+            if (isEdit && commentNum) {
+                if (commentNum === undefined) {
+                    alert("수정할 댓글이 존재하지 않습니다.");
+                    return;
+                }
                 await modifyCommentApi(boardNum, commentNum, content);
                 alert("댓글이 수정되었습니다!");
+                onCancel();
             } else {
-                //parentNum이 null이면 댓글, 아니면 대댓글, 그냥 어차피 같은 댃글..
-                //await addComment(boardNum, parentNum, content);
-                //alert("댓글이 등록되었습니다!");
+                await addCommentApi(boardNum, parentNum ?? null, content);
+                alert(parentNum ? "대댓글이 등록되었습니다!" : "댓글이 등록되었습니다!");
             }
+
             setContent("");
             onSubmitSuccess();
         } catch (error) {
@@ -43,22 +54,30 @@ export default function CommentForm({ boardNum, commentNum, isEdit = false, defa
 
     return (
         <>
-            <input
-                className={styles.CommentEditInput}
-                value={content}
-                onChange={handleChange}
-                placeholder="댓글을 입력하세요."
-            />
-            <div className={styles.CommentButtonBox}>
-                {isEdit ? (
+            {isEdit ? (<>
+                <input
+                    className={styles.CommentEditInput}
+                    value={content}
+                    onChange={handleChange}
+                    placeholder="댓글을 입력하세요."
+                />
+                <div className={styles.CommentButtonBox}>
                     <div className={styles.CommentEditBox}>
                         <button className={styles.CommentEditBtn} onClick={handleSubmit}>댓글 수정</button>
                         <button className={styles.CommentEditBtn} onClick={onCancel}>취소</button>
                     </div>
-                ) : (
-                        <button className={styles.CommentSubmitBtn} onClick={handleSubmit}>댓글 등록</button>
-                )}
-            </div>
+                </div></>
+            ) : (
+
+                <div className={styles.CommentFormContainer}>
+                    <input
+                        className={styles.CommentEditInput}
+                        value={content}
+                        onChange={handleChange}
+                        placeholder="댓글을 입력하세요."
+                    />
+                    <button className={styles.CommentSubmitBtn} onClick={handleSubmit}>댓글 등록</button></div>
+            )}
         </>
     );
 }
