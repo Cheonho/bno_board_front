@@ -9,7 +9,7 @@ const MyPage = () => {
 
 
     return (
-        <div>
+        <div style={{width: '100%'}}>
             <MypageForm
                 email = {email}
                 password = {password}
