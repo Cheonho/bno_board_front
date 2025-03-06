@@ -1,5 +1,4 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import 'styles/board-style.css';
 import { BoardType } from 'types/interface';
 import { format } from 'date-fns'

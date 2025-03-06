@@ -13,6 +13,7 @@ export const authInstance = axios.create({
   baseURL: process.env.REACT_APP_SERVER_URL,
 });
 
+
 // authInstance.interceptors.request.use(
 //   async (config) => {
 //     const session: any = await getSession();

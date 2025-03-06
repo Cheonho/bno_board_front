@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import './style.css'
+import 'styles/board-style.css'
 import Pagination from 'components/Pagination';
 import { BoardListType, BoardType } from 'types/interface';
 import { customFormatDate } from 'utils/dateUtil';
@@ -117,7 +118,7 @@ export default function Main() {
   },[loading, page, searchWord, selected, getSearchBoardList, getBoardList])
 
   return (
-    <div>
+    <div className='board-list-page-con'>
       <BoardTable 
         title={"게시판"}
         tableHeader={tableHeader}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import 'styles/board-style.css';
 import { BoardType } from 'types/interface';
 import { BOARD_DETAIL_PATH, BOARD_PATH, BOARD_UPDATE_PATH, BOARD_WRITE_PATH } from 'constant';
@@ -40,6 +40,7 @@ export default function BoardTable({ title, tableHeader, boardList, category, on
     return path
   }
   const userState = useUserStore((state) => state.user)
+  const userId = sessionStorage.getItem('id')
 
   const handleDetailPath = (event: any, boardNum: number | string) => {
     if (typeof(handleViewCount) == 'function') {
@@ -64,7 +65,7 @@ export default function BoardTable({ title, tableHeader, boardList, category, on
           <div className='board-top'>
             <Input type="text" id="search-input" value={searchWord} onChange={handleSearch} />
             <div className='btn-box'>
-              {userState ? <Button text={"글쓰기"} onClick={() => navigate(writePath)} /> : ""}
+              {userState && userId ? <Button text={"글쓰기"} onClick={() => navigate(writePath)} /> : ""}
             </div>
           </div>
         </div>
@@ -87,7 +88,7 @@ export default function BoardTable({ title, tableHeader, boardList, category, on
                     <td>
                       <Button text={item.title} classNames='non-btn' onClick={(event) => handleDetailPath(event, item.boardNum)} />
                     </td>
-                    <td>{item.writerNickname}</td>
+                    <td>{item.writerEmail}</td>
                     <td>{item.createAtFormat}</td>
                     <td>{item.viewCount}</td>
                     <td>

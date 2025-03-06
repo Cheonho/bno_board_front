@@ -1,57 +1,57 @@
 import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { login } from "api/LoginBoard";
-import { saveSession } from "utils/Login/LoginSession";
-import { UserModel } from "common/UserModel";
+import {LoginModel, UserModel} from "common/UserModel";
 import LoginForm from "components/Login/LoginForm";
 import styles from "styles/login.module.css";
+import { AxiosError } from 'axios'
+// @ts-ignore
+import Session from "react-session-api";
+import {saveSession} from "../../utils/Login/LoginSession";
 import useUserStore from "stores/useUserStore";
 
 const Login = () => {
-    const [userId, setUserId] = useState("");
-    const [salt, setSalt] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const {setUser} = useUserStore();
     const navigate = useNavigate();
-    const setUser = useUserStore((state) => state.setUser)
+
+    const join = () => navigate("/join");
+    const findIdPw = () => navigate("/findIdPw");
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const response = await login(userId, salt);
-            
+            const response = await login(email, password);
+
+            // 로그인 성공
             if (response.status === 200) {
-                const user: UserModel = response.data.user;
-                setUser({
-                    email: user.email,
-                    role: user.role,
-                    nickname: user.userName
-                })
-                saveSession(user.userName, user.role, user.email);
+                const loginmodel: LoginModel = response.data.loginResponseDto;
+                saveSession(loginmodel.id, loginmodel.userNickname, loginmodel.role, loginmodel.email);
+                setUser({email: loginmodel.email, role: loginmodel.role, nickname: loginmodel.userNickname})
+                alert(response.data.message);
                 navigate("/");
             }
         } catch (error) {
-            // @ts-ignore
-            alert("로그인 실패: " + (error.response?.data.msg || "네트워크 오류"));
-            // clearUser();
+            if (error instanceof AxiosError && error.response) {
+                const errorMessage = error.response.data.body.message
+                alert(errorMessage);
+            }
         }
-    };
-
+    }
     return (
         <div className={styles.login_page}>
             <LoginForm
-                userId={userId}
-                salt={salt}
-                onEmailChange={(e) => setUserId(e.target.value)}
-                onPwChange={(e) => setSalt(e.target.value)}
+                email={email}
+                password={password}
+                onEmailChange={(e) => setEmail(e.target.value)}
+                onPwChange={(e) => setPassword(e.target.value)} // ✅ 카멜 케이스 수정
                 onSubmit={handleLogin}
             />
             <div className={styles.all}>
-                <Link to="/join" style={{ textDecoration: "none" }}>
-                    회원가입
-                </Link>
+                <span onClick={join} style={{ cursor: "pointer" }}>회원가입</span>
                 &nbsp; | &nbsp;
-                <Link to="/findIdPw" style={{ textDecoration: "none" }}>
-                    아이디, 비밀번호 찾기
-                </Link>
+                <span onClick={findIdPw} style={{ cursor: "pointer" }}>아이디, 비밀번호 찾기</span>
             </div>
         </div>
     );

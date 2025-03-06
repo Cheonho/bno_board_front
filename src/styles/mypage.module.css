@@ -1,0 +1,93 @@
+.container {
+    width: 95%; /* 화면 너비를 95% 사용 */
+    max-width: 1400px; /* 가로 최대 길이 설정 */
+    max-height: 600px; /* 세로 최대 길이 설정 */
+    margin: 50px auto;
+    padding: 30px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    font-family: 'Noto Sans KR', sans-serif;
+    overflow: auto; /* 내용이 넘칠 경우 스크롤 */
+}
+
+/* 부모 컨테이너도 가득 차도록 설정 */
+body, html {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+h2 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 25px;
+    color: #333;
+    text-align: center;
+}
+
+.info_box {
+    background: #f8f9fa;
+    padding: 20px; /* 기존 15px -> 20px */
+    border-radius: 8px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.info_title {
+    font-size: 15px; /* 기존 14px -> 15px */
+    font-weight: bold;
+    color: #444;
+}
+
+.info_content {
+    font-size: 18px; /* 기존 16px -> 18px */
+    color: #222;
+    margin-top: 8px;
+}
+
+.button_group {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.btn {
+    padding: 2px 3px; /* 버튼 크기 증가 */
+    border: none;
+    border-radius: 6px;
+    background-color: #03c75a;
+    color: white;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn:hover {
+    background-color: #029c47;
+}
+
+.modal {
+    background: white;
+    padding: 20px;
+    width: 400px;
+    margin: auto;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+

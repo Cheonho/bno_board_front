@@ -1,6 +1,7 @@
 import customApi, { authInstance } from "utils/interceptor";
 import { BoardListType, CommentListType, BoardWriteType, BoardType } from "types/interface";
 import { DetailBoardType, ResType } from "types/interface/board-list.interface";
+import { GetCommentListResponse } from "types/interface/comment-list.interface";
 
 // export async function getBoardListApi(page: number): Promise<BoardListType> {
 //   const res = await authInstance.get(`/board/board-list`, {
@@ -98,14 +99,23 @@ export const getBoard = async (id: number): Promise<BoardType> => {
   return response.data;
 };
 
-export const getComments = async (id: number): Promise<CommentListType[]> => {
-  const response = await authInstance.get(`/${id}/comment`);
+export const getComments = async (boardNum:number | string): Promise<GetCommentListResponse> => {
+  const response = await authInstance.get<GetCommentListResponse>(`/board/${boardNum}/comment`);
   return response.data;
 };
 
-export const deleteBoard = async (id: number): Promise<void> => {
+
+export const deleteBoard = async (boardNum: number | string): Promise<void> => {
   const isConfirmed = window.confirm("정말로 삭제하시겠습니까?");
   if (!isConfirmed) return;
-  await authInstance.delete(`/${id}`);
+  await authInstance.delete(`/board/${boardNum}`);
   alert("게시글이 성공적으로 삭제되었습니다!");
 };
+
+export const deleteComment = async (boardNum: number, commentNum: number): Promise<void> => {
+  await authInstance.delete(`/board/${boardNum}/comment/${commentNum}`);
+};
+
+ export const modifyComment = async (boardNum: number, commentNum: number, content: string): Promise<void> => {
+     await authInstance.patch(`/board/${boardNum}/comment/${commentNum}`, content);
+ };
