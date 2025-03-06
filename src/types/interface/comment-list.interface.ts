@@ -9,6 +9,8 @@ export default interface CommentList {
     writerEmail: string;
     createAt: Date;
     updateAt: Date | null;
+    status: boolean;
+    replies?: CommentList[];
 }
 
 export interface GetCommentListResponse {

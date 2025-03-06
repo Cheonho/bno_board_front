@@ -1,20 +1,21 @@
 import { useState } from "react";
 import styles from "styles/boardDetail.module.css";
-import {modifyComment} from "api/board";
-    
+import { modifyCommentApi, addCommentApi } from "api/board";
+
 interface CommentFormProps {
-    boardNum: number;
-    commentNum: number;
+    boardNum: number | string;
+    commentNum?: number;
+    parentNum?: number | null;
     isEdit?: boolean;
-    initialContent?: string;
+    defaultContent?: string;
     onSubmitSuccess: () => void;
-    onCancel?: () => void;
+    onCancel: () => void;
 }
 
-export default function CommentForm({boardNum, commentNum, isEdit = false, initialContent = "", onSubmitSuccess, onCancel }: CommentFormProps) {
-    const [content, setContent] = useState(initialContent);
+export default function CommentForm({ boardNum, commentNum, parentNum, isEdit = false, defaultContent = "", onSubmitSuccess, onCancel }: CommentFormProps) {
+    const [content, setContent] = useState(defaultContent);
 
-    const handleChange = (event:React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setContent(event.target.value);
     };
 
@@ -24,14 +25,25 @@ export default function CommentForm({boardNum, commentNum, isEdit = false, initi
             return;
         }
 
+        if (content.trim() === defaultContent) {
+            alert("수정사항이 존재하지 않습니다.");
+            return;
+        }
+
         try {
-            if (isEdit) {
-                await modifyComment(boardNum, commentNum, content);
+            if (isEdit && commentNum) {
+                if (commentNum === undefined) {
+                    alert("수정할 댓글이 존재하지 않습니다.");
+                    return;
+                }
+                await modifyCommentApi(boardNum, commentNum, content);
                 alert("댓글이 수정되었습니다!");
+                onCancel();
             } else {
-                //await addComment(boardNum, parentNum, content);
-               // alert("댓글이 등록되었습니다!");
+                await addCommentApi(boardNum, parentNum ?? null, content);
+                alert(parentNum ? "대댓글이 등록되었습니다!" : "댓글이 등록되었습니다!");
             }
+
             setContent("");
             onSubmitSuccess();
         } catch (error) {
@@ -42,22 +54,30 @@ export default function CommentForm({boardNum, commentNum, isEdit = false, initi
 
     return (
         <>
-            <input
-                className={styles.CommentEditInput}
-                value={content}
-                onChange={handleChange}
-                placeholder="댓글을 입력하세요."
-            />
-            <div className={styles.CommentButtonBox}>
-                {isEdit ? (
-                     <div className={styles.CommentEditBox}>
-                     <button className={styles.CommentEditBtn} onClick={handleSubmit}>댓글 수정</button>
-                     <button className={styles.CommentEditBtn} onClick={onCancel}>취소</button>
-                 </div>
-                ) : (
-                    <button className={styles.CommentEditBtn} onClick={handleSubmit}>댓글 등록</button>
-                )}
-            </div>
+            {isEdit ? (<>
+                <input
+                    className={styles.CommentEditInput}
+                    value={content}
+                    onChange={handleChange}
+                    placeholder="댓글을 입력하세요."
+                />
+                <div className={styles.CommentButtonBox}>
+                    <div className={styles.CommentEditBox}>
+                        <button className={styles.CommentEditBtn} onClick={handleSubmit}>댓글 수정</button>
+                        <button className={styles.CommentEditBtn} onClick={onCancel}>취소</button>
+                    </div>
+                </div></>
+            ) : (
+
+                <div className={styles.CommentFormContainer}>
+                    <input
+                        className={styles.CommentEditInput}
+                        value={content}
+                        onChange={handleChange}
+                        placeholder="댓글을 입력하세요."
+                    />
+                    <button className={styles.CommentSubmitBtn} onClick={handleSubmit}>댓글 등록</button></div>
+            )}
         </>
     );
 }
