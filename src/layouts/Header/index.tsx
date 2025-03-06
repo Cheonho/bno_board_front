@@ -11,7 +11,7 @@ export default function Header() {
   const {clearUser, user: userState} = useUserStore();
   // const userState = useUserStore((state) => state.user);
   const location = useLocation().pathname;
-  const exceptionPath = [LOGIN_PATH(), FIND_ID_PW_PATH(), JOIN_PATH(), '/board/update']
+  const exceptionPath = [LOGIN_PATH(), FIND_ID_PW_PATH(), JOIN_PATH(), '/board/update', '/board/detail']
   const buttonCheck = exceptionPath.some(path => location.startsWith(path));
 
   const loginPath = `${LOGIN_PATH()}`
@@ -25,7 +25,7 @@ export default function Header() {
   }
 
   return (
-    <div className='header-box'>
+    <div className={!buttonCheck ? 'header-box' : ""}>
       {!buttonCheck && (
         <>
           <Button text={"게시판"} classNames='btn-pr btn-login' onClick={() => navigate(boardPath)} />
