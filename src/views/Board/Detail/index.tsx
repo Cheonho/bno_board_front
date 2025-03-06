@@ -77,9 +77,10 @@ export default function BoardDetail() {
 
     return (
         <div className={styles.container}>
-            {board ? (
+            {board && boardNum ? (
                 <div className={styles.card}>
                     <BoardInfo
+                        boardNum={boardNum}
                         board={board}
                         deleteBoard={handleDeleteBoard}
                         goBoardList={goBoardList}

@@ -34,12 +34,6 @@ export default function BoardTable({ title, tableHeader, boardList, category, on
     return path
   }
 
-  const updatePath = (boardNum: number | string) => {
-    const pathFunc = pathList?.find((item) => {return item.name === "update"})?.value
-    const path = typeof(pathFunc) === 'function' ? pathFunc(boardNum) : `${BOARD_PATH()}/${BOARD_UPDATE_PATH(boardNum)}`
-    
-    return path
-  }
   const userState = useUserStore((state) => state.user)
   const userId = sessionStorage.getItem('id')
 
@@ -92,9 +86,6 @@ export default function BoardTable({ title, tableHeader, boardList, category, on
                     <td>{item.writerEmail}</td>
                     <td>{item.createAtFormat}</td>
                     <td>{item.viewCount}</td>
-                    <td>
-                      <Button text={"수정"} onClick={() => navigate(updatePath(item.boardNum))} />
-                    </td>
                 </tr>
               )
             })}
