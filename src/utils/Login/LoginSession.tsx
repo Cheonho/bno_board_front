@@ -1,7 +1,10 @@
-export const saveSession = (userName: string, role: string, email: string) => {
-    sessionStorage.setItem("userName", userName);
-    sessionStorage.setItem("user", role);
-    sessionStorage.setItem("email", email);
+import internal from "node:stream";
+
+export const saveSession = (id:number, userNickname:string, role:string, email:string) => {
+    sessionStorage.setItem("id", String(id)) ;
+    sessionStorage.setItem("userNickname", userNickname);
+    sessionStorage.setItem("role", role);
+    sessionStorage.setItem("email", email)
 };
 
 export const clearSession = () => {

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 
 const usePagination = <T>(countPerPage: number) => {
   const [totalList, setTotalList] = useState<T[]>([]);

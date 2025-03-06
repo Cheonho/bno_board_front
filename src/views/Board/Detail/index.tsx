@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import {useEffect, useState} from "react";
+import {useNavigate, useParams} from "react-router-dom";
 import styles from "styles/boardDetail.module.css";
 import { BoardType, CommentListType } from "types/interface";
 import BoardInfo from "components/board/BoardInfo";

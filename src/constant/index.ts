@@ -7,6 +7,9 @@ export const USER_PATH = (userId: string) => `/user/${userId}`;
 export const LOGIN_PATH = () => `/login`;
 export const JOIN_PATH = () => `/join`;
 export const FIND_ID_PW_PATH = () => `/findIdPw`;
+export const MY_PAGE_PATH = () => `/mypage`;
+export const NICKNAME_CORRECTION = () => `/nicknamecorrection`
+export const PASSWORD_CORRECTION = () => `/passwordcorrection`
 
 // Board
 export const BOARD_PATH = () => '/board';

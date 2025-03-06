@@ -1,6 +1,6 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import 'styles/board-style.css';
+import {BoardListType} from 'types/interface';
 import { BoardType } from 'types/interface';
 import { format } from 'date-fns'
 
