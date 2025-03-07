@@ -1,7 +1,4 @@
-export interface ResType {
-    code: string;
-    message: string;
-}
+import { ResType } from "./common";
 
 export interface BoardType {
     boardIdx?: number;

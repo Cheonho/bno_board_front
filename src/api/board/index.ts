@@ -1,7 +1,8 @@
 import customApi, { authInstance } from "utils/interceptor";
-import { BoardListType, CommentListType, BoardWriteType, BoardType } from "types/interface";
-import { DetailBoardType, ResType } from "types/interface/board-list.interface";
-import { GetCommentListResponse } from "types/interface/comment-list.interface";
+import { BoardListType, BoardWriteType, BoardType } from "types/interface";
+import { DetailBoardType } from "types/interface/board-list.interface";
+import { GetCommentListResponse, PostCommentListResponse } from "types/interface/comment-list.interface";
+import { ResType } from "types/interface/common";
 
 // export async function getBoardListApi(page: number): Promise<BoardListType> {
 //   const res = await authInstance.get(`/board/board-list`, {
@@ -91,31 +92,34 @@ export async function getDetailBoardApi(boardNum: number | string): Promise<Deta
   )
   return res.data
 }
-
-export const getBoardApi = async (boardNum:number | string): Promise<BoardType> => {
+export const getBoardApi = async (boardNum: number | string): Promise<BoardType> => {
   const response = await authInstance.get(`/board/${boardNum}`);
   return response.data;
 };
 
-export const getCommentsApi = async (boardNum:number | string): Promise<GetCommentListResponse> => {
+export const getCommentsApi = async (boardNum: number | string): Promise<GetCommentListResponse> => {
   const response = await authInstance.get<GetCommentListResponse>(`/board/${boardNum}/comment`);
   return response.data;
 };
 
 
-export const deleteBoardApi = async (boardNum: number | string): Promise<void> => {
-  await authInstance.delete(`/board/${boardNum}`);
+export const deleteBoardApi = async (boardNum: number | string): Promise<ResType> => {
+  const response = await authInstance.delete(`/board/${boardNum}`);
+  return response.data;
 };
 
-export const deleteCommentApi = async (boardNum: number, commentNum: number): Promise<void> => {
-  await authInstance.delete(`/board/${boardNum}/comment/${commentNum}`);
+export const deleteCommentApi = async (boardNum: number | string, commentNum: number): Promise<ResType> => {
+  const response = await authInstance.delete(`/board/${boardNum}/comment/${commentNum}`);
+  return response.data;
 };
 
- export const modifyCommentApi = async (boardNum:number | string, commentNum: number, content: string): Promise<void> => {
-     await authInstance.patch(`/board/${boardNum}/comment/${commentNum}`, { content });
- };
-
- export const addCommentApi = async (boardNum:number | string, parentNum: number | null, content: string): Promise<void> => {
-  await authInstance.post(`/board/${boardNum}/comment`, { parentNum, content });
+export const modifyCommentApi = async (boardNum: number | string, commentNum: number, content: string): Promise<ResType> => {
+  const response = await authInstance.patch(`/board/${boardNum}/comment/${commentNum}`, { content });
+  return response.data;
 };
 
+export const addCommentApi = async (boardNum: number | string, parentNum: number | null, content: string): Promise<PostCommentListResponse> => {
+  console.log("content : " , content)
+  const response = await authInstance.post(`/board/${boardNum}/comment`, { parentNum, content });
+  return response.data;
+};

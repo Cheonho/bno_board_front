@@ -37,7 +37,7 @@ export default function BoardDetail() {
         if (!boardNum) return;
         getCommentsApi(boardNum)
             .then((data) => {
-                console.log("getCommentsApi : ", data.code, data.message);
+                console.log("getCommentsApi : ", data, data.message);
                 setComments(Array.isArray(data.commentList) ? data.commentList : []);
             })
             .catch(error => {
@@ -66,7 +66,6 @@ export default function BoardDetail() {
         if (!boardNum) return;
         getCommentsApi(boardNum)
             .then((data) => {
-                console.log(data.commentList);
                 setComments(Array.isArray(data.commentList) ? data.commentList : []);
             })
             .catch(error => {

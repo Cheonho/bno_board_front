@@ -7,6 +7,7 @@ import { BOARD_DETAIL_PATH, BOARD_PATH, BOARD_UPDATE_PATH, BOARD_WRITE_PATH } fr
 import Input from 'components/common/Input';
 import Button from 'components/common/Button';
 import useUserStore from 'stores/useUserStore';
+import { getSessionUser } from 'utils/Login/LoginSession';
 
 interface Props {
   title: string;
@@ -35,7 +36,7 @@ export default function BoardTable({ title, tableHeader, boardList, category, on
   }
 
   const userState = useUserStore((state) => state.user)
-  const userId = sessionStorage.getItem('id')
+  const userId = getSessionUser().id
 
   const handleDetailPath = (event: any, boardNum: number | string) => {
     if (typeof(handleViewCount) == 'function') {

@@ -3,6 +3,7 @@ import styles from "styles/boardDetail.module.css";
 import {useState} from "react";
 import CommentForm from "./CommentForm";
 import { getCommentsApi, deleteCommentApi, modifyCommentApi } from "api/board";
+import { getSessionUser } from "utils/Login/LoginSession";
 
 interface CommentListProps {
     comment: CommentListType;
@@ -17,6 +18,7 @@ interface CommentListProps {
 export default function CommentItem({ comment, openFormId, setOpenFormId, setComments, onSubmitSuccess, openEditFormId, setOpenEditFormId }: CommentListProps) {
 
     const isOpen = openFormId === comment.commentNum;
+    const userInfo = getSessionUser();
 
     const ReplyFormOpen = () => {
         setOpenFormId(isOpen ? null : Number(comment.commentNum));
@@ -75,18 +77,22 @@ export default function CommentItem({ comment, openFormId, setOpenFormId, setCom
                         <div className={styles.comment1}>
                             {comment.parentNum == null ? "" : <span>↳ &ensp;</span>}
                             {comment.content}
-                            <div className={styles.comment2}>
-                                <button className={styles.btn} onClick={handleEdit}>✏️</button>
-                                <button className={styles.btn} onClick={() => onDeleteComment(Number(comment.boardNum), Number(comment.commentNum))}>❌</button>
-                            </div>
+                            {userInfo.id && (
+                                <div className={styles.comment2}>
+                                    <button className={styles.btn} onClick={handleEdit}>✏️</button>
+                                    <button className={styles.btn} onClick={() => onDeleteComment(Number(comment.boardNum), Number(comment.commentNum))}>❌</button>
+                                </div>
+                            )}
                         </div>
 
                         <div className={styles.comment3}>
                             [{comment.writerEmail}]
                             <div className={styles.comment4}>{new Date(comment.createAt).toLocaleString()}</div>
-                            <div className={styles.comment4}>
-                                <button className={styles.btn} onClick={ReplyFormOpen}>{isOpen ? "닫기" : "답글달기"}</button>
-                            </div>
+                            {userInfo.id && (
+                                <div className={styles.comment4}>
+                                    <button className={styles.btn} onClick={ReplyFormOpen}>{isOpen ? "닫기" : "답글달기"}</button>
+                                </div>
+                            )}
                         </div>
                     </>
                 )}
