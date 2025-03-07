@@ -28,7 +28,7 @@ export default function Main() {
 
   const [selected, setSelected] = useState(1);
   // const [searchWord, setSearchWord] = useState("");
-  const [searchWord, handleSearchWord, setSearchWord] = useInput<string>("");
+  const [searchWord, handleSearchWord] = useInput<string>("");
   const [viewBoardList, setViewBoardList] = useState<BoardType[]>([]);
 
   const pathList = [
@@ -48,10 +48,10 @@ export default function Main() {
     setPage(1)
   }
 
-  // const handleSearchWord = (event: any) => {
-  //   setSearchWord(event?.target.value)
-  //   setPage(1)
-  // }
+  const handleSearchWordWithPageReset = (event: any) => {
+    handleSearchWord(event)
+    setPage(1)
+  }
 
   const handleViewCount = async (boardNum: number | string) => {
     try{
@@ -131,7 +131,7 @@ export default function Main() {
         pathList={pathList}
         
         searchWord={searchWord}
-        handleSearch={handleSearchWord}
+        handleSearch={handleSearchWordWithPageReset}
         handleViewCount={handleViewCount}
       />
       {isPage ? 

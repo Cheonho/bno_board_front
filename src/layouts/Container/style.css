@@ -5,9 +5,17 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  position:absolute;
-  top:50%;
-  left:50%;
-  transform: translate(-50%, -50%);
+  margin: 0 auto;
   max-width: 1040px;
+  opacity: 0;
+  animation: fadeIn 0.5s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }

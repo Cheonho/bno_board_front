@@ -25,7 +25,7 @@ export default function Container() {
   }, [checkFun, pathname])
 
   return (
-    <div className={isClass ? 'container' : ''}>
+    <div className={isClass ? `container` : ''}>
       <Header />
       <Outlet />
       {pathname !== AUTH_PATH() && <Footer />}

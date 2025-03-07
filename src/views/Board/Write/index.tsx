@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import './style.css'
 import BoardWriteCom from 'components/board/BoardWrite'
 import { BoardWriteType } from 'types/interface';
@@ -10,6 +10,7 @@ export default function BoardWrite() {
   const [content, setContent] = useState("");
   const [writer, setWriter] = useState("");
   const [writerEmail, setWriterEmail] = useState("");
+  const [isWrite, setIsWrite] = useState(false);
   const userInfo = useUserStore((state) => state.user)
 
   const {mutateAsync: postWriteBoard} = usePostWriteBoardListApiQuery();
@@ -24,6 +25,14 @@ export default function BoardWrite() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!title || !content) {
+      setIsWrite(false)
+      return
+    }
+    setIsWrite(true)
+  };
+
+  const boardWriteRequst = useCallback(() => {
     const payload: BoardWriteType = {
       title: title,
       content: content,
@@ -31,7 +40,7 @@ export default function BoardWrite() {
     }
 
     postWriteBoard(payload)
-  };
+  }, [content, title, postWriteBoard, writerEmail])
 
   useEffect(() => {
     if (userInfo) {
@@ -39,6 +48,12 @@ export default function BoardWrite() {
       setWriterEmail(userInfo.email)
     }
   }, [userInfo])
+
+  useEffect(() => {
+    if (isWrite) {
+      boardWriteRequst()
+    }
+  }, [isWrite, boardWriteRequst])
 
   return (
     <div>

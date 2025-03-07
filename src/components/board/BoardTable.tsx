@@ -79,13 +79,13 @@ export default function BoardTable({ title, tableHeader, boardList, category, on
             {boardList?.map((item, index) => {
               return (
                 <tr key={index}>
-                    <td>{item.boardIdx}</td>
-                    <td>
-                      <Button text={item.title} classNames='non-btn' onClick={(event) => handleDetailPath(event, item.boardNum)} />
-                    </td>
-                    <td>{item.writerEmail}</td>
-                    <td>{item.createAtFormat}</td>
-                    <td>{item.viewCount}</td>
+                  <td>{item.boardIdx}</td>
+                  <td>
+                    <Button text={item.title} classNames='non-btn' onClick={(event) => handleDetailPath(event, item.boardNum)} />
+                  </td>
+                  <td>{item.writerEmail}</td>
+                  <td>{item.createAtFormat}</td>
+                  <td>{item.viewCount}</td>
                 </tr>
               )
             })}

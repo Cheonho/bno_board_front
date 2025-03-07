@@ -66,7 +66,7 @@ export const usePutUpdateBoardApiQuery = () => {
     onSuccess: () => {
       console.log("update 성공")
       queryClient.invalidateQueries({queryKey: ["BoardList"]})
-      queryClient.removeQueries({ queryKey: ["DetailBoard"] });
+      // queryClient.removeQueries({ queryKey: ["DetailBoard"] });
     },
     onError: (error) => {
       console.log(`[UpdateApi - queryError] : `, error)
