@@ -1,4 +1,6 @@
-export default interface CommentList {
+import { ResType } from "./common";
+
+export default interface CommentType {
     commentIdx: number;
     commentNum: number | string;
     content: string;
@@ -9,10 +11,13 @@ export default interface CommentList {
     writerEmail: string;
     createAt: Date;
     updateAt: Date | null;
+    status: boolean;
+    replies?: CommentType[];
 }
 
-export interface GetCommentListResponse {
-    code: string;
-    message: string;
-    commentList: CommentList[];
+export interface GetCommentListResponse extends ResType{
+    commentList: CommentType[];
+}
+
+export interface PostCommentListResponse extends ResType{
 }

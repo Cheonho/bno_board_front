@@ -2,16 +2,16 @@ import React, { useCallback, useEffect, useState } from 'react'
 import './style.css'
 import BoardWriteCom from 'components/board/BoardWrite'
 import { BoardType } from 'types/interface';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import useUserStore from 'stores/useUserStore';
 import Modal from 'components/common/Modal'
 import { LOGIN_PATH } from 'constant';
-import { useGetDetailBoardApiQuery, usePutUpdateBoardApiQuery } from 'api/queries/board/boardQuery';
+import { usePutUpdateBoardApiQuery } from 'api/queries/board/boardQuery';
 
 export default function BoardUpdate() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [writer, setWriter] = useState("");
+  const [_, setWriter] = useState("");
   const [writerEmail, setWriterEmail] = useState("");
   const [board, setBoard] = useState<BoardType>({
     boardNum: "",
@@ -30,25 +30,26 @@ export default function BoardUpdate() {
   const params = useParams();
   const {user: userInfo} = useUserStore();
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const { state } = useLocation();
 
   const {mutate: updateApi} = usePutUpdateBoardApiQuery();
-  const {data: detailBoard, isLoading} = useGetDetailBoardApiQuery(params.boardNum || 0);
-
+  
   const modalClose = () => {
     setIsModalOpen(false);
     navigate(LOGIN_PATH())
   };
 
   const getBoardData = useCallback( async () => {
+    const detailBoard = state.detailBoard
+    
     if (detailBoard) {
-      const newBoard = detailBoard.detailBoard
-      setBoard(newBoard)
-      setTitle(newBoard.title)
-      setContent(newBoard.content)
-      setWriter(newBoard.writerNickname)
-      setWriterEmail(newBoard.writerEmail)
+      setBoard(detailBoard)
+      setTitle(detailBoard.title)
+      setContent(detailBoard.content)
+      setWriter(detailBoard.writerNickname)
+      setWriterEmail(detailBoard.writerEmail)
     }
-  }, [detailBoard])
+  }, [state.detailBoard])
 
   const onChangeTitle = (e: any) => {
     setTitle(e.target.value)
@@ -66,6 +67,8 @@ export default function BoardUpdate() {
         title: title,
         content: content
       }
+
+      console.log("payload : ", payload)
 
       updateApi(payload)
     } catch (err) {
@@ -89,7 +92,7 @@ export default function BoardUpdate() {
           comType="u"
           title={title}
           content={content}
-          writer={writer}
+          writer={writerEmail}
           onChangeTitle={onChangeTitle} 
           onChangeContent={onChangeContent}
           handleSubmit={handleSubmit}

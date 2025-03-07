@@ -1,15 +1,21 @@
+import { BOARD_PATH, BOARD_UPDATE_PATH } from "constant";
 import { useNavigate } from "react-router-dom";
 import styles from "styles/boardDetail.module.css";
 import {BoardType} from "types/interface";
+import { getSessionUser } from "utils/Login/LoginSession";
 
 interface BoardInfoProps {
+    boardNum: string | number;
     board: BoardType;
     id?: number;
     deleteBoard: () => void;
     goBoardList: () => void;
 }
 
-export default function BoardInfo({ board, deleteBoard, goBoardList }: BoardInfoProps) {
+export default function BoardInfo({ boardNum, board, deleteBoard, goBoardList }: BoardInfoProps) {
+    const navigate = useNavigate();
+    const userInfo = getSessionUser();
+    
     return (
         <>
             <h2 className={styles.title}>{board.title}</h2>
@@ -39,9 +45,12 @@ export default function BoardInfo({ board, deleteBoard, goBoardList }: BoardInfo
             <div className={styles.btn_box}>
 
                 <button className={styles.boardlistBtn} onClick={goBoardList}>목록으로</button>
-                <div className={styles.toboardlist}>
-                    <button className={styles.btn}>수정</button> |
-                    <button className={styles.btn} onClick={deleteBoard}>삭제</button></div>
+                {userInfo.id && (
+                    <div className={styles.toboardlist}>
+                        <button className={styles.btn} onClick={() => navigate(`${BOARD_PATH()}/${BOARD_UPDATE_PATH(boardNum)}`, {state : {'detailBoard' : board}})}>수정</button> |
+                        <button className={styles.btn} onClick={deleteBoard}>삭제</button>
+                    </div>
+                )}
             </div>
         </>
     );

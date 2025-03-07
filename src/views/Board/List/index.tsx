@@ -15,7 +15,7 @@ export default function Main() {
     {value:3, name:"제목"},
     {value:4, name:"내용"},
   ]
-  const tableHeader = ['번호', '제목', '작성자', '작성일', '조회수', '수정']
+  const tableHeader = ['번호', '제목', '작성자', '작성일', '조회수']
   const [isPage, setIsPage] = useState<boolean>(true);
   const [page, setPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(0);

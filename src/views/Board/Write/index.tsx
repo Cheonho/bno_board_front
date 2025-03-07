@@ -47,7 +47,7 @@ export default function BoardWrite() {
           comType='w'
           title={title}
           content={content}
-          writer={writer}
+          writer={writerEmail}
           onChangeTitle={onChangeTitle} 
           onChangeContent={onChangeContent}
           handleSubmit={handleSubmit}
