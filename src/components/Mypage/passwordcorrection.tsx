@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {useLocation, useNavigate} from "react-router-dom";
-import { passwordcorrection } from "../../api/Mypage/nicknameindex";
+import {passwordcorrection} from "../../api/Mypage/nicknameindex";
 import styles from "../../styles/join.module.css";
 import { isValidPassword } from "../../utils/Join/validation";
 
@@ -9,20 +9,14 @@ const PasswordForm: React.FC = () => {
         password: "",
         checkpassword: ""
     });
+
+    const [nowpassword, setNowpassword] = useState("") ;
     const [checkPwMessage, setCheckPwMessage] = useState("");
     const [checkPwMessageType, setCheckPwMessageType] = useState<"success" | "error" | "">("");
+
     const navigate = useNavigate();
 
-    const location = useLocation();
-    const [loginmodel, setLoginModel] = useState<any>()
-
 const id = Number(sessionStorage.getItem("id")); // 숫자로 변환
-/*
-const [password, setpassword] = useState("") ;
-const handleNowPwcheck = async () => {
-    const samepassword = await nowPasswordCheck(password, id) ;
-    if
-}*/
 
 const handlePwCheck = (password: string) => {
         if (password.length < 8 || password.length > 16) {
@@ -39,6 +33,7 @@ const handlePwCheck = (password: string) => {
         }
     };
 
+
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setForm({
             ...form,
@@ -50,18 +45,19 @@ const handlePwCheck = (password: string) => {
         }
     };
 
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         try {
-            const response = await passwordcorrection(loginmodel.id);
+            const response = await passwordcorrection(id, form.password, nowpassword);
 
-            console.log(response);
             if (response.status === 200) {
-                alert("변경되었습니다.");
+                alert(response.data.message);
+                navigate("/mypage");
             }
-        } catch (error) {
-            alert("변경 실패");
+        } catch (error : any) {
+            alert(error.response.data.body.message);
         }
     };
 
@@ -73,14 +69,12 @@ const handlePwCheck = (password: string) => {
                     name="nowpassword"
                     placeholder="현재 비밀번호"
                     type="password"
+                    value={nowpassword}
                     required
+                    onChange={(e) => setNowpassword(e.target.value)}
                 />
 
-                {(form.password.length > 0 && checkPwMessage) && (
-                    <div className={styles.check_message} style={{ color: checkPwMessageType === "error" ? "red" : "green" }}>
-                        {checkPwMessage}
-                    </div>
-                )}
+                <br /> <br />
                 <input
                     name="password"
                     placeholder="새 비밀번호"
