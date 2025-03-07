@@ -5,6 +5,7 @@ import { BoardWriteType } from 'types/interface';
 import useUserStore from 'stores/useUserStore';
 import { usePostWriteBoardListApiQuery } from 'api/queries/board/boardQuery';
 
+// 검색기록 저장
 export default function BoardWrite() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -29,7 +30,7 @@ export default function BoardWrite() {
       setIsWrite(false)
       return
     }
-    setIsWrite(true)
+    boardWriteRequst();
   };
 
   const boardWriteRequst = useCallback(() => {
@@ -48,12 +49,6 @@ export default function BoardWrite() {
       setWriterEmail(userInfo.email)
     }
   }, [userInfo])
-
-  useEffect(() => {
-    if (isWrite) {
-      boardWriteRequst()
-    }
-  }, [isWrite, boardWriteRequst])
 
   return (
     <div>

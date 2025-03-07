@@ -12,6 +12,7 @@ import { ResType } from "types/interface/common";
 // }
 
 export async function getBoardListApi(page:number): Promise<BoardListType> {
+  console.log("page : ", page)
   const res = await customApi<BoardListType>(
     `/board/board-list`,
     `GET`,

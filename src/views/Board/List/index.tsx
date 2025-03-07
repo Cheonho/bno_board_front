@@ -8,6 +8,7 @@ import BoardTable from 'components/board/BoardTable';
 import { BOARD_DETAIL_PATH, BOARD_PATH, BOARD_UPDATE_PATH, BOARD_WRITE_PATH } from 'constant';
 import { useGetBoardListApiQuery, useGetSearchBoardListApiQuery, usePatchViewCountApiQuery } from 'api/queries/board/boardQuery';
 import useInput from 'hooks/useInput';
+import useSearchHistoryStore from 'stores/useSearchHistoryStore';
 
 export default function Main() {
   const category = [
@@ -17,18 +18,19 @@ export default function Main() {
     {value:4, name:"내용"},
   ]
   const tableHeader = ['번호', '제목', '작성자', '작성일', '조회수']
+  const {lastSearchHistory, setSearchHistory} = useSearchHistoryStore();
   const [isPage, setIsPage] = useState<boolean>(true);
-  const [page, setPage] = useState<number>(1);
-  const [totalPages, setTotalPages] = useState<number>(0);
-  const [totalElements, setTotalElements] = useState<number>(0);
-  const [currentSection, setCurrentSection] = useState<number>(1);
-  const [firstPageNumber, setFirstPageNumber] = useState<number>(1);
-  const [lastPageNumber, setLastPageNumber] = useState<number>(1);
-  const [pageNumberSize, setPageNumberSize] = useState<number>(5);
+  const [page, setPage] = useState<number>(lastSearchHistory ? lastSearchHistory.pageInfo.page : 1);
+  const [totalPages, setTotalPages] = useState<number>(lastSearchHistory ? lastSearchHistory.pageInfo.totalPage : 0);
+  const [totalElements, setTotalElements] = useState<number>(lastSearchHistory ? lastSearchHistory.pageInfo.totalElement : 0);
+  const [currentSection, setCurrentSection] = useState<number>(lastSearchHistory ? lastSearchHistory.pageInfo.currentSection : 1);
+  const [firstPageNumber, setFirstPageNumber] = useState<number>(lastSearchHistory ? lastSearchHistory.pageInfo.firstPageNumber : 1);
+  const [lastPageNumber, setLastPageNumber] = useState<number>(lastSearchHistory ? lastSearchHistory.pageInfo.lastPageNumber : 1);
+  const [pageNumberSize, setPageNumberSize] = useState<number>(lastSearchHistory ? lastSearchHistory.pageInfo.pageNumberSize : 5);
 
-  const [selected, setSelected] = useState(1);
+  const [selected, setSelected] = useState(lastSearchHistory ? lastSearchHistory.category : 1);
   // const [searchWord, setSearchWord] = useState("");
-  const [searchWord, handleSearchWord] = useInput<string>("");
+  const [searchWord, handleSearchWord] = useInput<string>(lastSearchHistory ? lastSearchHistory.keyword : "");
   const [viewBoardList, setViewBoardList] = useState<BoardType[]>([]);
 
   const pathList = [
@@ -60,6 +62,33 @@ export default function Main() {
       console.log(err)
     }
   }
+
+  const handleSearchElement = useCallback(() => {
+    setSearchHistory({
+      pageInfo: {
+        page: page,
+        totalPage: totalPages,
+        totalElement: totalElements,
+        currentSection: currentSection,
+        firstPageNumber: firstPageNumber,
+        lastPageNumber: lastPageNumber,
+        pageNumberSize: pageNumberSize
+      },
+      keyword: searchWord,
+      category: selected
+    })
+  },[
+    currentSection, 
+    firstPageNumber, 
+    lastPageNumber, 
+    page, 
+    pageNumberSize, 
+    searchWord, 
+    selected, 
+    setSearchHistory, 
+    totalElements, 
+    totalPages
+  ])
 
   const setPageData = (resData: any) => {
     if (!resData || Object.keys(resData).length === 0) {
@@ -109,7 +138,11 @@ export default function Main() {
     setPageData(searchBoardList.pageData)
   }, [dataProcessing, searchBoardList])
 
-  useEffect(() => { 
+  useEffect(() => {
+    if ((page && page !== 1) || (searchWord && selected)) {
+      handleSearchElement()
+    }
+
     if (loading) {
       setViewBoardList((prev) => prev)
     } else if (searchWord && selected) {
@@ -117,7 +150,15 @@ export default function Main() {
     } else {
       getBoardList();
     }
-  },[loading, page, searchWord, selected, getSearchBoardList, getBoardList])
+  },[
+    loading, 
+    page, 
+    searchWord, 
+    selected, 
+    getSearchBoardList, 
+    getBoardList, 
+    handleSearchElement
+  ])
 
   return (
     <div className='board-list-page-con'>

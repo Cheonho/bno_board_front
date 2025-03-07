@@ -3,6 +3,7 @@ import { useMutation, useQuery, useQueryClient, UseQueryResult } from "@tanstack
 import { useNavigate } from "react-router-dom";
 import { BoardListType, BoardWriteType } from "types/interface";
 import { DetailBoardType } from "types/interface/board-list.interface";
+import useSearchHistoryStore from "stores/useSearchHistoryStore";
 
 export const useGetBoardListApiQuery = (
   param: number,
@@ -31,11 +32,13 @@ export const useGetSearchBoardListApiQuery = (
 export const usePostWriteBoardListApiQuery = () => {
   const queryClient = useQueryClient()
   const navigate = useNavigate();
+  const {clearSearchHistory} = useSearchHistoryStore();
 
   return useMutation({
     mutationFn: (board: BoardWriteType) => postWriteBoardApi(board),
     onSuccess: () => {
       queryClient.invalidateQueries({queryKey:["BoardList"]});
+      clearSearchHistory();
       navigate('/');
     },
     onError: (error) => {
