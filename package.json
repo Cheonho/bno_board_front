@@ -1,8 +1,11 @@
 {
   "name": "board-front",
   "version": "0.1.0",
+  "proxy": "http://localhost:8080",
   "private": true,
   "dependencies": {
+    "@tanstack/react-query": "^5.67.1",
+    "@tanstack/react-query-devtools": "^5.67.1",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.2.0",
@@ -16,17 +19,20 @@
     "http-proxy-middleware": "^3.0.3",
     "jwt-decode": "^4.0.0",
     "next-auth": "^4.24.11",
-    "react": "^19.0.0",
+    "react": "^18.3.1",
     "react-datepicker": "^8.0.0",
     "react-daum-postcode": "^3.2.0",
-    "react-dom": "^19.0.0",
+    "react-dom": "^18.3.1",
     "react-modal": "^3.16.3",
+    "react-query": "^3.39.3",
     "react-router-dom": "^7.1.5",
-    "react-scripts": "5.0.1",
+    "react-scripts": "^5.0.1",
     "react-session-api": "^1.1.0",
     "recoil": "^0.7.7",
+    "styled-components": "^6.1.15",
     "typescript": "^4.9.5",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "zustand": "^5.0.3"
   },
   "scripts": {
     "start": "react-scripts start",

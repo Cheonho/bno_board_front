@@ -1,15 +1,18 @@
-import React, {useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import './style.css'
 import BoardWriteCom from 'components/board/BoardWrite'
-import {BoardWriteType} from 'types/interface';
-import {postWriteBoardApi} from 'api/board';
-import {useNavigate} from 'react-router-dom';
+import { BoardWriteType } from 'types/interface';
+import useUserStore from 'stores/useUserStore';
+import { usePostWriteBoardListApiQuery } from 'api/queries/board/boardQuery';
 
 export default function BoardWrite() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [writer, setWriter] = useState("testId");
-  const navigate = useNavigate();
+  const [writer, setWriter] = useState("");
+  const [writerEmail, setWriterEmail] = useState("");
+  const userInfo = useUserStore((state) => state.user)
+
+  const {mutateAsync: postWriteBoard} = usePostWriteBoardListApiQuery();
 
   const onChangeTitle = (e: any) => {
     setTitle(e.target.value)
@@ -20,30 +23,36 @@ export default function BoardWrite() {
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
-      e.preventDefault();
-      try {
-        const payload: BoardWriteType = {
-          title: title,
-          content: content,
-          writerId: writer,
-        }
+    e.preventDefault();
+    const payload: BoardWriteType = {
+      title: title,
+      content: content,
+      writerEmail: writerEmail,
+    }
 
-        const res = await postWriteBoardApi(payload)
-      } catch (err) {
-        console.log(err)
-      }
-      navigate("/");
-    };
+    postWriteBoard(payload)
+  };
+
+  useEffect(() => {
+    if (userInfo) {
+      setWriter(userInfo.nickname)
+      setWriterEmail(userInfo.email)
+    }
+  }, [userInfo])
 
   return (
     <div>
-      <BoardWriteCom 
-        title={title}
-        content={content}
-        onChangeTitle={onChangeTitle} 
-        onChangeContent={onChangeContent}
-        handleSubmit={handleSubmit}
-      />
+      {userInfo ? 
+        <BoardWriteCom 
+          comType='w'
+          title={title}
+          content={content}
+          writer={writerEmail}
+          onChangeTitle={onChangeTitle} 
+          onChangeContent={onChangeContent}
+          handleSubmit={handleSubmit}
+        /> : ""
+      }
     </div>
   )
 }

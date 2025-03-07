@@ -1,4 +1,4 @@
-body {
+.main-container {
   font-family: Arial, sans-serif;
   background-color: #f8f9fa;
   margin: 0;
@@ -10,8 +10,15 @@ body {
   width: 100%;
 }
 
+/* .board-list-page-con {
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform: translate(-50%, -50%);
+} */
+
 .board-container {
-  max-width: 100%;
+  max-width: 50%;
   background: white;
   padding: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -21,7 +28,7 @@ body {
 .search-box {
   display: flex;
   justify-content: flex-start;
-  margin-bottom: 20px;
+  margin: 20px 0;
   gap: 5px;
 }
 
@@ -36,6 +43,7 @@ body {
   display: flex;
   gap: 10px;
   width: 30%;
+  justify-content: flex-end;
 }
 
 .search-box .btn-box button {
@@ -45,7 +53,7 @@ body {
   padding: 8px 12px;
   cursor: pointer;
   border-radius: 4px;
-  width: 100%;
+  width: 50%;
 }
 
 .search-box .btn-box button:hover {

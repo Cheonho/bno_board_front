@@ -1,20 +1,38 @@
-export interface BoardListType {
-    boardNum: number; // boardIdx
+import { ResType } from "./common";
+
+export interface BoardType {
+    boardIdx?: number;
+    boardNum: string | number;
     title: string;
     content: string;
-    writerId: string;
+    writerEmail: string;
     writerNickname: string;
     createAt: Date;
     updateAt: Date | null;
     viewCount: number | 0;
-    commentCount: number | 0;
-    favoriteCount: number | 0;
     createAtFormat: string | "";
     updateAtFormat: string | "";
+    status: boolean | true;
 };
+
+export interface BoardListType extends ResType {
+    boardList: BoardType[],
+    pageData: {
+        pageNumber: number,
+        totalPages: number,
+        currentSection: number,
+        firstPageNumber: number,
+        lastPageNumber: number,
+        totalElements: number
+    }
+}
+
+export interface DetailBoardType extends ResType {
+    detailBoard: BoardType,
+}
 
 export interface BoardWriteType {
     title: string;
     content: string;
-    writerId: string;
+    writerEmail: string;
 };

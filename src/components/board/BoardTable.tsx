@@ -2,24 +2,52 @@ import React from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import 'styles/board-style.css';
 import {BoardListType} from 'types/interface';
-import {BOARD_DETAIL_PATH, BOARD_PATH, BOARD_WRITE_PATH, LOGIN_PATH} from 'constant';
+import { BoardType } from 'types/interface';
+import { BOARD_DETAIL_PATH, BOARD_PATH, BOARD_UPDATE_PATH, BOARD_WRITE_PATH } from 'constant';
+import Input from 'components/common/Input';
+import Button from 'components/common/Button';
+import useUserStore from 'stores/useUserStore';
+import { getSessionUser } from 'utils/Login/LoginSession';
 
 interface Props {
-  boardList: BoardListType[];
+  title: string;
+  tableHeader: string[];
+  boardList: BoardType[];
   category: {value: number, name: string}[];
   onChangeSelect: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   selected: number;
   searchWord: string;
-  handleSearchWord: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleSearch: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleViewCount?: (boardNum: number | string, event: React.MouseEvent<HTMLButtonElement>) => void;
+  pathList?: {name: string, value: any}[];
 }
 
-export default function BoardTable({ boardList, category, onChangeSelect, selected, searchWord, handleSearchWord }: Props) {
+export default function BoardTable({ title, tableHeader, boardList, category, onChangeSelect, selected, searchWord, handleSearch, pathList, handleViewCount }: Props) {
 
   const navigate = useNavigate();
+  const writePath = pathList?.find((item) => {return item.name === "write"})?.value 
+                    ?? `${BOARD_PATH()}/${BOARD_WRITE_PATH()}`
+
+  const detailPath = (boardNum: number | string) => {
+    const pathFunc = pathList?.find((item) => {return item.name === "detail"})?.value
+    const path = typeof(pathFunc) === 'function' ? pathFunc(boardNum) : `${BOARD_PATH()}/${BOARD_DETAIL_PATH(boardNum)}`
+    
+    return path
+  }
+
+  const userState = useUserStore((state) => state.user)
+  const userId = getSessionUser().id
+
+  const handleDetailPath = (event: any, boardNum: number | string) => {
+    if (typeof(handleViewCount) == 'function') {
+      handleViewCount(boardNum, event)
+    }
+    navigate(detailPath(boardNum))
+  }
 
   return (
     <div className="board-container">
-        <h2>게시판</h2>
+        <h2>{title}</h2>
         <div className="search-box">
           <select id="category" onChange={onChangeSelect} value={selected}>
             {category?.map((item, index) => {
@@ -31,10 +59,9 @@ export default function BoardTable({ boardList, category, onChangeSelect, select
             })}
           </select>
           <div className='board-top'>
-            <input type="text" id="search-input" value={searchWord} onChange={handleSearchWord} />
+            <Input type="text" id="search-input" value={searchWord} onChange={handleSearch} />
             <div className='btn-box'>
-              <button onClick={() => navigate(`${BOARD_PATH()}/${BOARD_WRITE_PATH()}`)}>글쓰기</button>
-              <button onClick={() => navigate(`${LOGIN_PATH()}`)}>로그인</button>
+              {userState && userId ? <Button text={"글쓰기"} onClick={() => navigate(writePath)} /> : ""}
             </div>
           </div>
         </div>
@@ -42,23 +69,22 @@ export default function BoardTable({ boardList, category, onChangeSelect, select
         <table className="board-table">
             <thead>
                 <tr>
-                    <th>번호</th>
-                    <th>제목</th>
-                    <th>작성자</th>
-                    <th>작성일</th>
-                    <th>조회수</th>
+                  {tableHeader?.map((header, index) => {
+                    return (
+                      <th key={index}>{header}</th>
+                    )
+                  })}
                 </tr>
             </thead>
             <tbody>
-            {boardList?.map((item) => {
+            {boardList?.map((item, index) => {
               return (
-                <tr>
-                  {/* <BoardItem boardListType={item} /> */}
-                    <td>{item.boardNum}</td>
+                <tr key={index}>
+                    <td>{item.boardIdx}</td>
                     <td>
-                      <Link to={`${BOARD_PATH()}/${BOARD_DETAIL_PATH(item.boardNum)}`}>{ item.title }</Link>
+                      <Button text={item.title} classNames='non-btn' onClick={(event) => handleDetailPath(event, item.boardNum)} />
                     </td>
-                    <td>{item.writerNickname}</td>
+                    <td>{item.writerEmail}</td>
                     <td>{item.createAtFormat}</td>
                     <td>{item.viewCount}</td>
                 </tr>

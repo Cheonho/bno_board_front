@@ -56,7 +56,7 @@ const MypageForm: React.FC<Props> = ({email, userNickname, password, address}) =
             <div className={styles.info_box}>
                 <span className={styles.info_title}>닉네임</span>
                 <span className={styles.info_content}>{loginmodel?.userNickname || userNickname}</span>
-                <button onClick={nicknamecorrection}>수정</button>
+                <button className={styles.btn} onClick={nicknamecorrection}>수정</button>
             </div>
 
             <div className={styles.info_box}>
@@ -67,12 +67,12 @@ const MypageForm: React.FC<Props> = ({email, userNickname, password, address}) =
 
             <div className={styles.info_box}>
                 <span className={styles.info_title}>비밀번호</span>
-                <button onClick={passwordcorrection}>수정</button>
+                <button className={styles.btn} onClick={passwordcorrection}>수정</button>
             </div>
 
             <div className={styles.info_box}>
                 <span className={styles.info_title}>주소</span>
-                <button onClick={addresscorrection}>확인</button>
+                <button className={styles.btn} onClick={addresscorrection}>확인</button>
             </div>
         </div>
     );

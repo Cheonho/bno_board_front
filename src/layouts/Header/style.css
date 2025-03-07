@@ -1,0 +1,11 @@
+.header-box {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  margin-bottom: 15px;
+  gap: 10px;
+}
+
+.btn-login {
+  width: 12% !important;
+}

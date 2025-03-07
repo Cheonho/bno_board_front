@@ -5,20 +5,16 @@ import {LoginModel, UserModel} from "common/UserModel";
 import LoginForm from "components/Login/LoginForm";
 import styles from "styles/login.module.css";
 import { AxiosError } from 'axios'
-import { jwtDecode, JwtPayload } from "jwt-decode";
 // @ts-ignore
 import Session from "react-session-api";
 import {saveSession} from "../../utils/Login/LoginSession";
+import useUserStore from "stores/useUserStore";
 
 const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const {setUser} = useUserStore();
     const navigate = useNavigate();
-
-    interface CustomJwtPayload extends JwtPayload {
-        role?: string;   // 역할 (USER, ADMIN 등)
-        email?: string; // 사용자 email
-    }
 
     const join = () => navigate("/join");
     const findIdPw = () => navigate("/findIdPw");
@@ -30,15 +26,11 @@ const Login = () => {
 
             // 로그인 성공
             if (response.status === 200) {
-                const { token } = response.data;
-                localStorage.setItem("token" , token) ;
-
-                // const loginmodel: LoginModel = response.data.loginResponseDto;
-                // saveSession(loginmodel.id, loginmodel.userNickname, loginmodel.role, loginmodel.email);
-                // const decoded = jwtDecode<CustomJwtPayload>(token);
-
+                const loginmodel: LoginModel = response.data.loginResponseDto;
+                saveSession(loginmodel.id, loginmodel.userNickname, loginmodel.role, loginmodel.email);
+                setUser({email: loginmodel.email, role: loginmodel.role, nickname: loginmodel.userNickname})
                 alert(response.data.message);
-                navigate("/mypage");
+                navigate("/");
             }
         } catch (error) {
             if (error instanceof AxiosError && error.response) {
