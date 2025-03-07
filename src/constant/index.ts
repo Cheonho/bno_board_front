@@ -10,6 +10,7 @@ export const FIND_ID_PW_PATH = () => `/findIdPw`;
 export const MY_PAGE_PATH = () => `/mypage`;
 export const NICKNAME_CORRECTION = () => `/nicknamecorrection`
 export const PASSWORD_CORRECTION = () => `/passwordcorrection`
+export const ADDRESS_CORRECTION =() => `/addresscorrection`
 
 // Board
 export const BOARD_PATH = () => '/board';

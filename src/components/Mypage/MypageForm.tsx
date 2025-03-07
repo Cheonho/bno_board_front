@@ -3,6 +3,7 @@ import {useLocation, useNavigate} from "react-router-dom";
 // @ts-ignore
 import Session from "react-session-api";
 import styles from "../../styles/mypage.module.css" ;
+import {apitokendata} from "../../api/Mypage/nicknameindex";
 
 interface Props {
     email: string,
@@ -13,9 +14,9 @@ interface Props {
 
 const MypageForm: React.FC<Props> = ({email, userNickname, password, address}) => {
     const navigate = useNavigate();
-    const nicknamecorrection = () => navigate("/nicknamecorrection",{ state: { loginmodel } });
-    const passwordcorrection = () => navigate("/passwordcorrection", { state: { loginmodel } });
-    const addresscorrection = () => navigate("/addresscorrection", { state: { loginmodel } })
+    const nicknamecorrection = () => navigate("/nicknamecorrection");
+    const passwordcorrection = () => navigate("/passwordcorrection");
+    const addresscorrection = () => navigate("/addresscorrection") ;
 
     const location = useLocation();
     const [loginmodel, setLoginModel] = useState<any>()
@@ -25,6 +26,28 @@ const MypageForm: React.FC<Props> = ({email, userNickname, password, address}) =
         role: sessionStorage.getItem("role"),
         email: sessionStorage.getItem("email"),
     })},[])
+
+
+    const ApiTokenData = async () => {
+        const token = localStorage.getItem("token");
+        if (!token) {
+            alert("다시 로그인 바랍니다.");
+            navigate("/login");
+            return;
+        }
+
+        try {
+            const response = await apitokendata(token);  // 토큰을 전달
+            if (response.status === 200) {
+                console.log(response);
+            }
+        } catch (error: any) {
+            console.log(error.response);
+            alert(error.response.data.body.message)
+        }
+    };
+
+
 
     return (
         <div className={styles.container}>

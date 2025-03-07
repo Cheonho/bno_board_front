@@ -11,6 +11,7 @@ import BoardUpdate from 'views/Board/Update';
 import Container from 'layouts/Container';
 import Nicknamecorrection from './components/Mypage/nicknamecorrection' ;
 import Passwordcorrection from './components/Mypage/passwordcorrection';
+import Addresscorrection from "./components/Mypage/addresscorrection";
 
 import {
   AUTH_PATH,
@@ -25,12 +26,14 @@ import {
   MY_PAGE_PATH,
   USER_PATH,
   NICKNAME_CORRECTION,
-  PASSWORD_CORRECTION
+  PASSWORD_CORRECTION,
+  ADDRESS_CORRECTION
 } from 'constant';
 
 import Login from "./views/LoginBoard";
 import FindIdPw from "./components/FindIdPw";
 import MyPage from "./views/MyPage/MyPageindex";
+
 
 function App() {
   return (
@@ -43,6 +46,7 @@ function App() {
           <Route path={MY_PAGE_PATH()} element={<MyPage />}/>
           <Route path={NICKNAME_CORRECTION()} element={<Nicknamecorrection />} />
           <Route path={PASSWORD_CORRECTION()} element={<Passwordcorrection />} />
+          <Route path={ADDRESS_CORRECTION()} element={<Addresscorrection />} />
           <Route path={MAIN_PATH()} element={<Main />} />
           <Route path={AUTH_PATH()} element={<Authentication />} />
           <Route path={USER_PATH(`:userId`)} element={<User />} />
