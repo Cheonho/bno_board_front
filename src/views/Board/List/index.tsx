@@ -7,6 +7,7 @@ import { customFormatDate } from 'utils/dateUtil';
 import BoardTable from 'components/board/BoardTable';
 import { BOARD_DETAIL_PATH, BOARD_PATH, BOARD_UPDATE_PATH, BOARD_WRITE_PATH } from 'constant';
 import { useGetBoardListApiQuery, useGetSearchBoardListApiQuery, usePatchViewCountApiQuery } from 'api/queries/board/boardQuery';
+import useInput from 'hooks/useInput';
 
 export default function Main() {
   const category = [
@@ -26,7 +27,8 @@ export default function Main() {
   const [pageNumberSize, setPageNumberSize] = useState<number>(5);
 
   const [selected, setSelected] = useState(1);
-  const [searchWord, setSearchWord] = useState("");
+  // const [searchWord, setSearchWord] = useState("");
+  const [searchWord, handleSearchWord, setSearchWord] = useInput<string>("");
   const [viewBoardList, setViewBoardList] = useState<BoardType[]>([]);
 
   const pathList = [
@@ -46,10 +48,10 @@ export default function Main() {
     setPage(1)
   }
 
-  const handleSearchWord = (event: any) => {
-    setSearchWord(event?.target.value)
-    setPage(1)
-  }
+  // const handleSearchWord = (event: any) => {
+  //   setSearchWord(event?.target.value)
+  //   setPage(1)
+  // }
 
   const handleViewCount = async (boardNum: number | string) => {
     try{

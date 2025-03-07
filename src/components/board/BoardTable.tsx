@@ -1,8 +1,8 @@
 import React from 'react';
-import {Link, useNavigate} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import 'styles/board-style.css';
 import { BoardType } from 'types/interface';
-import { BOARD_DETAIL_PATH, BOARD_PATH, BOARD_UPDATE_PATH, BOARD_WRITE_PATH } from 'constant';
+import { BOARD_DETAIL_PATH, BOARD_PATH, BOARD_WRITE_PATH } from 'constant';
 import Input from 'components/common/Input';
 import Button from 'components/common/Button';
 import useUserStore from 'stores/useUserStore';
