@@ -94,6 +94,7 @@ const handlePwCheck = (password : string) => {
         setCheckPwMessageType("error");
         return;
     }
+
     // 정규식 검사
     if (!isValidPassword(password)) {
         setCheckPwMessage ('최소 하나의 문자, 숫자, 특수문자가 포함되어야 합니다.');
@@ -116,9 +117,10 @@ const handlePwCheck = (password : string) => {
                     navigate("/");
                 }
             } catch (error:any) {
-            console.log(error)
-                    const errorMessage = error.response.data.body.message
-                    alert(errorMessage);
+            const errorMessage = error.response?.data?.body?.message;
+            const errorDetails = error.response?.data ;
+
+            alert(errorMessage ? errorMessage : errorDetails);
             }
 
     };
