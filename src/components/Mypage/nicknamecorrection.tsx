@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { checkUserName } from "../../api/JoinBoard";
 import {useLocation, useNavigate} from "react-router-dom";
-import {nicknamecorrection} from "../../api/Mypage/nicknameindex";
+import {nicknamechange} from "../../api/Mypage/nicknameindex";
 
 
 const NicknameForm: React.FC = () => {
-    const [form, setForm] = useState({ userNickname: "" });
+    const [form, setForm] = useState({userNickname: ""});
     const [checkNameMessage, setCheckNameMessage] = useState<string>(""); // 메시지 상태
     const [checkNameMessageType, setCheckNameMessageType] = useState<"success" | "error" | "">(""); // 메시지 타입 상태
     const navigate = useNavigate();
@@ -15,34 +15,38 @@ const NicknameForm: React.FC = () => {
 
 
     const handleNameCheck = async () => {
-        const isAvailable = await checkUserName(form.userNickname);
-        if (isAvailable) {
-            setCheckNameMessage("사용 가능합니다.");
-            setCheckNameMessageType("success");
-        } else {
-            setCheckNameMessage("이미 사용 중입니다.");
+        try {
+            const response = await checkUserName(form.userNickname);
+            if (response.status === 200) {
+                setCheckNameMessage(response.data.message);
+                setCheckNameMessageType("success");
+            }
+        } catch (error: any) {
+            setCheckNameMessage(error.response.data.body.message);
             setCheckNameMessageType("error");
         }
-    };
 
+    };
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setForm({ ...form, userNickname: e.target.value });
+        setForm({...form, userNickname: e.target.value});
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const respronse = await nicknamecorrection(form.userNickname, id);
+            const response = await nicknamechange(form.userNickname, id);
 
-            if(respronse.status === 200) {
-                sessionStorage.setItem("userNickname",form.userNickname);
-            alert("변경되었습니다.")
-                navigate("/mypage") ;
+            if (response.status === 200) {
+                sessionStorage.setItem("userNickname", form.userNickname);
+                console.log(response)
+                alert(response.data.message);
+                navigate("/mypage");
             }
-        } catch (error) {
-            alert("변경 실패")
+        } catch (error: any) {
+            console.log(error)
+            alert(error.response.data.body.message);
         }
-        };
+    };
 
     return (
         <div>
