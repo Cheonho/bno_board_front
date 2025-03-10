@@ -1,7 +1,6 @@
 import { useState } from "react";
 import styles from "styles/boardDetail.module.css";
 import { modifyCommentApi, addCommentApi } from "api/board";
-import { getSessionUser } from "utils/Login/LoginSession";
 
 interface CommentFormProps {
     boardNum: number | string;
@@ -15,7 +14,6 @@ interface CommentFormProps {
 
 export default function CommentForm({ boardNum, commentNum, parentNum, isEdit = false, defaultContent = "", onSubmitSuccess, onCancel }: CommentFormProps) {
     const [content, setContent] = useState(defaultContent);
-    const userInfo = getSessionUser();
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setContent(event.target.value);
@@ -78,10 +76,7 @@ export default function CommentForm({ boardNum, commentNum, parentNum, isEdit = 
                         onChange={handleChange}
                         placeholder="댓글을 입력하세요."
                     />
-                    {userInfo.id && (
-                        <button className={styles.CommentSubmitBtn} onClick={handleSubmit}>댓글 등록</button>
-                    )}
-                </div>
+                    <button className={styles.CommentSubmitBtn} onClick={handleSubmit}>댓글 등록</button></div>
             )}
         </>
     );
