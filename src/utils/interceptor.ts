@@ -44,6 +44,10 @@ authInstance.interceptors.response.use(
     let returnErrorMessage;
 
     if (error.response?.status !== 200) {
+      if (error.response?.status === 400) {
+        console.log(`[Api] - status: ${error.response?.status} 오류 발생`)
+        return Promise.reject(error)
+      }
       const errorMessage = {
         status: error.response?.status,
         message: error.response?.data
