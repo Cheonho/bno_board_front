@@ -111,17 +111,16 @@ const handlePwCheck = (password : string) => {
         try {
             const address = mergeAddress(form.firstaddress, form.detail, form.code);
             const response =  await join({ ...form, address });
-
-                    if(response.status === 200) {
-                    alert(response.data.message)
-                    navigate("/");
-                }
-            } catch (error:any) {
+            if(response.status === 200) {
+                alert(response.data.message)
+                navigate("/");
+            }
+        } catch (error:any) {
             const errorMessage = error.response?.data?.body?.message;
             const errorDetails = error.response?.data ;
 
             alert(errorMessage ? errorMessage : errorDetails);
-            }
+        }
 
     };
 
