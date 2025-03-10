@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { checkUserName } from "../../api/JoinBoard";
 import {useLocation, useNavigate} from "react-router-dom";
-import {nicknamechange} from "../../api/Mypage/nicknameindex";
-
+import {apitokendata, nicknamechange} from "../../api/Mypage/nicknameindex";
 
 const NicknameForm: React.FC = () => {
     const [form, setForm] = useState({userNickname: ""});
@@ -10,8 +9,32 @@ const NicknameForm: React.FC = () => {
     const [checkNameMessageType, setCheckNameMessageType] = useState<"success" | "error" | "">(""); // 메시지 타입 상태
     const navigate = useNavigate();
 
-    const id = Number(sessionStorage.getItem("id")); // 숫자로 변환
-    const userNickname = sessionStorage.getItem("userNickname")
+    const [id, setId] = useState("") ;
+    const [userNickname, setUserNickname] = useState("") ;
+
+    useEffect(() => {
+        const ApiTokenData = async () => {
+            const token =  localStorage.getItem("token") ;
+            if(!token) {
+                alert("재로그인 바랍니다.")
+                navigate("/login") ;
+                return ;
+            }
+            try {
+                const response = await apitokendata(token);  // 토큰을 전달
+                if (response.status === 200) {
+                    setId(response.data.apitokendataDto.id) ;
+                    setUserNickname(response.data.apitokendataDto.userNickname) ;
+                }
+            } catch (error: any) {
+                console.log(error.response);
+                navigate("/login") ;
+            }
+        };
+        ApiTokenData(); // 함수 호출
+
+    },[]); // 경로가 변경될 때마다 실행
+
 
 
     const handleNameCheck = async () => {
@@ -37,7 +60,6 @@ const NicknameForm: React.FC = () => {
             const response = await nicknamechange(form.userNickname, id);
 
             if (response.status === 200) {
-                sessionStorage.setItem("userNickname", form.userNickname);
                 console.log(response)
                 alert(response.data.message);
                 navigate("/mypage");

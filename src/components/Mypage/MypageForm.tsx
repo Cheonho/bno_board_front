@@ -1,52 +1,44 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {useLocation, useNavigate} from "react-router-dom";
 // @ts-ignore
 import Session from "react-session-api";
 import styles from "../../styles/mypage.module.css" ;
 import {apitokendata} from "../../api/Mypage/nicknameindex";
 
-interface Props {
-    email: string,
-    password:string,
-    userNickname: string,
-    address : string
-}
-
-const MypageForm: React.FC<Props> = ({email, userNickname, password, address}) => {
+const MypageForm = () => {
     const navigate = useNavigate();
+
+    const [email, setEmail] = useState("")
+    const [userNickname, setUserNickname] = useState("") ;
+
     const nicknamecorrection = () => navigate("/nicknamecorrection");
     const passwordcorrection = () => navigate("/passwordcorrection");
     const addresscorrection = () => navigate("/addresscorrection") ;
 
-    const location = useLocation();
-    const [loginmodel, setLoginModel] = useState<any>()
 
-    useEffect(() => {setLoginModel({
-        userNickname: sessionStorage.getItem("userNickname"),
-        role: sessionStorage.getItem("role"),
-        email: sessionStorage.getItem("email"),
-    })},[])
-
-
-    const ApiTokenData = async () => {
-        const token = localStorage.getItem("token");
-        if (!token) {
-            alert("다시 로그인 바랍니다.");
-            navigate("/login");
-            return;
-        }
-
-        try {
-            const response = await apitokendata(token);  // 토큰을 전달
-            if (response.status === 200) {
-                console.log(response);
+    useEffect(() => {
+        const ApiTokenData = async () => {
+           const token =  localStorage.getItem("token") ;
+           if(!token) {
+               alert("재로그인 바랍니다.")
+               navigate("/login") ;
+               return ;
+           }
+            try {
+                const response = await apitokendata(token);  // 토큰을 전달
+                if (response.status === 200) {
+                    setEmail(response.data.apitokendataDto.email) ;
+                    setUserNickname(response.data.apitokendataDto.userNickname) ;
+                }
+            } catch (error: any) {
+                console.log(error.response);
+                navigate("/login") ;
             }
-        } catch (error: any) {
-            console.log(error.response);
-            alert(error.response.data.body.message)
-        }
-    };
+        };
 
+        ApiTokenData(); // 함수 호출
+
+    }, [useLocation().pathname]); // 경로가 변경될 때마다 실행
 
 
     return (
@@ -55,13 +47,17 @@ const MypageForm: React.FC<Props> = ({email, userNickname, password, address}) =
 
             <div className={styles.info_box}>
                 <span className={styles.info_title}>닉네임</span>
-                <span className={styles.info_content}>{loginmodel?.userNickname || userNickname}</span>
+                <span className={styles.info_content}>
+                    {userNickname}
+                </span>
                 <button className={styles.btn} onClick={nicknamecorrection}>수정</button>
             </div>
 
             <div className={styles.info_box}>
                 <span className={styles.info_title}>이메일</span>
-                <span className={styles.info_content}>{loginmodel?.email || email}</span>
+                <span className={styles.info_content}>
+                    {email}
+                </span>
             </div>
 
 
