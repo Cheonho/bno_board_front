@@ -21,12 +21,12 @@ export default function Main() {
   const {lastSearchHistory, setSearchHistory} = useSearchHistoryStore();
   const [isPage, setIsPage] = useState<boolean>(true);
   const [page, setPage] = useState<number>(lastSearchHistory ? lastSearchHistory.pageInfo.page : 1);
-  const [totalPages, setTotalPages] = useState<number>(lastSearchHistory ? lastSearchHistory.pageInfo.totalPage : 0);
-  const [totalElements, setTotalElements] = useState<number>(lastSearchHistory ? lastSearchHistory.pageInfo.totalElement : 0);
-  const [currentSection, setCurrentSection] = useState<number>(lastSearchHistory ? lastSearchHistory.pageInfo.currentSection : 1);
-  const [firstPageNumber, setFirstPageNumber] = useState<number>(lastSearchHistory ? lastSearchHistory.pageInfo.firstPageNumber : 1);
-  const [lastPageNumber, setLastPageNumber] = useState<number>(lastSearchHistory ? lastSearchHistory.pageInfo.lastPageNumber : 1);
-  const [pageNumberSize, setPageNumberSize] = useState<number>(lastSearchHistory ? lastSearchHistory.pageInfo.pageNumberSize : 5);
+  const [totalPages, setTotalPages] = useState<number>(0);
+  const [totalElements, setTotalElements] = useState<number>(0);
+  const [currentSection, setCurrentSection] = useState<number>(1);
+  const [firstPageNumber, setFirstPageNumber] = useState<number>(1);
+  const [lastPageNumber, setLastPageNumber] = useState<number>(1);
+  const [pageNumberSize, setPageNumberSize] = useState<number>(5);
 
   const [selected, setSelected] = useState(lastSearchHistory ? lastSearchHistory.category : 1);
   // const [searchWord, setSearchWord] = useState("");
@@ -67,27 +67,15 @@ export default function Main() {
     setSearchHistory({
       pageInfo: {
         page: page,
-        totalPage: totalPages,
-        totalElement: totalElements,
-        currentSection: currentSection,
-        firstPageNumber: firstPageNumber,
-        lastPageNumber: lastPageNumber,
-        pageNumberSize: pageNumberSize
       },
       keyword: searchWord,
       category: selected
     })
   },[
-    currentSection, 
-    firstPageNumber, 
-    lastPageNumber, 
     page, 
-    pageNumberSize, 
     searchWord, 
     selected, 
-    setSearchHistory, 
-    totalElements, 
-    totalPages
+    setSearchHistory
   ])
 
   const setPageData = (resData: any) => {

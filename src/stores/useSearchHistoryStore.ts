@@ -5,12 +5,6 @@ export interface SearchHistoryState {
   lastSearchHistory: {
     pageInfo: {
       page: number;
-      totalPage: number;
-      totalElement: number;
-      currentSection: number;
-      firstPageNumber: number;
-      lastPageNumber: number;
-      pageNumberSize: number;
     };
     keyword: string;
     category: number;
@@ -19,12 +13,6 @@ export interface SearchHistoryState {
     lastSearchHistory: {
       pageInfo: {
         page: number;
-        totalPage: number;
-        totalElement: number;
-        currentSection: number;
-        firstPageNumber: number;
-        lastPageNumber: number;
-        pageNumberSize: number;
       };
       keyword: string;
       category: number;

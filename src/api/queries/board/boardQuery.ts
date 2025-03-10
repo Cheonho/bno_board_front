@@ -37,7 +37,7 @@ export const usePostWriteBoardListApiQuery = () => {
   return useMutation({
     mutationFn: (board: BoardWriteType) => postWriteBoardApi(board),
     onSuccess: () => {
-      queryClient.invalidateQueries({queryKey:["BoardList"]});
+      queryClient.invalidateQueries({queryKey:["BoardList"], refetchType: "all"});
       clearSearchHistory();
       navigate('/');
     },
@@ -53,7 +53,7 @@ export const usePatchViewCountApiQuery = () => {
   return useMutation({
     mutationFn: (boardNum: string | number) => patchViewCountApi(boardNum),
     onSuccess: () => {
-      queryClient.invalidateQueries({queryKey: ["BoardList"]});
+      queryClient.invalidateQueries({queryKey: ["BoardList"], refetchType: "all"});
     },
     onError: (error) => {
       console.log(`[ViewCountApi - queryError] : `, error)
@@ -68,8 +68,7 @@ export const usePutUpdateBoardApiQuery = () => {
     mutationFn: (board:BoardWriteType) => putUpdateBoardApi(board),
     onSuccess: () => {
       console.log("update 성공")
-      queryClient.invalidateQueries({queryKey: ["BoardList"]})
-      // queryClient.removeQueries({ queryKey: ["DetailBoard"] });
+      queryClient.invalidateQueries({queryKey: ["BoardList"], refetchType: "all"})
     },
     onError: (error) => {
       console.log(`[UpdateApi - queryError] : `, error)

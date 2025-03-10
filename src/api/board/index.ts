@@ -12,7 +12,6 @@ import { ResType } from "types/interface/common";
 // }
 
 export async function getBoardListApi(page:number): Promise<BoardListType> {
-  console.log("page : ", page)
   const res = await customApi<BoardListType>(
     `/board/board-list`,
     `GET`,
@@ -120,7 +119,6 @@ export const modifyCommentApi = async (boardNum: number | string, commentNum: nu
 };
 
 export const addCommentApi = async (boardNum: number | string, parentNum: number | null, content: string): Promise<PostCommentListResponse> => {
-  console.log("content : " , content)
   const response = await authInstance.post(`/board/${boardNum}/comment`, { parentNum, content });
   return response.data;
 };
