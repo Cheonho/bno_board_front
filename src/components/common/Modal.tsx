@@ -3,9 +3,10 @@ import {ModalBack, PageModal, MessgaeStyle} from 'styles/modal'
 type Props = {
   modalClose: () => void;
   message?: string;
+  color?: string;
 };
 
-const Modalname = ({modalClose, message}: Props) => {
+const Modalname = ({modalClose, message, color}: Props) => {
   const handleModalClick = (e: React.MouseEvent) => {
     modalClose();
   };
@@ -17,7 +18,7 @@ const Modalname = ({modalClose, message}: Props) => {
   return (
     <ModalBack onClick={handleModalClick}>
       <PageModal onClick={handleContentClick}>
-        <MessgaeStyle>{message}</MessgaeStyle>
+        <MessgaeStyle color={color}>{message}</MessgaeStyle>
       </PageModal>
     </ModalBack>
   )

@@ -23,9 +23,12 @@ export const PageModal = styled.div`
   background: rgba(255, 255, 255, 1)
 `;
 
-export const MessgaeStyle = styled.div`
+export const MessgaeStyle = styled.div<{color?: string}>`
   position: absolute;
   top:30%;
   left:50%;
   transform: translate(-50%, -50%);
+  width: 100%;
+  text-align: center;
+  color: ${(props) => props.color || "rgba(0, 0, 0, 1)"}
 `

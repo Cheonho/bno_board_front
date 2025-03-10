@@ -60,13 +60,17 @@ export default function BoardUpdate() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!title || !content) {
+      return
+    }
+
     try {
       const payload: BoardType = {
         ...board,
         title: title,
         content: content
       }
-      updateApi(payload)
+      await updateApi(payload)
     } catch (err) {
       console.log(err)
     }
