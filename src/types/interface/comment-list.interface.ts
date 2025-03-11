@@ -2,12 +2,13 @@ import { ResType } from "./common";
 
 export default interface CommentType {
     commentIdx: number;
-    commentNum: number | string;
+    commentNum: number;
     content: string;
     commentLevel: number;
     parentNum: number | null;
     writer: string;
-    boardNum: string | number;
+    writerNickname: string;
+    boardNum: number;
     writerEmail: string;
     createAt: Date;
     updateAt: Date | null;

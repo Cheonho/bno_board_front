@@ -41,13 +41,8 @@ authInstance.interceptors.response.use(
     return {...response, data: {...response.data, pageData: etcObj}};
   },
   async (error: AxiosError) => {
-    let returnErrorMessage;
 
     if (error.response?.status !== 200) {
-      if (error.response?.status === 400) {
-        console.log(`[Api] - status: ${error.response?.status} 오류 발생`)
-        return Promise.reject(error)
-      }
       const errorMessage = {
         status: error.response?.status,
         message: error.response?.data
@@ -59,13 +54,11 @@ authInstance.interceptors.response.use(
       if (errorMessage.status === 401) {
         window.location.href = "/login";
       }
-      returnErrorMessage = errorMessage
     } else {
       console.log(`[Error] : ${error}`)
-      returnErrorMessage = error
     }
 
-    return Promise.reject(returnErrorMessage);
+    return Promise.reject(error);
   }
 );
 

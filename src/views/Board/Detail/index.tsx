@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import styles from "styles/boardDetail.module.css";
-import { BoardType, CommentListType } from "types/interface";
+import { BoardType, CommentType } from "types/interface";
 import BoardInfo from "components/board/BoardInfo";
 import { getBoardApi, getCommentsApi, deleteBoardApi, deleteCommentApi } from "api/board";
 import CommentItem from "components/comment/CommentItem";
@@ -13,21 +13,32 @@ export default function BoardDetail() {
     const { boardNum } = useParams();
 
     const [board, setBoard] = useState<BoardType | null>(null);
-    const [comments, setComments] = useState<CommentListType[]>([]);
+    const [comments, setComments] = useState<CommentType[]>([]);
     const [openFormId, setOpenFormId] = useState<number | null>(null);
     const [openEditFormId, setOpenEditFormId] = useState<number | null>(null)
-
+    const [isLoading, setIsLoading] = useState(true);
+  
 
     useEffect(() => {
-        if (!boardNum) return;
+        if (!boardNum) {
+            setIsLoading(false);
+            return;
+        }
+
+        setIsLoading(true); 
         getBoardApi(boardNum)
             .then(data => {
                 setBoard(data);
             })
             .catch(error => {
                 console.error("게시글 데이터를 불러오는 중 오류 발생:", error);
+            })
+            .finally(() => {
+                setIsLoading(false);
             });
     }, [boardNum]);
+
+   
 
     const goBoardList = () => {
         navigate("/");
@@ -37,7 +48,6 @@ export default function BoardDetail() {
         if (!boardNum) return;
         getCommentsApi(boardNum)
             .then((data) => {
-                console.log("getCommentsApi : ", data, data.message);
                 setComments(Array.isArray(data.commentList) ? data.commentList : []);
             })
             .catch(error => {
@@ -76,7 +86,9 @@ export default function BoardDetail() {
 
     return (
         <div className={styles.container}>
-            {board && boardNum ? (
+            {isLoading ? (
+                <p>로딩 중...</p>
+            ) : board && boardNum ? (
                 <div className={styles.card}>
                     <BoardInfo
                         boardNum={boardNum}
@@ -90,9 +102,10 @@ export default function BoardDetail() {
 
                         <CommentForm
                             boardNum={board.boardNum}
-                            onSubmitSuccess={refreshComments} onCancel={function (): void {
-                                throw new Error("Function not implemented.");
-                            } }                        />
+                            onSubmitSuccess={refreshComments}
+                            onCancel={() => {}}
+                        /> 
+
                         <CommentList
                             comments={comments}
                             openFormId={openFormId}
@@ -105,7 +118,7 @@ export default function BoardDetail() {
                     </div>
                 </div>
             ) : (
-                <p>존재하지 않는 게시글입니다.</p>
+                <p>존재하지 않는 게시글입니다.</p> // 데이터가 없을 때만 표시
             )}
         </div>
     );

@@ -1,9 +1,9 @@
 import { BoardListType, BoardWriteType, BoardType } from './board-list.interface';
-import CommentListType from './comment-list.interface';
+import CommentType from './comment-list.interface';
 
 export type {
   BoardListType,
-  CommentListType,
+  CommentType,
   BoardWriteType,
   BoardType
 }
