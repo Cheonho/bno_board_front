@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import './style.css'
 import 'styles/board-style.css'
 import Pagination from 'components/Pagination';
@@ -11,6 +11,7 @@ import useInput from 'hooks/useInput';
 import useSearchHistoryStore from 'stores/useSearchHistoryStore';
 
 export default function Main() {
+  const isFirstRender = useRef(true);
   const category = [
     {value:1, name:"전체"},
     {value:2, name:"작성자"},
@@ -127,8 +128,10 @@ export default function Main() {
   }, [dataProcessing, searchBoardList])
 
   useEffect(() => {
-    if ((page && page !== 1) || (searchWord && selected)) {
+    if (!isFirstRender.current) {
       handleSearchElement()
+    } else {
+      isFirstRender.current = false;
     }
 
     if (loading) {
@@ -168,6 +171,7 @@ export default function Main() {
           currentPage={page}
           currentSection={currentSection}
           totalPages={totalPages}
+          totalElements={totalElements}
           firstPageNumber={firstPageNumber}
           lastPageNumber={lastPageNumber}
           pageNumberSize={pageNumberSize}

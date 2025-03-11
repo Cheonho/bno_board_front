@@ -45,7 +45,7 @@ export default function BoardInfo({ boardNum, board, deleteBoard, goBoardList }:
             <div className={styles.btn_box}>
 
                 <button className={styles.boardlistBtn} onClick={goBoardList}>목록으로</button>
-                {userInfo.id && (
+                {(userInfo.id && board.writerEmail === userInfo.email) && (
                     <div className={styles.toboardlist}>
                         <button className={styles.btn} onClick={() => navigate(`${BOARD_PATH()}/${BOARD_UPDATE_PATH(boardNum)}`, {state : {'detailBoard' : board}})}>수정</button> |
                         <button className={styles.btn} onClick={deleteBoard}>삭제</button>

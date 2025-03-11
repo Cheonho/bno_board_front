@@ -46,11 +46,12 @@ export default function BoardWrite() {
   }
 
   useEffect(() => {
+    if(!userInfo) navigate('/')
     if (userInfo) {
       setWriter(userInfo.nickname)
       setWriterEmail(userInfo.email)
     }
-  }, [userInfo])
+  }, [userInfo, navigate])
 
   return (
     <div>

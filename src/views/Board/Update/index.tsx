@@ -39,6 +39,10 @@ export default function BoardUpdate() {
   };
 
   const getBoardData = useCallback( async () => {
+    if (!state) {
+      navigate('/')
+      return
+    }
     const detailBoard = state.detailBoard
     
     if (detailBoard) {
@@ -48,7 +52,7 @@ export default function BoardUpdate() {
       setWriter(detailBoard.writerNickname)
       setWriterEmail(detailBoard.writerEmail)
     }
-  }, [state.detailBoard])
+  }, [state, navigate])
 
   const onChangeTitle = (e: any) => {
     setTitle(e.target.value)
@@ -83,7 +87,7 @@ export default function BoardUpdate() {
     } else {
       setIsModalOpen(true)
     }
-  }, [getBoardData, userInfo])
+  }, [getBoardData, userInfo, state, navigate])
 
   return (
     <div>
