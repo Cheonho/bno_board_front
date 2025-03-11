@@ -3,7 +3,7 @@ import Button from "components/common/Button";
 import Modal from 'components/common/Modal'
 import { useNavigate } from "react-router-dom";
 import 'styles/board-style.css';
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { BOARD_WRITE_AND_UPDATE } from "constant";
 
 interface Props {
@@ -52,6 +52,15 @@ export default function BoardWriteCom({comType, title, content, writer, onChange
             onChange={(e) => onChangeTitle(e)}
             classNames="input-field"
             placeholder="제목을 입력하세요"
+          />
+        </div>
+        <div className="form-group">
+          <label>파일</label>
+          <input
+            type="file"
+            // onChange={(e) => onChangeContent(e)}
+            className="input-field"
+            placeholder="내용을 입력하세요"
           />
         </div>
         <div className="form-group">
