@@ -5,7 +5,8 @@ export const buildCommentTree = (comments: CommentList[]): CommentList[] => {
     const commentMap = new Map<number, CommentList>();
 
     comments.forEach(comment => {
-        commentMap.set(Number(comment.commentNum), { ...comment, replies: [] });
+        commentMap.set(comment.commentNum, { ...comment, replies: [] });
+
     });
 
     const rootComments: CommentList[] = [];

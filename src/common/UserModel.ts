@@ -1,5 +1,5 @@
 export interface UserModel {
-    id: number;
+    id: string ;
     email: string;
     userNickname: string;
     password: string;
@@ -8,7 +8,7 @@ export interface UserModel {
 }
 
 export interface LoginModel {
-    id: number;
+    id: string ;
     email: string;
     userNickname: string;
     role: string;

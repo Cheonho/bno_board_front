@@ -113,12 +113,12 @@ export const deleteCommentApi = async (boardNum: number | string, commentNum: nu
   return response.data;
 };
 
-export const modifyCommentApi = async (boardNum: number | string, commentNum: number, content: string): Promise<ResType> => {
-  const response = await authInstance.patch(`/board/${boardNum}/comment/${commentNum}`, { content });
+export const modifyCommentApi = async (boardNum: number | string, writerEmail: string, commentNum: number, content: string): Promise<ResType> => {
+  const response = await authInstance.patch(`/board/${boardNum}/comment/${commentNum}`, { writerEmail, content });
   return response.data;
 };
 
-export const addCommentApi = async (boardNum: number | string, parentNum: number | null, content: string): Promise<PostCommentListResponse> => {
-  const response = await authInstance.post(`/board/${boardNum}/comment`, { parentNum, content });
+export const addCommentApi = async (boardNum: number | string, writerEmail: string, parentNum: number | null, content: string): Promise<PostCommentListResponse> => {
+  const response = await authInstance.post(`/board/${boardNum}/comment`, { writerEmail, parentNum, content });
   return response.data;
 };

@@ -1,7 +1,7 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useLayoutEffect, useState} from "react";
 import {useLocation, useNavigate} from "react-router-dom";
-import {passwordcorrection} from "../../api/Mypage/nicknameindex";
-import styles from "../../styles/join.module.css";
+import {apitokendata, passwordcorrection} from "../../api/Mypage/nicknameindex";
+import styles from "../../styles/correction.module.css";
 import { isValidPassword } from "../../utils/Join/validation";
 
 const PasswordForm: React.FC = () => {
@@ -14,9 +14,36 @@ const PasswordForm: React.FC = () => {
     const [checkPwMessage, setCheckPwMessage] = useState("");
     const [checkPwMessageType, setCheckPwMessageType] = useState<"success" | "error" | "">("");
 
+
     const navigate = useNavigate();
 
-const id = Number(sessionStorage.getItem("id")); // 숫자로 변환
+    const [id, setId] = useState("") ;
+
+
+    useEffect(() => {
+
+        const ApiTokenData = async () => {
+            const token =  localStorage.getItem("token") ;
+            if(!token) {
+                alert("재로그인 바랍니다.")
+                navigate("/login") ;
+                return ;
+            }
+            try {
+                const response = await apitokendata(token);  // 토큰을 전달
+                if (response.status === 200) {
+                    setId(response.data.apitokendataDto.id) ;
+
+                }
+            } catch (error: any) {
+                console.log(error.response);
+                navigate("/login") ;
+            }
+        };
+
+        ApiTokenData(); // 함수 호출
+
+    }, [useLocation().pathname]); // 경로가 변경될 때마다 실행
 
 const handlePwCheck = (password: string) => {
         if (password.length < 8 || password.length > 16) {
@@ -48,9 +75,10 @@ const handlePwCheck = (password: string) => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        window.location.reload();
 
         try {
-            const response = await passwordcorrection(id, form.password, nowpassword);
+            const response = await passwordcorrection(String(id), form.password, nowpassword);
 
             if (response.status === 200) {
                 alert(response.data.message);
@@ -62,10 +90,12 @@ const handlePwCheck = (password: string) => {
     };
 
     return (
-        <div>
+        <div  className={styles.container}>
             <form onSubmit={handleSubmit}>
-                <p>비밀번호 변경하기</p>
+                <p className={styles.title}>비밀번호 변경하기</p>
+                <br />
                 <input
+                    className={styles.input_field}
                     name="nowpassword"
                     placeholder="현재 비밀번호"
                     type="password"
@@ -76,6 +106,7 @@ const handlePwCheck = (password: string) => {
 
                 <br /> <br />
                 <input
+                    className={styles.input_field}
                     name="password"
                     placeholder="새 비밀번호"
                     type="password"
@@ -91,7 +122,7 @@ const handlePwCheck = (password: string) => {
 
                 <br /> <br />
                 <input
-                    className={styles.pw}
+                    className={styles.input_field}
                     value={form.checkpassword}
                     placeholder="비밀번호를 다시 입력해 주세요."
                     type="password"
@@ -107,7 +138,7 @@ const handlePwCheck = (password: string) => {
                 )}
                 <br />
                 <br />
-                <button type="submit">변경하기</button>
+                <button type="submit" className={styles.pw_btn}>변경하기</button>
             </form>
         </div>
     );

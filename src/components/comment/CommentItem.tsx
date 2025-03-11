@@ -1,27 +1,35 @@
-import {CommentListType} from "types/interface";
+import {useEffect, useState} from "react";
+import { CommentType } from "../../types/interface";
 import styles from "styles/boardDetail.module.css";
-import {useState} from "react";
 import CommentForm from "./CommentForm";
-import { getCommentsApi, deleteCommentApi, modifyCommentApi } from "api/board";
-import { getSessionUser } from "utils/Login/LoginSession";
+import {deleteCommentApi} from "api/board";
+import useUserStore from "stores/useUserStore";
 
-interface CommentListProps {
-    comment: CommentListType;
+interface CommentItemProps {
+    comment: CommentType;
     openFormId: number | null;
     setOpenFormId: (boardNum: number | null) => void;
-    setComments: React.Dispatch<React.SetStateAction<CommentListType[]>>;
+    setComments: React.Dispatch<React.SetStateAction<CommentType[]>>;
     onSubmitSuccess: () => void;
     openEditFormId: number | null;
     setOpenEditFormId: (boardNum: number | null) => void;
 }
 
-export default function CommentItem({ comment, openFormId, setOpenFormId, setComments, onSubmitSuccess, openEditFormId, setOpenEditFormId }: CommentListProps) {
+export default function CommentItem({ comment, openFormId, setOpenFormId, setComments, onSubmitSuccess, openEditFormId, setOpenEditFormId }: CommentItemProps) {
+
+    const userInfo = useUserStore((state) => state.user);
+    const [writerEmail, setWriterEmail] = useState("");
+
+     useEffect(() => {
+            if (userInfo) {
+                setWriterEmail(userInfo.email);
+            }
+          }, [userInfo])
 
     const isOpen = openFormId === comment.commentNum;
-    const userInfo = getSessionUser();
 
     const ReplyFormOpen = () => {
-        setOpenFormId(isOpen ? null : Number(comment.commentNum));
+        setOpenFormId(isOpen ? null : comment.commentNum);
         setOpenEditFormId(null);
     };
 
@@ -49,7 +57,7 @@ export default function CommentItem({ comment, openFormId, setOpenFormId, setCom
 
     const isEditing = openEditFormId === comment.commentNum;
     const handleEdit = () => {
-        setOpenEditFormId(Number(comment.commentNum));
+        setOpenEditFormId(comment.commentNum);
         setOpenFormId(null);
     }
     const cancleEdit = () => setOpenEditFormId(null);
@@ -64,8 +72,8 @@ export default function CommentItem({ comment, openFormId, setOpenFormId, setCom
                 {isEditing ? (
                     <div className={styles.CommentEditContainer}>
                         <CommentForm
-                            boardNum={Number(comment.boardNum)}
-                            commentNum={Number(comment.commentNum)}
+                            boardNum={comment.boardNum}
+                            commentNum={comment.commentNum}
                             isEdit={true}
                             defaultContent={comment.content}
                             onSubmitSuccess={onSubmitSuccess}
@@ -77,22 +85,19 @@ export default function CommentItem({ comment, openFormId, setOpenFormId, setCom
                         <div className={styles.comment1}>
                             {comment.parentNum == null ? "" : <span>↳ &ensp;</span>}
                             {comment.content}
-                            {userInfo.id && (
-                                <div className={styles.comment2}>
-                                    <button className={styles.btn} onClick={handleEdit}>✏️</button>
-                                    <button className={styles.btn} onClick={() => onDeleteComment(Number(comment.boardNum), Number(comment.commentNum))}>❌</button>
-                                </div>
-                            )}
+                            {writerEmail && writerEmail===comment.writerEmail &&
+                            <div className={styles.comment2}>
+                                <button className={styles.btn} onClick={handleEdit}>✏️</button>
+                                <button className={styles.btn} onClick={() => onDeleteComment(comment.boardNum, comment.commentNum)}>❌</button>
+                            </div>}
                         </div>
 
                         <div className={styles.comment3}>
-                            [{comment.writerEmail}]
+                            [{comment.writerNickname}]
                             <div className={styles.comment4}>{new Date(comment.createAt).toLocaleString()}</div>
-                            {userInfo.id && (
-                                <div className={styles.comment4}>
-                                    <button className={styles.btn} onClick={ReplyFormOpen}>{isOpen ? "닫기" : "답글달기"}</button>
-                                </div>
-                            )}
+                            <div className={styles.comment4}>
+                                <button className={styles.btn} onClick={ReplyFormOpen}>{isOpen ? "닫기" : "답글달기"}</button>
+                            </div>
                         </div>
                     </>
                 )}
@@ -101,21 +106,20 @@ export default function CommentItem({ comment, openFormId, setOpenFormId, setCom
             {isOpen && (
                 <CommentForm
                     boardNum={comment.boardNum}
-                    commentNum={Number(comment.commentNum)}
+                    commentNum={comment.commentNum}
                     onSubmitSuccess={() => {
                         setOpenFormId(null);
                         onSubmitSuccess();
                     }}
                     onCancel={cancleEdit}
-                    parentNum={Number(comment.commentNum)}
+                    parentNum={comment.commentNum}
                 />
             )}
 
 
-            {comment.replies && Array.isArray(comment.replies) && comment.replies.length > 0 && (
+            {comment.replies && comment.replies.length > 0 && (
                 <div className={styles.repliesContainer}>
                     {comment.replies.map((reply) => {
-                        console.log("Reply: ", reply);
                         return (
                             <CommentItem
                                 key={reply.commentNum}
