@@ -1,7 +1,7 @@
 import React, {useEffect, useLayoutEffect, useState} from "react";
 import {useLocation, useNavigate} from "react-router-dom";
 import {apitokendata, passwordcorrection} from "../../api/Mypage/nicknameindex";
-import styles from "../../styles/join.module.css";
+import styles from "../../styles/correction.module.css";
 import { isValidPassword } from "../../utils/Join/validation";
 
 const PasswordForm: React.FC = () => {
@@ -14,12 +14,13 @@ const PasswordForm: React.FC = () => {
     const [checkPwMessage, setCheckPwMessage] = useState("");
     const [checkPwMessageType, setCheckPwMessageType] = useState<"success" | "error" | "">("");
 
+
     const navigate = useNavigate();
 
     const [id, setId] = useState("") ;
 
 
-    useLayoutEffect(() => {
+    useEffect(() => {
 
         const ApiTokenData = async () => {
             const token =  localStorage.getItem("token") ;
@@ -74,6 +75,7 @@ const handlePwCheck = (password: string) => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        window.location.reload();
 
         try {
             const response = await passwordcorrection(String(id), form.password, nowpassword);
@@ -88,10 +90,12 @@ const handlePwCheck = (password: string) => {
     };
 
     return (
-        <div>
+        <div  className={styles.container}>
             <form onSubmit={handleSubmit}>
-                <p>비밀번호 변경하기</p>
+                <p className={styles.title}>비밀번호 변경하기</p>
+                <br />
                 <input
+                    className={styles.input_field}
                     name="nowpassword"
                     placeholder="현재 비밀번호"
                     type="password"
@@ -102,6 +106,7 @@ const handlePwCheck = (password: string) => {
 
                 <br /> <br />
                 <input
+                    className={styles.input_field}
                     name="password"
                     placeholder="새 비밀번호"
                     type="password"
@@ -117,7 +122,7 @@ const handlePwCheck = (password: string) => {
 
                 <br /> <br />
                 <input
-                    className={styles.pw}
+                    className={styles.input_field}
                     value={form.checkpassword}
                     placeholder="비밀번호를 다시 입력해 주세요."
                     type="password"
@@ -133,7 +138,7 @@ const handlePwCheck = (password: string) => {
                 )}
                 <br />
                 <br />
-                <button type="submit">변경하기</button>
+                <button type="submit" className={styles.pw_btn}>변경하기</button>
             </form>
         </div>
     );
