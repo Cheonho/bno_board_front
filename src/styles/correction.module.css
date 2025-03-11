@@ -1,0 +1,111 @@
+/* 전체 컨테이너 */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    max-width: 1000px;
+    margin: auto;
+}
+
+/* 제목 스타일 */
+.title {
+    font-size: 28px; /* 기존 20px → 28px */
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+/* 주소 입력 필드 스타일 */
+.input_field {
+    width: 100%;
+    padding: 15px; /* 기존 10px에서 15px로 증가 */
+    font-size: 18px; /* 기존 14px → 18px */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+    transition: border-color 0.3s ease-in-out;
+    margin-bottom: 20px;
+}
+
+/* 입력 필드 포커스 효과 */
+.input_field:focus {
+    border-color: #007bff;
+}
+
+/* 버튼 스타일 */
+.btn {
+    width: 100%;
+    padding: 10px; /* 버튼 크기도 조정 */
+    font-size: 14px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+    margin-top: 15px;
+}
+
+.address_form {
+}
+
+/* 버튼 스타일 */
+.pw_btn {
+    width: 100%;
+    padding: 10px ; /* 버튼 크기도 조정 */
+    font-size: 14px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+}
+
+
+/* 버튼 스타일 */
+.address_btn {
+    width: 100%;
+    padding: 7px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+    margin-top: 10px;
+}
+
+
+/* 버튼 호버 효과 */
+.btn:hover {
+    background-color: #0056b3;
+}
+
+/* 메시지 스타일 */
+.check_message {
+    font-size: 16px;
+    margin-top: 8px;
+}
+
+/* 성공 메시지 */
+.success {
+    color: #28a745;
+    font-size: 16px;
+}
+
+/* 에러 메시지 */
+.error {
+    color: #dc3545;
+    font-size: 16px;
+}
+.current_nickname {
+    font-size: 20px;
+    padding-bottom: 15px;
+}
