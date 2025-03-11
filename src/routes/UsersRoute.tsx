@@ -1,4 +1,14 @@
-import { AUTH_PATH, FIND_ID_PW_PATH, JOIN_PATH, LOGIN_PATH, MY_PAGE_PATH, NICKNAME_CORRECTION, PASSWORD_CORRECTION, USER_PATH } from "constant";
+import {
+  ADDRESS_CORRECTION,
+  AUTH_PATH,
+  FIND_ID_PW_PATH,
+  JOIN_PATH,
+  LOGIN_PATH,
+  MY_PAGE_PATH,
+  NICKNAME_CORRECTION,
+  PASSWORD_CORRECTION,
+  USER_PATH
+} from "constant";
 import Login from "views/LoginBoard";
 import Join from "views/JoinBoard";
 import MyPage from "views/MyPage/MyPageindex";
@@ -7,6 +17,7 @@ import Passwordcorrection from 'components/Mypage/passwordcorrection';
 import FindIdPw from "components/FindIdPw";
 import Authentication from 'views/Authentication';
 import User from 'views/User';
+import AddressCorrectionForm from "../components/Mypage/addresscorrection";
 
 
 export const userRoutes: MenuRouter[] = [
@@ -41,5 +52,9 @@ export const userRoutes: MenuRouter[] = [
   {
     path: `${PASSWORD_CORRECTION()}`,
     element: <Passwordcorrection />
+  },
+  {
+    path: `${ADDRESS_CORRECTION()}`,
+    element: <AddressCorrectionForm />
   }
 ]

@@ -27,8 +27,10 @@ const Login = () => {
             // 로그인 성공
             if (response.status === 200) {
                 const loginmodel: LoginModel = response.data.loginResponseDto;
-                saveSession(loginmodel.id, loginmodel.userNickname, loginmodel.role, loginmodel.email);
+                // saveSession(loginmodel.id, loginmodel.userNickname, loginmodel.role, loginmodel.email);
                 setUser({email: loginmodel.email, role: loginmodel.role, nickname: loginmodel.userNickname})
+                const token = response.data.token ;
+                localStorage.setItem("token", token);
                 alert(response.data.message);
                 navigate("/");
             }

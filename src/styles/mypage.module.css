@@ -1,7 +1,16 @@
+/* 전체 화면 크기 고정 */
+body, html {
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+/* 메인 컨테이너 고정 크기 설정 */
 .container {
-    width: 95%; /* 화면 너비를 95% 사용 */
-    max-width: 1400px; /* 가로 최대 길이 설정 */
-    max-height: 600px; /* 세로 최대 길이 설정 */
+    width: 300px; /* 고정된 너비 */
+    height: 600px; /* 고정된 높이 */
     margin: 50px auto;
     padding: 30px;
     border: 1px solid #ddd;
@@ -9,26 +18,22 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     background-color: #fff;
     font-family: 'Noto Sans KR', sans-serif;
-    overflow: auto; /* 내용이 넘칠 경우 스크롤 */
+    overflow: hidden; /* 스크롤 방지 */
+    position: relative;
 }
 
-/* 부모 컨테이너도 가득 차도록 설정 */
-body, html {
-    width: 100%;
-    margin: 0;
-    padding: 0;
-}
 h2 {
     font-size: 24px;
     font-weight: bold;
     margin-bottom: 25px;
     color: #333;
     text-align: center;
+    padding-bottom: 30px ;
 }
 
 .info_box {
     background: #f8f9fa;
-    padding: 20px; /* 기존 15px -> 20px */
+    padding: 20px;
     border-radius: 8px;
     margin-bottom: 20px;
     display: flex;
@@ -36,29 +41,33 @@ h2 {
 }
 
 .info_title {
-    font-size: 15px; /* 기존 14px -> 15px */
+    font-size: 15px;
     font-weight: bold;
     color: #444;
 }
 
 .info_content {
-    font-size: 18px; /* 기존 16px -> 18px */
+    font-size: 18px;
     color: #222;
     margin-top: 8px;
 }
 
+/* 버튼 그룹 고정 */
 .button_group {
     display: flex;
-    justify-content: flex-end;
+    justify-content: center; /* 버튼 중앙 정렬 */
     gap: 15px;
-    margin-top: 20px;
+    position: absolute; /* ✅ 부모(.container) 기준으로 위치 고정 */
+    bottom: 20px; /* 컨테이너 아래쪽에서 20px 떨어진 위치 */
+    width: 100%;
 }
 
+/* 버튼 스타일 */
 .btn {
-    padding: 2px 3px; /* 버튼 크기 증가 */
+    padding: 7px 16px;
     border: none;
     border-radius: 6px;
-    background-color: #03c75a;
+    background-color: #007bff;
     color: white;
     font-size: 15px;
     font-weight: bold;
@@ -74,9 +83,13 @@ h2 {
     background: white;
     padding: 20px;
     width: 400px;
-    margin: auto;
+    height: 250px;
     border-radius: 10px;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 .overlay {
@@ -91,3 +104,7 @@ h2 {
     justify-content: center;
 }
 
+.info_content2 {
+    background-color: #f8f9fa;
+    margin-top: 10.5px;
+}

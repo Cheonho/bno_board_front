@@ -11,10 +11,6 @@ const MyPage = () => {
     return (
         <div style={{width: '100%'}}>
             <MypageForm
-                email = {email}
-                password = {password}
-                userNickname = {userNickname}
-                address = {address}
                 />
             <div>
 
