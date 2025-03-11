@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect, useLayoutEffect} from "react";
 import { checkUserName } from "../../api/JoinBoard";
 import {useLocation, useNavigate} from "react-router-dom";
 import {apitokendata, nicknamechange} from "../../api/Mypage/nicknameindex";
@@ -12,7 +12,8 @@ const NicknameForm: React.FC = () => {
     const [id, setId] = useState("") ;
     const [userNickname, setUserNickname] = useState("") ;
 
-    useEffect(() => {
+    useLayoutEffect(() => {
+
         const ApiTokenData = async () => {
             const token =  localStorage.getItem("token") ;
             if(!token) {
@@ -31,11 +32,10 @@ const NicknameForm: React.FC = () => {
                 navigate("/login") ;
             }
         };
+
         ApiTokenData(); // 함수 호출
 
-    },[]); // 경로가 변경될 때마다 실행
-
-
+    }, [useLocation().pathname]); // 경로가 변경될 때마다 실행
 
     const handleNameCheck = async () => {
         try {
