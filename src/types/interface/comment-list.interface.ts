@@ -7,6 +7,7 @@ export default interface CommentType {
     commentLevel: number;
     parentNum: number | null;
     writer: string;
+    writerNickname: string;
     boardNum: number;
     writerEmail: string;
     createAt: Date;

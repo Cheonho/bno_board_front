@@ -1,6 +1,7 @@
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import styles from "styles/boardDetail.module.css";
 import { modifyCommentApi, addCommentApi } from "api/board";
+import useUserStore from "stores/useUserStore";
 
 interface CommentFormProps {
     boardNum: number | string;
@@ -14,6 +15,15 @@ interface CommentFormProps {
 
 export default function CommentForm({ boardNum, commentNum, parentNum, isEdit = false, defaultContent = "", onSubmitSuccess, onCancel }: CommentFormProps) {
     const [content, setContent] = useState(defaultContent);
+
+    const userInfo = useUserStore((state) => state.user);
+    const [writerEmail, setWriterEmail] = useState("");
+
+     useEffect(() => {
+            if (userInfo) {
+              setWriterEmail(userInfo.email)
+            }
+          }, [userInfo])
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setContent(event.target.value);
@@ -36,11 +46,11 @@ export default function CommentForm({ boardNum, commentNum, parentNum, isEdit = 
                     alert("수정할 댓글이 존재하지 않습니다.");
                     return;
                 }
-                await modifyCommentApi(boardNum, commentNum, content);
+                await modifyCommentApi(boardNum, writerEmail, commentNum, content);
                 alert("댓글이 수정되었습니다!");
                 onCancel();
             } else {
-                await addCommentApi(boardNum, parentNum ?? null, content);
+                await addCommentApi(boardNum, writerEmail, parentNum ?? null, content);
                 alert(parentNum ? "대댓글이 등록되었습니다!" : "댓글이 등록되었습니다!");
             }
 

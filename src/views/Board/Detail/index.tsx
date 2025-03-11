@@ -17,6 +17,7 @@ export default function BoardDetail() {
     const [openFormId, setOpenFormId] = useState<number | null>(null);
     const [openEditFormId, setOpenEditFormId] = useState<number | null>(null)
     const [isLoading, setIsLoading] = useState(true);
+  
 
     useEffect(() => {
         if (!boardNum) {
@@ -37,6 +38,8 @@ export default function BoardDetail() {
             });
     }, [boardNum]);
 
+   
+
     const goBoardList = () => {
         navigate("/");
     };
@@ -45,7 +48,6 @@ export default function BoardDetail() {
         if (!boardNum) return;
         getCommentsApi(boardNum)
             .then((data) => {
-                console.log("getCommentsApi : ", data, data.message);
                 setComments(Array.isArray(data.commentList) ? data.commentList : []);
             })
             .catch(error => {
@@ -102,7 +104,8 @@ export default function BoardDetail() {
                             boardNum={board.boardNum}
                             onSubmitSuccess={refreshComments}
                             onCancel={() => {}}
-                        />
+                        /> 
+
                         <CommentList
                             comments={comments}
                             openFormId={openFormId}

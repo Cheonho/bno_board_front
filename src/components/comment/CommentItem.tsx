@@ -1,8 +1,9 @@
-
+import {useEffect, useState} from "react";
 import { CommentType } from "../../types/interface";
 import styles from "styles/boardDetail.module.css";
 import CommentForm from "./CommentForm";
 import {deleteCommentApi} from "api/board";
+import useUserStore from "stores/useUserStore";
 
 interface CommentItemProps {
     comment: CommentType;
@@ -15,6 +16,15 @@ interface CommentItemProps {
 }
 
 export default function CommentItem({ comment, openFormId, setOpenFormId, setComments, onSubmitSuccess, openEditFormId, setOpenEditFormId }: CommentItemProps) {
+
+    const userInfo = useUserStore((state) => state.user);
+    const [writerEmail, setWriterEmail] = useState("");
+
+     useEffect(() => {
+            if (userInfo) {
+                setWriterEmail(userInfo.email);
+            }
+          }, [userInfo])
 
     const isOpen = openFormId === comment.commentNum;
 
@@ -75,14 +85,15 @@ export default function CommentItem({ comment, openFormId, setOpenFormId, setCom
                         <div className={styles.comment1}>
                             {comment.parentNum == null ? "" : <span>↳ &ensp;</span>}
                             {comment.content}
+                            {writerEmail && writerEmail===comment.writerEmail &&
                             <div className={styles.comment2}>
                                 <button className={styles.btn} onClick={handleEdit}>✏️</button>
                                 <button className={styles.btn} onClick={() => onDeleteComment(comment.boardNum, comment.commentNum)}>❌</button>
-                            </div>
+                            </div>}
                         </div>
 
                         <div className={styles.comment3}>
-                            [{comment.writerEmail}]
+                            [{comment.writerNickname}]
                             <div className={styles.comment4}>{new Date(comment.createAt).toLocaleString()}</div>
                             <div className={styles.comment4}>
                                 <button className={styles.btn} onClick={ReplyFormOpen}>{isOpen ? "닫기" : "답글달기"}</button>

@@ -27,7 +27,7 @@ const CommentList: React.FC<CommentListProps> = ({ comments, openFormId, setOpen
             {treeComments.length === 0 ? <p>댓글이 없습니다.</p> : treeComments.map((comment) => (
                 <CommentItem
                     key={comment.commentNum}
-                    comment={comment} 
+                    comment={comment}
                     openFormId={openFormId} 
                     setOpenFormId={setOpenFormId}  
                     setComments={setComments}  
