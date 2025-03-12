@@ -31,7 +31,7 @@ export default function BoardUpdate() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const { state } = useLocation();
 
-  const {mutate: updateApi} = usePutUpdateBoardApiQuery();
+  const {mutateAsync: updateApi} = usePutUpdateBoardApiQuery();
   
   const modalClose = () => {
     setIsModalOpen(false);
@@ -74,11 +74,13 @@ export default function BoardUpdate() {
         title: title,
         content: content
       }
-      await updateApi(payload)
+      const res = await updateApi(payload)
+      if (res.code === "SU") {
+        navigate("/");
+      }
     } catch (err) {
       console.log(err)
     }
-    navigate("/");
   };
 
   useEffect(() => {

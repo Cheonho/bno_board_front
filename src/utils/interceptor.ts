@@ -66,7 +66,6 @@ const customApi = async <T>(
 
   if (etc?.isAuth) {
     const accessToken: String | null = await getToken();
-    console.log(accessToken)
     if (accessToken) {
       headers["Authorization"] = `Bearer ${accessToken}`;
     }

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import './style.css'
 import BoardWriteCom from 'components/board/BoardWrite'
-import { BoardWriteType } from 'types/interface';
+import { BoardWriteType, FileType } from 'types/interface';
 import useUserStore from 'stores/useUserStore';
 import { usePostWriteBoardListApiQuery } from 'api/queries/board/boardQuery';
 import { useNavigate } from 'react-router-dom';
@@ -13,6 +13,7 @@ export default function BoardWrite() {
   const [content, setContent] = useState("");
   const [writer, setWriter] = useState("");
   const [writerEmail, setWriterEmail] = useState("");
+  const [files, setFiles] = useState<FileType[]>([]);
   const userInfo = useUserStore((state) => state.user)
 
   const {mutateAsync: postWriteBoard} = usePostWriteBoardListApiQuery();
@@ -40,7 +41,11 @@ export default function BoardWrite() {
       writerEmail: writerEmail,
     }
 
-    const res = await postWriteBoard(payload)
+    const fileList: File[] = files.map((item) => {
+      return item.file
+    })
+
+    const res = await postWriteBoard({board: payload, files: fileList})
     if (res.code === "SU") {
       navigate('/')
     }
@@ -62,6 +67,8 @@ export default function BoardWrite() {
           title={title}
           content={content}
           writer={writer}
+          files={files}
+          setFiles={setFiles}
           onChangeTitle={onChangeTitle} 
           onChangeContent={onChangeContent}
           handleSubmit={handleSubmit}

@@ -35,7 +35,7 @@ export const usePostWriteBoardListApiQuery = () => {
   const {clearSearchHistory} = useSearchHistoryStore();
 
   return useMutation({
-    mutationFn: (board: BoardWriteType) => postWriteBoardApi(board),
+    mutationFn: ({ board, files }: { board: BoardWriteType; files: File[] }) => postWriteBoardApi(board, files),
     onSuccess: () => {
       queryClient.invalidateQueries({queryKey:["BoardList"], refetchType: "all"});
       clearSearchHistory();

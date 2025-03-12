@@ -41,11 +41,15 @@ export async function getSearchBoardListApi(category: number, searchWord: string
 //   return res;
 // }
 
-export async function postWriteBoardApi(board: BoardWriteType): Promise<ResType> {
+export async function postWriteBoardApi(board: BoardWriteType, files: File[]): Promise<ResType> {
   const requestBody  = new FormData();
   const jsonData = JSON.stringify(board);
-  const deisgnerInfo = new Blob([jsonData], { type: 'application/json' });
-  requestBody.append('board', deisgnerInfo)
+  const boardInfo = new Blob([jsonData], { type: 'application/json' });
+  requestBody.append('board', boardInfo)
+
+  files.forEach((file) => {
+    if (file?.name) requestBody.append("file", file)
+  })
   
   const res = await customApi<any>(
     `/board/write`,
@@ -79,11 +83,22 @@ export async function patchViewCountApi(boardNum: number | string): Promise<ResT
 //   return res;
 // }
 
-export async function putUpdateBoardApi(board: BoardWriteType):Promise<ResType> {
+export async function putUpdateBoardApi(board: BoardWriteType): Promise<ResType> {
+  const requestBody  = new FormData();
+  const jsonData = JSON.stringify(board);
+  const boardInfo = new Blob([jsonData], { type: 'application/json' });
+  requestBody.append('board', boardInfo)
+  
   const res = await customApi<any>(
     `/board/update`,
     `PUT`,
-    {data: board}
+    {
+      data: requestBody,
+      headers: {
+        'Content-Type' : 'multipart/form-data'
+      }
+    },
+    {isAuth: true}
   )
   return res.data
 }
