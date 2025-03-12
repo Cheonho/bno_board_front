@@ -25,6 +25,7 @@
     "react-daum-postcode": "^3.2.0",
     "react-dom": "^18.3.1",
     "react-modal": "^3.16.3",
+    "react-qr-code": "^2.0.15",
     "react-query": "^3.39.3",
     "react-router-dom": "^7.1.5",
     "react-scripts": "^5.0.1",

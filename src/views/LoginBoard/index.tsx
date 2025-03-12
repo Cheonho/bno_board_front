@@ -9,6 +9,7 @@ import { AxiosError } from 'axios'
 import Session from "react-session-api";
 import {saveSession} from "../../utils/Login/LoginSession";
 import useUserStore from "stores/useUserStore";
+import { OTP_VERIFY_PATH } from "constant";
 
 const Login = () => {
     const [email, setEmail] = useState("");
@@ -32,7 +33,7 @@ const Login = () => {
                 const token = response.data.token ;
                 localStorage.setItem("token", token);
                 alert(response.data.message);
-                navigate("/");
+                navigate(`${OTP_VERIFY_PATH()}`);
             }
         } catch (error) {
             if (error instanceof AxiosError && error.response) {

@@ -4,7 +4,6 @@ body, html {
     height: 100vh;
     margin: 0;
     padding: 0;
-    overflow: hidden;
 }
 
 /* 메인 컨테이너 고정 크기 설정 */
