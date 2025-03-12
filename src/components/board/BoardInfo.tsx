@@ -16,14 +16,14 @@ interface BoardInfoProps {
 export default function BoardInfo({ boardNum, board, deleteBoard, goBoardList }: BoardInfoProps) {
     const navigate = useNavigate();
 
-    const userInfo = useUserStore((state) => state.user);
+    const {user} = useUserStore();
     const [writerEmail, setWriterEmail] = useState("");
 
      useEffect(() => {
-            if (userInfo) {
-                setWriterEmail(userInfo.email);
+            if (user) {
+                setWriterEmail(user.email);
             }
-          }, [userInfo])
+          }, [user])
     
     return (
         <>

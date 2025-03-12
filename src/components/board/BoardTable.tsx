@@ -6,7 +6,6 @@ import { BOARD_DETAIL_PATH, BOARD_PATH, BOARD_WRITE_PATH } from 'constant';
 import Input from 'components/common/Input';
 import Button from 'components/common/Button';
 import useUserStore from 'stores/useUserStore';
-import { getSessionUser } from 'utils/Login/LoginSession';
 
 interface Props {
   title: string;
@@ -34,8 +33,7 @@ export default function BoardTable({ title, tableHeader, boardList, category, on
     return path
   }
 
-  const userState = useUserStore((state) => state.user)
-  const userId = getSessionUser().id
+  const {user} = useUserStore()
 
   const handleDetailPath = (event: any, boardNum: number | string) => {
     if (typeof(handleViewCount) == 'function') {
@@ -60,7 +58,7 @@ export default function BoardTable({ title, tableHeader, boardList, category, on
           <div className='board-top'>
             <Input type="text" id="search-input" value={searchWord} onChange={handleSearch} />
             <div className='btn-box'>
-              {userState && userId ? <Button text={"글쓰기"} onClick={() => navigate(writePath)} /> : ""}
+              {user?.email ? <Button text={"글쓰기"} onClick={() => navigate(writePath)} /> : ""}
             </div>
           </div>
         </div>

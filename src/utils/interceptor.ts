@@ -1,4 +1,5 @@
 import axios, { AxiosError, Method } from "axios";
+import { getToken } from "./token";
 // import { getSession } from "next-auth/react";
 
 axios.defaults.baseURL = process.env.REACT_APP_SERVER_URL;
@@ -14,18 +15,20 @@ export const authInstance = axios.create({
 });
 
 
-// authInstance.interceptors.request.use(
-//   async (config) => {
-//     const session: any = await getSession();
-//     if (session && session.access_token) {
-//       
-//     }
-//     return config;
-//   },
-//   (error) => {
-//     return Promise.reject(error);
-//   }
-// );
+authInstance.interceptors.request.use(
+  async (config) => {
+    const accessToken: String | null = await getToken();
+    console.log(accessToken)
+    if (accessToken) {
+      config.headers["Authorization"] = `Bearer ${accessToken}`;
+    }
+    return config;
+  },
+  (error) => {
+    console.error("[_axios.interceptors.request] config : " + error.message);
+    return Promise.reject(error);
+  }
+);
 
 authInstance.interceptors.response.use(
   (response) => {
