@@ -4,6 +4,7 @@ import { mergeAddress } from "../../utils/Join/address";
 import { addresschange, apitokendata } from "../../api/Mypage/nicknameindex";
 import { useLocation, useNavigate } from "react-router-dom";
 import styles from "../../styles/correction.module.css";
+import Swal from "sweetalert2";
 
 const AddressCorrectionForm: React.FC = () => {
     const [form, setForm] = useState({
@@ -25,25 +26,37 @@ const AddressCorrectionForm: React.FC = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        window.location.reload();
 
         try {
             const response = await addresschange(address, String(id));
             if (response.status === 200) {
-                alert(response.data.message);
-                navigate("/mypage");
+                Swal.fire({
+                    icon: "success",
+                    text: response.data.message
+                }).then(() => {
+                    window.location.reload();
+                    navigate("/mypage");
+                });
             }
         } catch (error: any) {
-            alert(error.response.data.body.message);
+            Swal.fire({
+                icon: "error",
+                text: error.response.data.body.message
+            });
+
         }
     };
 
-    useEffect(() => {
+
         const ApiTokenData = async () => {
             const token = localStorage.getItem("token");
             if (!token) {
-                alert("재로그인 바랍니다.");
-                navigate("/login");
+                Swal.fire({
+                    icon: "error",
+                    text: "다시 로그인해 주세요."
+                }).then(() => {
+                    navigate("/login");
+                });
                 return;
             }
             try {
@@ -52,11 +65,11 @@ const AddressCorrectionForm: React.FC = () => {
                     setId(response.data.apitokendataDto.id);
                 }
             } catch (error: any) {
-                console.log(error.response);
-                navigate("/login");
+                    navigate("/login");
             }
         };
 
+    useEffect(() => {
         ApiTokenData(); // 함수 호출
     }, [useLocation().pathname]); // 경로가 변경될 때마다 실행
 

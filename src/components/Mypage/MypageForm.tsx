@@ -2,12 +2,15 @@ import React, {useEffect, useRef, useState} from "react";
 import {useLocation, useNavigate} from "react-router-dom";
 import styles from "../../styles/mypage.module.css";
 import { apitokendata } from "../../api/Mypage/nicknameindex";
+import Swal from "sweetalert2";
 
 import Passwordchangeindex from "../../views/MyPage/passwordchangeindex";
 import Addresschangeindex from "../../views/MyPage/addresschangeindex";
-import Lodingldx from "../../views/MyPage/lodingldx";
 import NicknameForm from "./nicknamecorrection";
-import LodingIdx from "../../views/MyPage/lodingldx";
+import LoadingIdx from "../../views/MyPage/lodingldx";
+import Otpidx from "../../views/MyPage/otpindex";
+
+
 
 const MypageForm = () => {
     const navigate = useNavigate();
@@ -15,42 +18,46 @@ const MypageForm = () => {
     const [email, setEmail] = useState("");
     const [nicknamemodalOpen, setNicknameModalOpen] = useState(false);
     const modalBackground = useRef<HTMLDivElement | null>(null);
-    const [userNickname, setUserNickname] = useState(""); // 닉네임 상태 추가
+    const [userNickname, setUserNickname] = useState("");
+    const [address, setAddress] = useState("") ;
     const [Loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
-        setLoading(true) ;
-
         const ApiTokenData = async () => {
-            const token =  localStorage.getItem("token") ;
-            if(!token) {
-                alert("재로그인 바랍니다.")
-                navigate("/login") ;
-                return ;
+            setLoading(true);
+            const token = localStorage.getItem("token");
+
+            if (!token) {
+                Swal.fire({
+                    icon: "error",
+                    text: "다시 로그인해 주세요."
+                }).then(() => {
+                    navigate("/login");
+                });
+                return;
             }
-            setLoading(true) ;
+
             try {
-                const response = await apitokendata(token);  // 토큰을 전달
+                const response = await apitokendata(token);
                 if (response.status === 200) {
-                    setEmail(response.data.apitokendataDto.email) ;
+                    setEmail(response.data.apitokendataDto.email);
                     setUserNickname(response.data.apitokendataDto.userNickname);
+                    setAddress(response.data.apitokendataDto.address);
                 }
             } catch (error: any) {
-                console.log(error.response);
-                navigate("/login") ;
+                navigate("/login");
             } finally {
-                setLoading(false) ;
+                setLoading(false); // 로딩 완료 후 상태 변경
             }
         };
 
-        ApiTokenData(); // 함수 호출
-
-    },[]);
+        ApiTokenData();
+    }, []);
 
 
     if (Loading) {
         return (
-            <LodingIdx />
+            <LoadingIdx />
         )
     }
 
@@ -60,6 +67,7 @@ const MypageForm = () => {
             <div className={styles.info_box}>
                 <span className={styles.info_title}>닉네임</span>
                 <span className={styles.info_content}>{userNickname}</span>
+                <br />
                 <button className={styles.btn} onClick={() => setNicknameModalOpen(true)}>
                     수정
                 </button>
@@ -88,7 +96,14 @@ const MypageForm = () => {
                 <span className={styles.info_content}>{email}</span>
             </div>
             <Passwordchangeindex />
-            <Addresschangeindex />
+            <div className={styles.info_box}>
+                <span className={styles.info_title}>주소</span>
+                <span className={styles.info_content}>{address}</span>
+                <Addresschangeindex />
+            </div>
+            <div className={styles.info_box}>
+            <Otpidx />
+            </div>
         </div>
     );
 };

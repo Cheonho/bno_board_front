@@ -7,8 +7,7 @@ const Addresschangeindex = () => {
     const modalBackground = useRef<HTMLDivElement | null>(null);
 
     return (
-        <div className={styles.info_box}>
-            <span className={styles.info_title}>주소</span>
+        <div className={styles.address_box}>
             <br />
             <button className={styles.btn} onClick={() => setAddressModalOpen(true)}>수정</button>
 
