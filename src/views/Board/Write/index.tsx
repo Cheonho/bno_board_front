@@ -30,19 +30,20 @@ export default function BoardWrite() {
     if (!title || !content) {
       return
     }
-    await boardWriteRequst();
-
-    navigate('/')
+    boardWriteRequst();
   };
 
-  const boardWriteRequst = () => {
+  const boardWriteRequst = async () => {
     const payload: BoardWriteType = {
       title: title,
       content: content,
       writerEmail: writerEmail,
     }
 
-    postWriteBoard(payload)
+    const res = await postWriteBoard(payload)
+    if (res.code === "SU") {
+      navigate('/')
+    }
   }
 
   useEffect(() => {
@@ -60,7 +61,7 @@ export default function BoardWrite() {
           comType='w'
           title={title}
           content={content}
-          writer={writerEmail}
+          writer={writer}
           onChangeTitle={onChangeTitle} 
           onChangeContent={onChangeContent}
           handleSubmit={handleSubmit}

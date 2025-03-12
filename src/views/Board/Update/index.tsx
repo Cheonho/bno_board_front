@@ -96,7 +96,7 @@ export default function BoardUpdate() {
           comType="u"
           title={title}
           content={content}
-          writer={writerEmail}
+          writer={write}
           onChangeTitle={onChangeTitle} 
           onChangeContent={onChangeContent}
           handleSubmit={handleSubmit}

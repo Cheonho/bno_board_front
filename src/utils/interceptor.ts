@@ -14,22 +14,6 @@ export const authInstance = axios.create({
   baseURL: process.env.REACT_APP_SERVER_URL,
 });
 
-
-authInstance.interceptors.request.use(
-  async (config) => {
-    const accessToken: String | null = await getToken();
-    console.log(accessToken)
-    if (accessToken) {
-      config.headers["Authorization"] = `Bearer ${accessToken}`;
-    }
-    return config;
-  },
-  (error) => {
-    console.error("[_axios.interceptors.request] config : " + error.message);
-    return Promise.reject(error);
-  }
-);
-
 authInstance.interceptors.response.use(
   (response) => {
     const etcObj: any = {}
@@ -79,6 +63,14 @@ const customApi = async <T>(
   const headers = opts?.headers
     ? { ...opts.headers }
     : { 'Content-Type': 'application/json' }
+
+  if (etc?.isAuth) {
+    const accessToken: String | null = await getToken();
+    console.log(accessToken)
+    if (accessToken) {
+      headers["Authorization"] = `Bearer ${accessToken}`;
+    }
+  }
 
   return await authInstance<T>({
     method: method,

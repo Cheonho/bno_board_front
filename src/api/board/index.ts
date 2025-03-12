@@ -42,10 +42,21 @@ export async function getSearchBoardListApi(category: number, searchWord: string
 // }
 
 export async function postWriteBoardApi(board: BoardWriteType): Promise<ResType> {
+  const requestBody  = new FormData();
+  const jsonData = JSON.stringify(board);
+  const deisgnerInfo = new Blob([jsonData], { type: 'application/json' });
+  requestBody.append('board', deisgnerInfo)
+  
   const res = await customApi<any>(
     `/board/write`,
     'POST',
-    {data: board}
+    {
+      data: requestBody,
+      headers: {
+        'Content-Type' : 'multipart/form-data'
+      }
+    },
+    {isAuth: true}
   )
   return res.data;
 }
