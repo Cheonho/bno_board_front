@@ -8,8 +8,8 @@ body, html {
 
 /* 메인 컨테이너 고정 크기 설정 */
 .container {
-    width: 300px; /* 고정된 너비 */
-    height: 600px; /* 고정된 높이 */
+    width: 300px;
+    height: 700px;
     margin: 50px auto;
     padding: 30px;
     border: 1px solid #ddd;
@@ -17,10 +17,12 @@ body, html {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     background-color: #fff;
     font-family: 'Noto Sans KR', sans-serif;
-    overflow: hidden; /* 스크롤 방지 */
     position: relative;
+    overflow: auto; /* 모달 내부에서 스크롤 가능 */
 }
 
+
+/* 헤더 고정 */
 h2 {
     font-size: 24px;
     font-weight: bold;
@@ -28,8 +30,10 @@ h2 {
     color: #333;
     text-align: center;
     padding-bottom: 30px ;
+    position: sticky;
+    background-color: #fff; /* 배경색을 설정하여 스크롤 시 배경이 보이도록 함 */
+    z-index: 1; /* 다른 요소보다 위로 겹치지 않도록 */
 }
-
 .info_box {
     background: #f8f9fa;
     padding: 20px;
@@ -51,8 +55,6 @@ h2 {
     color: #222;
     margin-top: 8px;
 }
-
-
 
 /* 버튼 스타일 */
 .btn {
@@ -137,4 +139,9 @@ h2 {
 .info_content2 {
     background-color: #f8f9fa;
     margin-top: 10.5px;
+}
+
+.info_content3 {
+    background-color: #f8f9fa;
+    margin-top: 50px;
 }

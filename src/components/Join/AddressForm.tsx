@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useCallback, useState} from "react";
 import DaumPostcode from "react-daum-postcode";
 import styles from "../../styles/correction.module.css"
 
@@ -22,6 +22,10 @@ const AddressForm: React.FC<AddressFormProps> = ({ firstaddress, code, detail, o
         setIsOpenPost(false); // 완료 후 닫기
     };
 
+    const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+        onChange("detail", e.target.value) ;
+    }, []);
+
     return (
         <div className={styles.address_form}>
             <input placeholder="주소" value={firstaddress} readOnly />
@@ -31,7 +35,7 @@ const AddressForm: React.FC<AddressFormProps> = ({ firstaddress, code, detail, o
             <input
                 placeholder="상세주소"
                 value={detail}
-                onChange={(e) => onChange("detail", e.target.value)}
+                onChange={handleInputChange}
             />
             <br />
             <button type="button" className={styles.address_btn} onClick={onChangeOpenPost}>

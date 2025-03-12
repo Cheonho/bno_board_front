@@ -3,7 +3,7 @@ import styles from "../../styles/mypage.module.css";
 import Passwordchangeindex from "./passwordchangeindex";
 import Addresschangeindex from "./addresschangeindex";
 
-const LodingIdx = () => {
+const LoadingIdx = () => {
 
     return (
         <div className={styles.container}>
@@ -11,6 +11,7 @@ const LodingIdx = () => {
             <div className={styles.info_box}>
                 <span className={styles.info_title}>닉네임</span>
                 <div className={styles.info_content2}>ㅤ</div>
+                <br />
                 <button className={styles.btn}>수정</button>
             </div>
 
@@ -19,10 +20,14 @@ const LodingIdx = () => {
                 <span className={styles.info_content2}>ㅤ</span>
             </div>
             <Passwordchangeindex />
-            <Addresschangeindex />
+            <div className={styles.info_box}>
+                <span className={styles.info_title}>주소</span>
+                <span className={styles.info_content3}>ㅤ</span>
+                <button className={styles.btn}>수정</button>
+            </div>
         </div>
     )
 
 }
 
-export default LodingIdx ;
+export default LoadingIdx ;

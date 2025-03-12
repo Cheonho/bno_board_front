@@ -10,7 +10,7 @@ body, html {
 /* 메인 컨테이너 고정 크기 설정 */
 .container {
     width: 300px; /* 고정된 너비 */
-    height: 600px; /* 고정된 높이 */
+    height: 700px; /* 고정된 높이 */
     margin: 50px auto;
     padding: 30px;
     border: 1px solid #ddd;
@@ -37,9 +37,19 @@ body, html {
     color: #333;
 }
 
+
+.address_box {
+    background: #f8f9fa;
+    border-radius: 8px;
+    margin-bottom: 6px;
+    display: flex;
+    flex-direction: column;
+
+}
+
 /* 버튼 스타일 */
 .btn {
-    padding: 7px 16px;
+    padding: 7.5px 19px;
     border: none;
     border-radius: 6px;
     background-color: #007bff;
@@ -49,6 +59,7 @@ body, html {
     cursor: pointer;
     transition: 0.3s;
 }
+
 
 .btn:hover {
     background-color: #0056b3;
