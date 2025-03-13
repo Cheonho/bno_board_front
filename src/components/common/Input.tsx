@@ -2,13 +2,14 @@ interface InputProps {
     type: string;
     id?: string;
     classNames?: string;
-    value?: string;
+    value?: any;
     disabled?: boolean;
     placeholder?: string;
+    required?: boolean;
     onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-export default function Input({type, id, classNames, value, onChange, disabled, placeholder}: InputProps) {
+export default function Input({type, id, classNames, value, onChange, disabled, placeholder, required}: InputProps) {
   return (
     <div>
       <input 
@@ -18,7 +19,8 @@ export default function Input({type, id, classNames, value, onChange, disabled, 
         value={value} 
         disabled={disabled} 
         placeholder={placeholder}
-        onChange={onChange} 
+        onChange={onChange}
+        required={required}
       />
     </div>
   )

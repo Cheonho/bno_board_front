@@ -8,12 +8,13 @@ interface Props {
   firstPageNumber: number;
   lastPageNumber: number;
   pageNumberSize: number;
+  totalElements: number
   setCurrentPage: Dispatch<SetStateAction<number>>;
 }
 
 export default function Pagination(props: Props) {
 
-  const {currentPage, currentSection, totalPages, firstPageNumber, lastPageNumber, pageNumberSize} = props;
+  const {currentPage, currentSection, totalPages, firstPageNumber, lastPageNumber, pageNumberSize, totalElements} = props;
   const {setCurrentPage} = props;
   const [viewPageList, setViewPageList] = useState<number[]>([]);
 
@@ -45,7 +46,7 @@ export default function Pagination(props: Props) {
   }, [currentSection, totalPages, getViewPageList])
 
   return (
-    <div>
+    <div id="pagination-container">
       <div id="pagination-wrapper">
         <div className='pagination-change-link-box'>
           <div className='icon-box-small'>
@@ -56,8 +57,8 @@ export default function Pagination(props: Props) {
         <div className='pagination-divider'>{`|`}</div>
 
         {viewPageList.map(page => page === currentPage ? 
-          <div className='pagination-text-active'>{page}</div> :
-          <div className='pagination-text' onClick={() => onPageClickHandler(page)}>{page}</div>
+          <div key={page} className='pagination-text-active'>{page}</div> :
+          <div key={page} className='pagination-text' onClick={() => onPageClickHandler(page)}>{page}</div>
         )}
 
         <div className='pagination-divider'>{`|`}</div>
@@ -67,6 +68,9 @@ export default function Pagination(props: Props) {
             <div></div>
           </div>
         </div>
+      </div>
+      <div>
+        <div>{totalElements}</div>
       </div>
     </div>
   )

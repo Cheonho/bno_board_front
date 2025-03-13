@@ -1,4 +1,5 @@
 import { ResType } from "./common";
+import { FileInfoType } from "./file";
 
 export interface BoardType {
     boardIdx?: number;
@@ -13,6 +14,7 @@ export interface BoardType {
     createAtFormat: string | "";
     updateAtFormat: string | "";
     status: boolean | true;
+    files?: FileInfoType[] | [];
 };
 
 export interface BoardListType extends ResType {
