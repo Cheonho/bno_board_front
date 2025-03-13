@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import './style.css'
 import BoardWriteCom from 'components/board/BoardWrite'
-import { BoardType, FileInfoType, FileType } from 'types/interface';
+import { BoardType, FileDeleteIdList, FileInfoType, FileType } from 'types/interface';
 import { useLocation, useNavigate } from 'react-router-dom';
 import useUserStore from 'stores/useUserStore';
 import Modal from 'components/common/Modal'
-import { LOGIN_PATH } from 'constant';
+import { LOGIN_PATH, MAIN_PATH } from 'constant';
 import { usePutUpdateBoardApiQuery } from 'api/queries/board/boardQuery';
 
 export default function BoardUpdate() {
@@ -14,7 +14,7 @@ export default function BoardUpdate() {
   const [write, setWriter] = useState("");
   const [writerEmail, setWriterEmail] = useState("");
   const [files, setFiles] = useState<FileType[]>([])
-  const [deleteFileList, setDeleteFileList] = useState<string[]>([])
+  const [deleteFileList, setDeleteFileList] = useState<FileDeleteIdList>()
   const [board, setBoard] = useState<BoardType>({
     boardNum: "",
     title: "",
@@ -31,6 +31,7 @@ export default function BoardUpdate() {
   const navigate = useNavigate();
   const {user: userInfo} = useUserStore();
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [modalMessage, setModalMessage] = useState("")
   const { state } = useLocation();
 
   const {mutateAsync: updateApi} = usePutUpdateBoardApiQuery();
@@ -71,15 +72,24 @@ export default function BoardUpdate() {
     setContent(e.target.value)
   }
 
+  const handleDeleteFileList = (item: FileType) => {
+    setDeleteFileList((prev) => ({
+      fileIds: [
+        ...(prev?.fileIds ?? []), 
+        item.fileInfo?.id
+      ].filter((id): id is string => id !== undefined)
+    }));
+  }
+
   const handleFile = (e: any, id: string) => {
     if (!setFiles) return
-    if(e.target.files) {
+    if(e.target.files && e.target.files.length !== 0) {
       const newFiles = e.target.files[0];
       setFiles((prev:FileType[]) => {
         return prev.map((item) => {
           let newItem: FileType;
           if (item.id === id && item.fileInfo) {
-            setDeleteFileList([...deleteFileList, item.fileInfo.id])
+            handleDeleteFileList(item)
             newItem = {id: crypto.randomUUID(), file: newFiles}
           } else {
             newItem = item.id === id ? {...item, file: newFiles} : item
@@ -98,7 +108,7 @@ export default function BoardUpdate() {
       // )))
       return (prev.filter((item) => {
         if (item.id === id && item.fileInfo) {
-          setDeleteFileList([...deleteFileList, item.fileInfo.id])
+          handleDeleteFileList(item)
         } 
         return item.id !== id
       }))
@@ -135,7 +145,12 @@ export default function BoardUpdate() {
       if (res.code === "SU") {
         navigate("/");
       }
-    } catch (err) {
+    } catch (err: any) {
+      if (err?.status === 403) {
+        setIsModalOpen(true)
+        setModalMessage("인증이 만료되었습니다.")
+        navigate(MAIN_PATH())
+      }
       console.log(err)
     }
   };
@@ -145,11 +160,13 @@ export default function BoardUpdate() {
       getBoardData()
     } else {
       setIsModalOpen(true)
+      setModalMessage("로그인 해주세요")
     }
   }, [getBoardData, userInfo, state, navigate])
 
   return (
     <div>
+      {isModalOpen && (<Modal modalClose={modalClose} message={modalMessage} />)}
       {userInfo ? 
         (<BoardWriteCom 
           comType="u"
@@ -164,7 +181,7 @@ export default function BoardUpdate() {
           removeFile={removeFile}
           addFileList={addFileList}
         />) : (
-          isModalOpen && (<Modal modalClose={modalClose} message="로그인 해주세요" />)
+          ""
         )
       }
     </div>

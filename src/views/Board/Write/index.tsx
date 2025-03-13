@@ -36,7 +36,7 @@ export default function BoardWrite() {
 
   const handleFile = (e: any, id: string) => {
     if (!setFiles) return
-    if(e.target.files) {
+    if(e.target.files && e.target.files.length !== 0) {
       const newFiles = e.target.files[0];
       setFiles((prev:FileType[]) => {
         return prev.map((item) => {

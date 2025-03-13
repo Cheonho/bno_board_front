@@ -4,7 +4,7 @@ import Modal from 'components/common/Modal'
 import { useNavigate } from "react-router-dom";
 import 'styles/board-style.css';
 import { useRef, useState } from "react";
-import { BOARD_WRITE_AND_UPDATE } from "constant";
+import { BOARD_WRITE_AND_UPDATE, MAIN_PATH } from "constant";
 import { FileType } from "types/interface";
 
 interface Props {
@@ -36,7 +36,7 @@ export default function BoardWriteCom({
 }: Props) {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const fileInput = useRef<HTMLInputElement>(null);
+  const fileInput = useRef<{[key:string]: HTMLInputElement | null }>({});
 
   const modalClose = () => {
     setIsModalOpen(false);
@@ -48,9 +48,8 @@ export default function BoardWriteCom({
     }
   }
 
-  const handleInputFile = () => {
-    const fileInput = document.querySelector(`input[type="file"]`) as HTMLInputElement
-    fileInput.click();
+  const handleInputFile = (fileId: string) => {
+    fileInput.current[fileId]?.click();
   }
 
   return (
@@ -84,14 +83,14 @@ export default function BoardWriteCom({
               <span>{file.fileInfo?.fileName || file.file.name || `파일없음`}</span>
               <input
                 type="file"
-                ref={fileInput}
+                ref={(el) => {fileInput.current[file.id] = el}}
                 onChange={(e) => handleFile(e, file.id)}
                 className="input-field"
                 placeholder="내용을 입력하세요"
                 multiple={false}
                 style={{ display: "none" }}
               />
-              <Button text="수정" type="button" classNames="modify-file-button" onClick={() => handleInputFile()} />
+              <Button text="+" type="button" classNames="modify-file-button" onClick={() => handleInputFile(file.id)} />
               {removeFile && <Button text="❌" type="button" classNames="delete-file-button" onClick={() => removeFile(file.id)} />}
             </div>
           ))}
@@ -107,7 +106,7 @@ export default function BoardWriteCom({
           />
         </div>
         <div className="button-group">
-          <Button onClick={() => navigate("/")} classNames="cancel-button" text="취소" />
+          <Button onClick={() => navigate(MAIN_PATH())} classNames="cancel-button" text="취소" />
           <Button type="submit" classNames="submit-button" onClick={(formCheck)} text={comType === 'u' ? '수정' : '등록'} />
         </div>
       </form>
