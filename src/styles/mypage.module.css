@@ -32,7 +32,6 @@ h2 {
     padding-bottom: 30px ;
     position: sticky;
     background-color: #fff; /* 배경색을 설정하여 스크롤 시 배경이 보이도록 함 */
-    z-index: 1; /* 다른 요소보다 위로 겹치지 않도록 */
 }
 .info_box {
     background: #f8f9fa;
