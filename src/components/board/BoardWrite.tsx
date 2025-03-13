@@ -4,7 +4,7 @@ import Modal from 'components/common/Modal'
 import { useNavigate } from "react-router-dom";
 import 'styles/board-style.css';
 import { useRef, useState } from "react";
-import { BOARD_WRITE_AND_UPDATE } from "constant";
+import { BOARD_WRITE_AND_UPDATE, MAIN_PATH } from "constant";
 import { FileType } from "types/interface";
 
 interface Props {
@@ -106,7 +106,7 @@ export default function BoardWriteCom({
           />
         </div>
         <div className="button-group">
-          <Button onClick={() => navigate("/")} classNames="cancel-button" text="취소" />
+          <Button onClick={() => navigate(MAIN_PATH())} classNames="cancel-button" text="취소" />
           <Button type="submit" classNames="submit-button" onClick={(formCheck)} text={comType === 'u' ? '수정' : '등록'} />
         </div>
       </form>
