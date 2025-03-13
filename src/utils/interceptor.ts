@@ -1,4 +1,5 @@
 import axios, { AxiosError, Method } from "axios";
+import { getToken } from "./token";
 // import { getSession } from "next-auth/react";
 
 axios.defaults.baseURL = process.env.REACT_APP_SERVER_URL;
@@ -12,20 +13,6 @@ export const authInstance = axios.create({
   timeout: 10000,
   baseURL: process.env.REACT_APP_SERVER_URL,
 });
-
-
-// authInstance.interceptors.request.use(
-//   async (config) => {
-//     const session: any = await getSession();
-//     if (session && session.access_token) {
-//       
-//     }
-//     return config;
-//   },
-//   (error) => {
-//     return Promise.reject(error);
-//   }
-// );
 
 authInstance.interceptors.response.use(
   (response) => {
@@ -76,6 +63,13 @@ const customApi = async <T>(
   const headers = opts?.headers
     ? { ...opts.headers }
     : { 'Content-Type': 'application/json' }
+
+  if (etc?.isAuth) {
+    const accessToken: String | null = await getToken();
+    if (accessToken) {
+      headers["Authorization"] = `Bearer ${accessToken}`;
+    }
+  }
 
   return await authInstance<T>({
     method: method,

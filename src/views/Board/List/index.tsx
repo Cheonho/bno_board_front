@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import './style.css'
 import 'styles/board-style.css'
 import Pagination from 'components/Pagination';
@@ -7,8 +7,11 @@ import { customFormatDate } from 'utils/dateUtil';
 import BoardTable from 'components/board/BoardTable';
 import { BOARD_DETAIL_PATH, BOARD_PATH, BOARD_UPDATE_PATH, BOARD_WRITE_PATH } from 'constant';
 import { useGetBoardListApiQuery, useGetSearchBoardListApiQuery, usePatchViewCountApiQuery } from 'api/queries/board/boardQuery';
+import useInput from 'hooks/useInput';
+import useSearchHistoryStore from 'stores/useSearchHistoryStore';
 
 export default function Main() {
+  const isFirstRender = useRef(true);
   const category = [
     {value:1, name:"전체"},
     {value:2, name:"작성자"},
@@ -16,8 +19,9 @@ export default function Main() {
     {value:4, name:"내용"},
   ]
   const tableHeader = ['번호', '제목', '작성자', '작성일', '조회수']
+  const {lastSearchHistory, setSearchHistory} = useSearchHistoryStore();
   const [isPage, setIsPage] = useState<boolean>(true);
-  const [page, setPage] = useState<number>(1);
+  const [page, setPage] = useState<number>(lastSearchHistory ? lastSearchHistory.pageInfo.page : 1);
   const [totalPages, setTotalPages] = useState<number>(0);
   const [totalElements, setTotalElements] = useState<number>(0);
   const [currentSection, setCurrentSection] = useState<number>(1);
@@ -25,8 +29,9 @@ export default function Main() {
   const [lastPageNumber, setLastPageNumber] = useState<number>(1);
   const [pageNumberSize, setPageNumberSize] = useState<number>(5);
 
-  const [selected, setSelected] = useState(1);
-  const [searchWord, setSearchWord] = useState("");
+  const [selected, setSelected] = useState(lastSearchHistory ? lastSearchHistory.category : 1);
+  // const [searchWord, setSearchWord] = useState("");
+  const [searchWord, handleSearchWord] = useInput<string>(lastSearchHistory ? lastSearchHistory.keyword : "");
   const [viewBoardList, setViewBoardList] = useState<BoardType[]>([]);
 
   const pathList = [
@@ -46,8 +51,8 @@ export default function Main() {
     setPage(1)
   }
 
-  const handleSearchWord = (event: any) => {
-    setSearchWord(event?.target.value)
+  const handleSearchWordWithPageReset = (event: any) => {
+    handleSearchWord(event)
     setPage(1)
   }
 
@@ -58,6 +63,21 @@ export default function Main() {
       console.log(err)
     }
   }
+
+  const handleSearchElement = useCallback(() => {
+    setSearchHistory({
+      pageInfo: {
+        page: page,
+      },
+      keyword: searchWord,
+      category: selected
+    })
+  },[
+    page, 
+    searchWord, 
+    selected, 
+    setSearchHistory
+  ])
 
   const setPageData = (resData: any) => {
     if (!resData || Object.keys(resData).length === 0) {
@@ -107,7 +127,13 @@ export default function Main() {
     setPageData(searchBoardList.pageData)
   }, [dataProcessing, searchBoardList])
 
-  useEffect(() => { 
+  useEffect(() => {
+    if (!isFirstRender.current) {
+      handleSearchElement()
+    } else {
+      isFirstRender.current = false;
+    }
+
     if (loading) {
       setViewBoardList((prev) => prev)
     } else if (searchWord && selected) {
@@ -115,7 +141,15 @@ export default function Main() {
     } else {
       getBoardList();
     }
-  },[loading, page, searchWord, selected, getSearchBoardList, getBoardList])
+  },[
+    loading, 
+    page, 
+    searchWord, 
+    selected, 
+    getSearchBoardList, 
+    getBoardList, 
+    handleSearchElement
+  ])
 
   return (
     <div className='board-list-page-con'>
@@ -129,7 +163,7 @@ export default function Main() {
         pathList={pathList}
         
         searchWord={searchWord}
-        handleSearch={handleSearchWord}
+        handleSearch={handleSearchWordWithPageReset}
         handleViewCount={handleViewCount}
       />
       {isPage ? 
@@ -137,6 +171,7 @@ export default function Main() {
           currentPage={page}
           currentSection={currentSection}
           totalPages={totalPages}
+          totalElements={totalElements}
           firstPageNumber={firstPageNumber}
           lastPageNumber={lastPageNumber}
           pageNumberSize={pageNumberSize}
