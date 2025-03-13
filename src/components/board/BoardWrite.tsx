@@ -90,7 +90,7 @@ export default function BoardWriteCom({
                 multiple={false}
                 style={{ display: "none" }}
               />
-              <Button text="수정" type="button" classNames="modify-file-button" onClick={() => handleInputFile(file.id)} />
+              <Button text="+" type="button" classNames="modify-file-button" onClick={() => handleInputFile(file.id)} />
               {removeFile && <Button text="❌" type="button" classNames="delete-file-button" onClick={() => removeFile(file.id)} />}
             </div>
           ))}
