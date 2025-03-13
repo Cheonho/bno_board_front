@@ -86,17 +86,19 @@ export async function patchViewCountApi(boardNum: number | string): Promise<ResT
 export async function putUpdateBoardApi(board: BoardWriteType, files: File[], deleteIdList?: FileDeleteIdList): Promise<ResType> {
   const requestBody  = new FormData();
   const jsonData = JSON.stringify(board);
-  const jsonDeleteId = JSON.stringify(deleteIdList)
   const boardInfo = new Blob([jsonData], { type: 'application/json' });
-  const deleteIdListInfo = new Blob([jsonDeleteId], { type: 'application/json' });
   requestBody.append('board', boardInfo)
-  requestBody.append('deleteIdList', deleteIdListInfo)
+
+  if (deleteIdList) {
+    const jsonDeleteId = JSON.stringify(deleteIdList)
+    const deleteIdListInfo = new Blob([jsonDeleteId], { type: 'application/json' });
+    requestBody.append('deleteIdList', deleteIdListInfo)
+  }
 
   files.forEach((file) => {
     if (file?.name) requestBody.append("file", file)
   })
 
-  
   const res = await customApi<any>(
     `/board/update`,
     `PUT`,
