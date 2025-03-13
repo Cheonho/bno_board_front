@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import './style.css'
 import BoardWriteCom from 'components/board/BoardWrite'
-import { BoardType, FileInfoType, FileType } from 'types/interface';
+import { BoardType, FileDeleteIdList, FileInfoType, FileType } from 'types/interface';
 import { useLocation, useNavigate } from 'react-router-dom';
 import useUserStore from 'stores/useUserStore';
 import Modal from 'components/common/Modal'
@@ -14,7 +14,7 @@ export default function BoardUpdate() {
   const [write, setWriter] = useState("");
   const [writerEmail, setWriterEmail] = useState("");
   const [files, setFiles] = useState<FileType[]>([])
-  const [deleteFileList, setDeleteFileList] = useState<string[]>([])
+  const [deleteFileList, setDeleteFileList] = useState<FileDeleteIdList>()
   const [board, setBoard] = useState<BoardType>({
     boardNum: "",
     title: "",
@@ -71,6 +71,15 @@ export default function BoardUpdate() {
     setContent(e.target.value)
   }
 
+  const handleDeleteFileList = (item: FileType) => {
+    setDeleteFileList((prev) => ({
+      fileIds: [
+        ...(prev?.fileIds ?? []), 
+        item.fileInfo?.id
+      ].filter((id): id is string => id !== undefined)
+    }));
+  }
+
   const handleFile = (e: any, id: string) => {
     if (!setFiles) return
     if(e.target.files) {
@@ -79,7 +88,7 @@ export default function BoardUpdate() {
         return prev.map((item) => {
           let newItem: FileType;
           if (item.id === id && item.fileInfo) {
-            setDeleteFileList([...deleteFileList, item.fileInfo.id])
+            handleDeleteFileList(item)
             newItem = {id: crypto.randomUUID(), file: newFiles}
           } else {
             newItem = item.id === id ? {...item, file: newFiles} : item
@@ -98,7 +107,7 @@ export default function BoardUpdate() {
       // )))
       return (prev.filter((item) => {
         if (item.id === id && item.fileInfo) {
-          setDeleteFileList([...deleteFileList, item.fileInfo.id])
+          handleDeleteFileList(item)
         } 
         return item.id !== id
       }))

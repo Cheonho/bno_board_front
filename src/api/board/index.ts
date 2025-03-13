@@ -1,5 +1,5 @@
 import customApi, { authInstance } from "utils/interceptor";
-import { BoardListType, BoardWriteType, BoardType } from "types/interface";
+import { BoardListType, BoardWriteType, BoardType, FileDeleteIdList } from "types/interface";
 import { DetailBoardType } from "types/interface/board-list.interface";
 import { GetCommentListResponse, PostCommentListResponse } from "types/interface/comment-list.interface";
 import { ResType } from "types/interface/common";
@@ -83,19 +83,19 @@ export async function patchViewCountApi(boardNum: number | string): Promise<ResT
 //   return res;
 // }
 
-export async function putUpdateBoardApi(board: BoardWriteType, files: File[], deleteIdList: string[]): Promise<ResType> {
+export async function putUpdateBoardApi(board: BoardWriteType, files: File[], deleteIdList?: FileDeleteIdList): Promise<ResType> {
   const requestBody  = new FormData();
   const jsonData = JSON.stringify(board);
+  const jsonDeleteId = JSON.stringify(deleteIdList)
   const boardInfo = new Blob([jsonData], { type: 'application/json' });
+  const deleteIdListInfo = new Blob([jsonDeleteId], { type: 'application/json' });
   requestBody.append('board', boardInfo)
+  requestBody.append('deleteIdList', deleteIdListInfo)
 
   files.forEach((file) => {
     if (file?.name) requestBody.append("file", file)
   })
 
-  deleteIdList.forEach((deleteId) => {
-    if (deleteId) requestBody.append('deleteIdList', deleteId)
-  })
   
   const res = await customApi<any>(
     `/board/update`,

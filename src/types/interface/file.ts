@@ -17,3 +17,7 @@ export interface FileInfoType {
   update: Date | null;
   createAt: Date;
 }
+
+export interface FileDeleteIdList {
+  fileIds: string[];
+}
