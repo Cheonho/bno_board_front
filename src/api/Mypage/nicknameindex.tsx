@@ -7,8 +7,8 @@ export const nicknamechange = async (userNickname: string, id: string) => {
     return response ;
 };
 
-export const passwordcorrection = async (id:string, password : string, nowpassword : string) => {
-    const response = await axios.post(`/passwordcorrection`, {id, nowpassword, password});
+export const passwordcorrection = async (id:string, password : string, nowpassword : string, checkpassword : string) => {
+    const response = await axios.post(`/passwordcorrection`, {id, nowpassword, password, checkpassword});
     return response ;
 };
 

@@ -5,9 +5,8 @@ import {LoginModel, UserModel} from "common/UserModel";
 import LoginForm from "components/Login/LoginForm";
 import styles from "styles/login.module.css";
 import { AxiosError } from 'axios'
-// @ts-ignore
-import Session from "react-session-api";
-import {saveSession} from "../../utils/Login/LoginSession";
+import Swal from "sweetalert2";
+
 import useUserStore from "stores/useUserStore";
 import { OTP_VERIFY_PATH } from "constant";
 
@@ -30,16 +29,21 @@ const Login = () => {
                 const loginmodel: LoginModel = response.data.loginResponseDto;
                 // saveSession(loginmodel.id, loginmodel.userNickname, loginmodel.role, loginmodel.email);
                 setUser({email: loginmodel.email, role: loginmodel.role, nickname: loginmodel.userNickname})
-                const token = response.data.token ;
+                const token = response.data.token;
                 localStorage.setItem("token", token);
-                alert(response.data.message);
-                navigate(`${OTP_VERIFY_PATH()}`);
-            }
-        } catch (error) {
-            if (error instanceof AxiosError && error.response) {
-                const errorMessage = error.response.data.body.message
-                alert(errorMessage);
-            }
+
+                Swal.fire({
+                    icon: "success",
+                    text: response.data.message
+                }).then(() => {
+                    navigate("/");
+                });
+
+            }  } catch (error : any) {
+            Swal.fire({
+                icon: "error",
+                text: error.response.data.body.message
+            }) ;
         }
     }
     return (

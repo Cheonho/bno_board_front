@@ -1,118 +1,108 @@
-import React, {use, useEffect, useLayoutEffect, useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {useLocation, useNavigate} from "react-router-dom";
-// @ts-ignore
-import Session from "react-session-api";
-import styles from "../../styles/mypage.module.css" ;
-import {apitokendata} from "../../api/Mypage/nicknameindex";
-import {keepPreviousData} from "@tanstack/react-query";
+import styles from "../../styles/mypage.module.css";
+import { apitokendata } from "../../api/Mypage/nicknameindex";
+import Swal from "sweetalert2";
+
+import Passwordchangeindex from "../../views/MyPage/passwordchangeindex";
+import Addresschangeindex from "../../views/MyPage/addresschangeindex";
+import NicknameForm from "./nicknamecorrection";
+import LoadingIdx from "../../views/MyPage/lodingldx";
+import Otpidx from "../../views/MyPage/otpindex";
+
+
 
 const MypageForm = () => {
     const navigate = useNavigate();
 
-    const [email, setEmail] = useState("")
-    const [userNickname, setUserNickname] = useState("") ;
-    const [Loading, setLoading] = useState<boolean>() ;
-    const [modalOpen, setModalOpen] = useState(false) ;
+    const [email, setEmail] = useState("");
+    const [nicknamemodalOpen, setNicknameModalOpen] = useState(false);
+    const modalBackground = useRef<HTMLDivElement | null>(null);
+    const [userNickname, setUserNickname] = useState("");
+    const [address, setAddress] = useState("") ;
+    const [Loading, setLoading] = useState<boolean>(true);
 
-    const nicknamecorrection = () => navigate("/nicknamecorrection");
-    const passwordcorrection = () => navigate("/passwordcorrection");
-    const addresscorrection = () => navigate("/addresscorrection") ;
-
-
-    useLayoutEffect(() => {
-        setLoading(true) ;
-
+    useEffect(() => {
         const ApiTokenData = async () => {
-           const token =  localStorage.getItem("token") ;
-           if(!token) {
-               alert("재로그인 바랍니다.")
-               navigate("/login") ;
-               return ;
-           }
-           setLoading(true) ;
+            setLoading(true);
+            const token = localStorage.getItem("token");
+
+            if (!token) {
+                Swal.fire({
+                    icon: "error",
+                    text: "다시 로그인해 주세요."
+                }).then(() => {
+                    navigate("/login");
+                });
+                return;
+            }
+
             try {
-                const response = await apitokendata(token);  // 토큰을 전달
+                const response = await apitokendata(token);
                 if (response.status === 200) {
-                    setEmail(response.data.apitokendataDto.email) ;
-                    setUserNickname(response.data.apitokendataDto.userNickname) ;
+                    setEmail(response.data.apitokendataDto.email);
+                    setUserNickname(response.data.apitokendataDto.userNickname);
+                    setAddress(response.data.apitokendataDto.address);
                 }
             } catch (error: any) {
-                console.log(error.response);
-                navigate("/login") ;
+                navigate("/login");
             } finally {
-                setLoading(false) ;
+                setLoading(false); // 로딩 완료 후 상태 변경
             }
         };
 
-        ApiTokenData(); // 함수 호출
+        ApiTokenData();
+    }, []);
 
-    }, [useLocation().pathname]); // 경로가 변경될 때마다 실행
 
     if (Loading) {
         return (
-            <div className={styles.container}>
-                <h2>기본 정보</h2>
-                <div className={styles.info_box}>
-                    <span className={styles.info_title}>닉네임</span>
-                    <div className={styles.info_content2}>
-                        ㅤ
-                </div>
-                    <button className={styles.btn} onClick={nicknamecorrection}>수정</button>
-                </div>
-
-                <div className={styles.info_box}>
-                    <span className={styles.info_title}>이메일</span>
-                    <span className={styles.info_content2}>
-                    ㅤ
-                </span>
-                </div>
-
-
-                <div className={styles.info_box}>
-                    <span className={styles.info_title}>비밀번호</span>
-                    <br />
-                    <button className={styles.btn} onClick={passwordcorrection}>수정</button>
-                </div>
-
-                <div className={styles.info_box}>
-                    <span className={styles.info_title}>주소</span>
-                    <br />
-                    <button className={styles.btn} onClick={addresscorrection}>확인</button>
-                </div>
-            </div>
-        );
+            <LoadingIdx />
+        )
     }
 
     return (
         <div className={styles.container}>
             <h2>기본 정보</h2>
-
             <div className={styles.info_box}>
                 <span className={styles.info_title}>닉네임</span>
-                <span className={styles.info_content}>
-                    {userNickname}
-                </span>
-                <button className={styles.btn} onClick={nicknamecorrection}>수정</button>
-            </div>
+                <span className={styles.info_content}>{userNickname}</span>
+                <br />
+                <button className={styles.btn} onClick={() => setNicknameModalOpen(true)}>
+                    수정
+                </button>
 
+                {nicknamemodalOpen && (
+                    <div
+                        className={styles.modal_container}
+                        ref={modalBackground}
+                        onClick={(e) => {
+                            if (modalBackground.current && e.target === modalBackground.current) {
+                                setNicknameModalOpen(false);
+                            }
+                        }}
+                    >
+                        <div className={styles.modal_content}>
+                            <NicknameForm />
+                            <button className={styles.modal_close_btn} onClick={() => setNicknameModalOpen(false)}>
+                                닫기
+                            </button>
+                        </div>
+                    </div>
+                )}
+            </div>
             <div className={styles.info_box}>
                 <span className={styles.info_title}>이메일</span>
-                <span className={styles.info_content}>
-                    {email}
-                </span>
+                <span className={styles.info_content}>{email}</span>
             </div>
-
-
-            <div className={styles.info_box}>
-                <span className={styles.info_title}>비밀번호</span>
-                <br />
-                <button className={styles.btn} onClick={passwordcorrection}>수정</button>
-            </div>
-
+            <Passwordchangeindex />
             <div className={styles.info_box}>
                 <span className={styles.info_title}>주소</span>
-                <br />
-                <button className={styles.btn} onClick={addresscorrection}>확인</button>
+                <span className={styles.info_content}>{address}</span>
+                <Addresschangeindex />
+            </div>
+            <div className={styles.info_box}>
+            <Otpidx />
             </div>
         </div>
     );

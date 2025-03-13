@@ -4,12 +4,13 @@ body, html {
     height: 100vh;
     margin: 0;
     padding: 0;
+
 }
 
 /* 메인 컨테이너 고정 크기 설정 */
 .container {
-    width: 300px;
-    height: 700px;
+    width: 300px; /* 고정된 너비 */
+    height: 700px; /* 고정된 높이 */
     margin: 50px auto;
     padding: 30px;
     border: 1px solid #ddd;
@@ -17,23 +18,10 @@ body, html {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     background-color: #fff;
     font-family: 'Noto Sans KR', sans-serif;
+    overflow: hidden; /* 스크롤 방지 */
     position: relative;
-    overflow: auto; /* 모달 내부에서 스크롤 가능 */
 }
 
-
-/* 헤더 고정 */
-h2 {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 25px;
-    color: #333;
-    text-align: center;
-    padding-bottom: 30px ;
-    position: sticky;
-    background-color: #fff; /* 배경색을 설정하여 스크롤 시 배경이 보이도록 함 */
-    z-index: 1; /* 다른 요소보다 위로 겹치지 않도록 */
-}
 .info_box {
     background: #f8f9fa;
     padding: 20px;
@@ -50,15 +38,18 @@ h2 {
 }
 
 
-.info_content {
-    font-size: 18px;
-    color: #222;
-    margin-top: 8px;
+.address_box {
+    background: #f8f9fa;
+    border-radius: 8px;
+    margin-bottom: 6px;
+    display: flex;
+    flex-direction: column;
+
 }
 
 /* 버튼 스타일 */
 .btn {
-    padding: 7px 16px;
+    padding: 7.5px 19px;
     border: none;
     border-radius: 6px;
     background-color: #007bff;
@@ -69,20 +60,11 @@ h2 {
     transition: 0.3s;
 }
 
+
 .btn:hover {
-    background-color:#0056b3;
+    background-color: #0056b3;
 }
 
-.btn_wrapper {
-    display: flex;
-    justify-content: center;
-    margin-top: 5rem;
-}
-
-.modal_open_button {
-    cursor: pointer;
-    margin-left: auto;
-}
 /* 모달 오버레이 */
 .modal_container {
     position: fixed;
@@ -121,27 +103,51 @@ h2 {
     margin-top: 15px;
     transition: background 0.3s ease-in-out;
 }
+
 .modal_close_btn:hover {
     background-color: #b02a37;
 }
-.overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+
+/* 애니메이션 */
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+    }
 }
 
-.info_content2 {
-    background-color: #f8f9fa;
-    margin-top: 10.5px;
+@keyframes scaleUp {
+    to {
+        transform: scale(1);
+    }
 }
 
-.info_content3 {
-    background-color: #f8f9fa;
-    margin-top: 50px;
+
+.otpInput{
+    width: 170px;
+    height: 30px;
+    font-size: 18px;
+}
+
+.otpButton {
+    width: 150px;
+    height: 40px;
+    background-color: #f0f0f0; 
+    border: 1px solid #d9d9d9;
+    border-radius: 8px; 
+    color: #555; 
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.otp_modal_container {
+    background: white;
+    padding: 25px;
+    width: 400px;
+    border-radius: 12px;
+    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    transform: scale(0.8);
+    animation: scaleUp 0.3s forwards;
 }
