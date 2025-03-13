@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import './style.css'
 import BoardWriteCom from 'components/board/BoardWrite'
-import { BoardType } from 'types/interface';
+import { BoardType, FileInfoType, FileType } from 'types/interface';
 import { useLocation, useNavigate } from 'react-router-dom';
 import useUserStore from 'stores/useUserStore';
 import Modal from 'components/common/Modal'
@@ -13,6 +13,8 @@ export default function BoardUpdate() {
   const [content, setContent] = useState("");
   const [write, setWriter] = useState("");
   const [writerEmail, setWriterEmail] = useState("");
+  const [files, setFiles] = useState<FileType[]>([])
+  const [deleteFileList, setDeleteFileList] = useState<string[]>([])
   const [board, setBoard] = useState<BoardType>({
     boardNum: "",
     title: "",
@@ -51,6 +53,13 @@ export default function BoardUpdate() {
       setContent(detailBoard.content)
       setWriter(detailBoard.writerNickname)
       setWriterEmail(detailBoard.writerEmail)
+
+      detailBoard.files?.forEach((item: FileInfoType) => {
+        setFiles((prev) => [
+          ...prev,
+          {id: item.id, file: new File([], ''), fileInfo: item}
+        ])
+      })
     }
   }, [state, navigate])
 
@@ -60,6 +69,49 @@ export default function BoardUpdate() {
 
   const onChangeContent = (e: any) => {
     setContent(e.target.value)
+  }
+
+  const handleFile = (e: any, id: string) => {
+    if (!setFiles) return
+    if(e.target.files) {
+      const newFiles = e.target.files[0];
+      setFiles((prev:FileType[]) => {
+        return prev.map((item) => {
+          let newItem: FileType;
+          if (item.id === id && item.fileInfo) {
+            setDeleteFileList([...deleteFileList, item.fileInfo.id])
+            newItem = {id: crypto.randomUUID(), file: newFiles}
+          } else {
+            newItem = item.id === id ? {...item, file: newFiles} : item
+          }
+          return newItem
+        })
+      })
+    }
+  }
+
+  const removeFile = (id: string) => {
+    if (!setFiles) return; 
+    setFiles((prev) => {
+      // return (prev.filter((item) => (
+      //   item.id !== id
+      // )))
+      return (prev.filter((item) => {
+        if (item.id === id && item.fileInfo) {
+          setDeleteFileList([...deleteFileList, item.fileInfo.id])
+        } 
+        return item.id !== id
+      }))
+    })
+  }
+
+  const addFileList = () => {
+    if (setFiles) {
+      setFiles((prev) => [
+        ...prev,
+        {id: crypto.randomUUID(), file: new File([], '')}
+      ])
+    }
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -74,7 +126,12 @@ export default function BoardUpdate() {
         title: title,
         content: content
       }
-      const res = await updateApi(payload)
+
+      const fileList: File[] = files.map((item) => {
+        return item.file
+      })
+
+      const res = await updateApi({board: payload, files: fileList, deleteFileList: deleteFileList})
       if (res.code === "SU") {
         navigate("/");
       }
@@ -99,9 +156,13 @@ export default function BoardUpdate() {
           title={title}
           content={content}
           writer={write}
+          files={files}
           onChangeTitle={onChangeTitle} 
           onChangeContent={onChangeContent}
           handleSubmit={handleSubmit}
+          handleFile={handleFile}
+          removeFile={removeFile}
+          addFileList={addFileList}
         />) : (
           isModalOpen && (<Modal modalClose={modalClose} message="로그인 해주세요" />)
         )

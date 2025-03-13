@@ -1,5 +1,5 @@
 interface ButtonProps {
-  text: string;
+  text: any;
   id?: string;
   classNames?: string;
   type?: "button" | "submit" | "reset";

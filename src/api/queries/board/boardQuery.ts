@@ -65,7 +65,7 @@ export const usePutUpdateBoardApiQuery = () => {
   const queryClient = useQueryClient();
   
   return useMutation({
-    mutationFn: (board:BoardWriteType) => putUpdateBoardApi(board),
+    mutationFn: ({board, files, deleteFileList} : {board:BoardWriteType, files: File[], deleteFileList: string[]}) => putUpdateBoardApi(board, files, deleteFileList),
     onSuccess: () => {
       console.log("update 성공")
       queryClient.invalidateQueries({queryKey: ["BoardList"], refetchType: "all"})

@@ -34,6 +34,36 @@ export default function BoardWrite() {
     boardWriteRequst();
   };
 
+  const handleFile = (e: any, id: string) => {
+    if (!setFiles) return
+    if(e.target.files) {
+      const newFiles = e.target.files[0];
+      setFiles((prev:FileType[]) => {
+        return prev.map((item) => {
+          return item.id === id ? {...item, file: newFiles} : item
+        })
+      })
+    }
+  }
+
+  const removeFile = (id: string) => {
+    if (!setFiles) return; 
+    setFiles((prev) => {
+      return (prev.filter((item) => (
+        item.id !== id
+      )))
+    })
+  }
+
+  const addFileList = () => {
+    if (setFiles) {
+      setFiles((prev) => [
+        ...prev,
+        {id: crypto.randomUUID(), file: new File([], '')}
+      ])
+    }
+  }
+
   const boardWriteRequst = async () => {
     const payload: BoardWriteType = {
       title: title,
@@ -68,10 +98,12 @@ export default function BoardWrite() {
           content={content}
           writer={writer}
           files={files}
-          setFiles={setFiles}
+          handleFile={handleFile}
           onChangeTitle={onChangeTitle} 
           onChangeContent={onChangeContent}
           handleSubmit={handleSubmit}
+          removeFile={removeFile}
+          addFileList={addFileList}
         /> : ""
       }
     </div>

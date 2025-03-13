@@ -3,7 +3,7 @@ import Button from "components/common/Button";
 import Modal from 'components/common/Modal'
 import { useNavigate } from "react-router-dom";
 import 'styles/board-style.css';
-import { Dispatch, SetStateAction, useState } from "react";
+import { useRef, useState } from "react";
 import { BOARD_WRITE_AND_UPDATE } from "constant";
 import { FileType } from "types/interface";
 
@@ -16,7 +16,9 @@ interface Props {
   onChangeTitle: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onChangeContent: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
   handleSubmit: (event: React.FormEvent) => void;
-  setFiles?: Dispatch<SetStateAction<FileType[]>>
+  handleFile?: (event: React.ChangeEvent<HTMLInputElement>, id: string) => void;
+  removeFile?: (id: string) => void;
+  addFileList?: () => void;
 }
 
 export default function BoardWriteCom({
@@ -28,10 +30,13 @@ export default function BoardWriteCom({
   onChangeTitle, 
   onChangeContent, 
   handleSubmit,
-  setFiles
+  handleFile,
+  removeFile,
+  addFileList
 }: Props) {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const fileInput = useRef<HTMLInputElement>(null);
 
   const modalClose = () => {
     setIsModalOpen(false);
@@ -43,34 +48,9 @@ export default function BoardWriteCom({
     }
   }
 
-  const handleFile = (e: any, id: string) => {
-    if (!setFiles) return
-    if(e.target.files) {
-      const newFiles = e.target.files[0];
-      setFiles((prev:FileType[]) => {
-        return prev.map((item) => {
-          return item.id === id ? {...item, file: newFiles} : item
-        })
-      })
-    }
-  }
-
-  const removeFile = (id: string) => {
-    if (!setFiles) return; 
-    setFiles((prev) => {
-      return (prev.filter((item) => (
-        item.id !== id
-      )))
-    })
-  }
-
-  const addFileList = () => {
-    if (setFiles) {
-      setFiles((prev) => [
-        ...prev,
-        {id: crypto.randomUUID(), file: new File([], '')}
-      ])
-    }
+  const handleInputFile = () => {
+    const fileInput = document.querySelector(`input[type="file"]`) as HTMLInputElement
+    fileInput.click();
   }
 
   return (
@@ -99,21 +79,23 @@ export default function BoardWriteCom({
         </div>
         <div className="form-group">
           <label>파일</label>
-          {files?.map((file) => (
+          {handleFile && files?.map((file) => (
             <div key={file.id} className="file-input-group">
+              <span>{file.fileInfo?.fileName || file.file.name || `파일없음`}</span>
               <input
                 type="file"
+                ref={fileInput}
                 onChange={(e) => handleFile(e, file.id)}
                 className="input-field"
                 placeholder="내용을 입력하세요"
                 multiple={false}
+                style={{ display: "none" }}
               />
-              <button type="button" className="delete-file-button" onClick={() => removeFile(file.id)}>
-                ❌
-              </button>
+              <Button text="수정" type="button" classNames="modify-file-button" onClick={() => handleInputFile()} />
+              {removeFile && <Button text="❌" type="button" classNames="delete-file-button" onClick={() => removeFile(file.id)} />}
             </div>
           ))}
-          <Button type="button" onClick={addFileList} classNames="add-file-button" text="파일 추가" />
+          {addFileList && <Button type="button" onClick={addFileList} classNames="add-file-button" text="파일 추가" />}
         </div>
         <div className="form-group">
           <label>내용</label>
