@@ -1,5 +1,5 @@
 import { BoardListType, BoardWriteType, BoardType } from './board-list.interface';
-import {FileType, FileInfoType, FileDeleteIdList} from './file'
+import {FileType, FileInfoType, FileDeleteIdList, FileRefreshUrlType} from './file'
 import CommentType from './comment-list.interface';
 
 export type {
@@ -9,5 +9,6 @@ export type {
   BoardType,
   FileType,
   FileInfoType,
-  FileDeleteIdList
+  FileDeleteIdList,
+  FileRefreshUrlType
 }

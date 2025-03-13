@@ -5,7 +5,7 @@ import { BoardType, FileDeleteIdList, FileInfoType, FileType } from 'types/inter
 import { useLocation, useNavigate } from 'react-router-dom';
 import useUserStore from 'stores/useUserStore';
 import Modal from 'components/common/Modal'
-import { LOGIN_PATH } from 'constant';
+import { LOGIN_PATH, MAIN_PATH } from 'constant';
 import { usePutUpdateBoardApiQuery } from 'api/queries/board/boardQuery';
 
 export default function BoardUpdate() {
@@ -31,6 +31,7 @@ export default function BoardUpdate() {
   const navigate = useNavigate();
   const {user: userInfo} = useUserStore();
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [modalMessage, setModalMessage] = useState("")
   const { state } = useLocation();
 
   const {mutateAsync: updateApi} = usePutUpdateBoardApiQuery();
@@ -144,7 +145,12 @@ export default function BoardUpdate() {
       if (res.code === "SU") {
         navigate("/");
       }
-    } catch (err) {
+    } catch (err: any) {
+      if (err?.status === 403) {
+        setIsModalOpen(true)
+        setModalMessage("인증이 만료되었습니다.")
+        navigate(MAIN_PATH())
+      }
       console.log(err)
     }
   };
@@ -154,11 +160,13 @@ export default function BoardUpdate() {
       getBoardData()
     } else {
       setIsModalOpen(true)
+      setModalMessage("로그인 해주세요")
     }
   }, [getBoardData, userInfo, state, navigate])
 
   return (
     <div>
+      {isModalOpen && (<Modal modalClose={modalClose} message={modalMessage} />)}
       {userInfo ? 
         (<BoardWriteCom 
           comType="u"
@@ -173,7 +181,7 @@ export default function BoardUpdate() {
           removeFile={removeFile}
           addFileList={addFileList}
         />) : (
-          isModalOpen && (<Modal modalClose={modalClose} message="로그인 해주세요" />)
+          ""
         )
       }
     </div>

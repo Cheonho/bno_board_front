@@ -21,3 +21,7 @@ export interface FileInfoType {
 export interface FileDeleteIdList {
   fileIds: string[];
 }
+
+export interface FileRefreshUrlType {
+  refreshUrl: string;
+}

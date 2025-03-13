@@ -1,5 +1,5 @@
 import customApi, { authInstance } from "utils/interceptor";
-import { BoardListType, BoardWriteType, BoardType, FileDeleteIdList } from "types/interface";
+import { BoardListType, BoardWriteType, BoardType, FileDeleteIdList, FileRefreshUrlType } from "types/interface";
 import { DetailBoardType } from "types/interface/board-list.interface";
 import { GetCommentListResponse, PostCommentListResponse } from "types/interface/comment-list.interface";
 import { ResType } from "types/interface/common";
@@ -128,8 +128,19 @@ export async function getDetailBoardApi(boardNum: number | string): Promise<Deta
   )
   return res.data
 }
+
+export async function getRefreshFileDownloadUrl(fileId: string): Promise<FileRefreshUrlType> {
+  const res = await customApi<FileRefreshUrlType>(
+    `/file/refresh-url/${fileId}`,
+    `GET`,
+    {},
+    {isAuth: true}
+  )
+  return res.data
+}
+
 export const getBoardApi = async (boardNum: number | string): Promise<BoardType> => {
-  const response = await authInstance.get(`/board/${boardNum}`);
+  const response = await authInstance.get(`/board/detail/${boardNum}`);
   return response.data;
 };
 
@@ -140,7 +151,7 @@ export const getCommentsApi = async (boardNum: number | string): Promise<GetComm
 
 
 export const deleteBoardApi = async (boardNum: number | string): Promise<ResType> => {
-  const response = await authInstance.delete(`/board/${boardNum}`);
+  const response = await authInstance.delete(`/board/delete/${boardNum}`);
   return response.data;
 };
 
