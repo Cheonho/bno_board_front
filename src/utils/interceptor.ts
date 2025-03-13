@@ -14,6 +14,18 @@ export const authInstance = axios.create({
   baseURL: process.env.REACT_APP_SERVER_URL,
 });
 
+authInstance.interceptors.request.use(
+  (config) => {
+    const accessToken: String | null = getToken();
+    if (accessToken) {
+      if (!config.headers["Authorization"]) {
+        config.headers["Authorization"] = `Bearer ${accessToken}`;
+      }
+    }
+    return config
+  }
+)
+
 authInstance.interceptors.response.use(
   (response) => {
     const etcObj: any = {}
@@ -40,6 +52,9 @@ authInstance.interceptors.response.use(
   
       if (errorMessage.status === 401) {
         window.location.href = "/login";
+      } else if (errorMessage.status === 403) {
+        // localStorage.removeItem('token')
+
       }
     } else {
       console.log(`[Error] : ${error}`)
@@ -57,7 +72,7 @@ const customApi = async <T>(
     params?: any;
     headers?: any;
   },
-  etc?: { isAuth?: boolean; responseType?: ResponseType }
+  etc?: { isAuth?: boolean; responseType?: 'json' | 'blob' | 'text' | 'arraybuffer' }
 ) => {
   
   const headers = opts?.headers
@@ -77,7 +92,7 @@ const customApi = async <T>(
     headers: headers,
     data: opts?.data,
     params: opts?.params,
-    // responseType: etc?.responseType ? etc?.responseType : 'json',
+    responseType: etc?.responseType ?? 'json',
   })
 }
 
