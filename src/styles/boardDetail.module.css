@@ -242,4 +242,53 @@
   }
 
 
+  /* 첨부파일 섹션 스타일링 */
+.filesContainer {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f9f9f9; /* 배경 색상 */
+    border-radius: 8px; /* 모서리 둥글게 */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 그림자 */
+  }
+
+  .fileWrap {
+    display: flex;
+    gap: 15px;
+  }
   
+  .filesContainer h3 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #333;
+  }
+  
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .fileItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #fff;
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  }
+  
+  .fileItem:hover {
+    background-color: #f1f1f1; /* hover시 배경색 */
+  }
+  
+  .fileItem span {
+    font-size: 1rem;
+    color: #555;
+    white-space: nowrap; /* 파일 이름이 한 줄로 표시되도록 */
+    overflow: hidden; /* 넘치는 글자는 숨김 */
+    text-overflow: ellipsis; /* 글자가 너무 길면 '...'으로 표시 */
+    flex-grow: 1;
+  }

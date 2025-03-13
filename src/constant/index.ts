@@ -20,3 +20,7 @@ export const BOARD_DETAIL_PATH = (boardNum: string | number) => `detail/${boardN
 export const BOARD_WRITE_PATH = () => 'write';
 export const BOARD_LIST_PATH = () => 'list';
 export const BOARD_UPDATE_PATH = (boardNum: string | number) => `update/${boardNum}`;
+
+
+// 게시글 추가 / 수정 시
+export const BOARD_WRITE_AND_UPDATE = "제목 내용을 모두 입력해주세요"

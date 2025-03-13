@@ -3,6 +3,7 @@ import { useMutation, useQuery, useQueryClient, UseQueryResult } from "@tanstack
 import { useNavigate } from "react-router-dom";
 import { BoardListType, BoardWriteType } from "types/interface";
 import { DetailBoardType } from "types/interface/board-list.interface";
+import useSearchHistoryStore from "stores/useSearchHistoryStore";
 
 export const useGetBoardListApiQuery = (
   param: number,
@@ -31,11 +32,13 @@ export const useGetSearchBoardListApiQuery = (
 export const usePostWriteBoardListApiQuery = () => {
   const queryClient = useQueryClient()
   const navigate = useNavigate();
+  const {clearSearchHistory} = useSearchHistoryStore();
 
   return useMutation({
-    mutationFn: (board: BoardWriteType) => postWriteBoardApi(board),
+    mutationFn: ({ board, files }: { board: BoardWriteType; files: File[] }) => postWriteBoardApi(board, files),
     onSuccess: () => {
-      queryClient.invalidateQueries({queryKey:["BoardList"]});
+      queryClient.invalidateQueries({queryKey:["BoardList"], refetchType: "all"});
+      clearSearchHistory();
       navigate('/');
     },
     onError: (error) => {
@@ -50,7 +53,7 @@ export const usePatchViewCountApiQuery = () => {
   return useMutation({
     mutationFn: (boardNum: string | number) => patchViewCountApi(boardNum),
     onSuccess: () => {
-      queryClient.invalidateQueries({queryKey: ["BoardList"]});
+      queryClient.invalidateQueries({queryKey: ["BoardList"], refetchType: "all"});
     },
     onError: (error) => {
       console.log(`[ViewCountApi - queryError] : `, error)
@@ -62,11 +65,10 @@ export const usePutUpdateBoardApiQuery = () => {
   const queryClient = useQueryClient();
   
   return useMutation({
-    mutationFn: (board:BoardWriteType) => putUpdateBoardApi(board),
+    mutationFn: ({board, files, deleteFileList} : {board:BoardWriteType, files: File[], deleteFileList: string[]}) => putUpdateBoardApi(board, files, deleteFileList),
     onSuccess: () => {
       console.log("update 성공")
-      queryClient.invalidateQueries({queryKey: ["BoardList"]})
-      queryClient.removeQueries({ queryKey: ["DetailBoard"] });
+      queryClient.invalidateQueries({queryKey: ["BoardList"], refetchType: "all"})
     },
     onError: (error) => {
       console.log(`[UpdateApi - queryError] : `, error)

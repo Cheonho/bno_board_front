@@ -20,7 +20,6 @@ import FindIdPw from "components/FindIdPw";
 import Authentication from 'views/Authentication';
 import User from 'views/User';
 import AddressCorrectionForm from "../components/Mypage/addresscorrection";
-import SetupOtpPage from "views/Otp/activate";
 import VerifyOtpPage from "views/Otp/verify";
 
 
@@ -60,10 +59,6 @@ export const userRoutes: MenuRouter[] = [
   {
     path: `${ADDRESS_CORRECTION()}`,
     element: <AddressCorrectionForm />
-  },
-  {
-    path: `${OTP_ACTIVATE_PATH()}`,
-    element: <SetupOtpPage />
   },
   {
     path: `${OTP_VERIFY_PATH()}`,

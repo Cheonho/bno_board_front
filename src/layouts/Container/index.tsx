@@ -8,6 +8,7 @@ import './style.css'
 export default function Container() {
   const { pathname } = useLocation();
   const [isClass, setIsClass] = useState(false);
+  const [isRendered, setIsRendered] = useState(false);
   
   const checkFun = useCallback(() => {
     const checkUrl = [
@@ -21,14 +22,22 @@ export default function Container() {
   }, [pathname])
 
   useEffect(() => {
+    requestAnimationFrame(() => {
+      setIsRendered(true);
+    });
+  }, []);
+
+  useEffect(() => {
     checkFun();
   }, [checkFun, pathname])
 
   return (
-    <div className={isClass ? 'container' : ''}>
-      <Header />
-      <Outlet />
-      {pathname !== AUTH_PATH() && <Footer />}
-    </div>
+    <>
+      <div style={{opacity: isRendered ? "flex" : "none"}} className={isClass ? `container` : ''}>
+        <Header />
+        <Outlet />
+        {pathname !== AUTH_PATH() && <Footer />}
+      </div>
+    </>
   )
 }

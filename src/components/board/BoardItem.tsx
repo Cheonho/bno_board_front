@@ -1,6 +1,5 @@
 import React from 'react';
 import 'styles/board-style.css';
-import {BoardListType} from 'types/interface';
 import { BoardType } from 'types/interface';
 import { format } from 'date-fns'
 

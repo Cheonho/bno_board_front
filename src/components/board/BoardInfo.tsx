@@ -2,7 +2,7 @@ import {useEffect, useState} from "react";
 import { BOARD_PATH, BOARD_UPDATE_PATH } from "constant";
 import { useNavigate } from "react-router-dom";
 import styles from "styles/boardDetail.module.css";
-import {BoardType} from "types/interface";
+import {BoardType, FileInfoType} from "types/interface";
 import useUserStore from "stores/useUserStore";
 
 interface BoardInfoProps {
@@ -16,14 +16,15 @@ interface BoardInfoProps {
 export default function BoardInfo({ boardNum, board, deleteBoard, goBoardList }: BoardInfoProps) {
     const navigate = useNavigate();
 
-    const userInfo = useUserStore((state) => state.user);
+    const {user} = useUserStore();
     const [writerEmail, setWriterEmail] = useState("");
+    const files = board.files ? board.files : []
 
      useEffect(() => {
-            if (userInfo) {
-                setWriterEmail(userInfo.email);
+            if (user) {
+                setWriterEmail(user.email);
             }
-          }, [userInfo])
+          }, [user])
     
     return (
         <>
@@ -43,6 +44,21 @@ export default function BoardInfo({ boardNum, board, deleteBoard, goBoardList }:
                     <span className={styles.label}>조회수:</span>
                     <span className={styles.value}>{board.viewCount}</span>
                 </p>
+                {files && files.length > 0 && (
+                    <div className={styles.filesContainer}>
+                        <h3>첨부파일</h3>
+                        <ul className={styles.fileWrap}>
+                            {files.map((file, index) => (
+                                <li key={index} className={styles.fileItem}>
+                                    <span>{file.fileName}</span>
+                                    {/* <a href={file.minioDataUrl} download>
+                                        다운로드
+                                    </a> */}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
             </div>
             <div className={styles.content}>
                 <p>{board.content}</p>

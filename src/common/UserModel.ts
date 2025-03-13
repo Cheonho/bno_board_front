@@ -12,5 +12,6 @@ export interface LoginModel {
     email: string;
     userNickname: string;
     role: string;
+    otpEnabled : boolean;
 }
 

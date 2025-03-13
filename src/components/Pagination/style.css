@@ -1,3 +1,8 @@
+#pagination-container {
+  display: flex;
+  justify-content: space-between;
+}
+
 #pagination-wrapper {
   display: flex;
   gap: 20px;

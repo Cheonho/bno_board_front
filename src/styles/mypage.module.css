@@ -7,7 +7,7 @@ body, html {
 }
 
 /* 메인 컨테이너 고정 크기 설정 */
-.container {
+.mypage_container {
     width: 300px;
     height: 700px;
     margin: 50px auto;
