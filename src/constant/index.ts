@@ -24,3 +24,6 @@ export const BOARD_UPDATE_PATH = (boardNum: string | number) => `update/${boardN
 
 // 게시글 추가 / 수정 시
 export const BOARD_WRITE_AND_UPDATE = "제목 내용을 모두 입력해주세요"
+
+// 파일
+export const NON_PERMIT_EXTENSION = "허용 하지 않는 파일 입니다."

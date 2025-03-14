@@ -4,7 +4,7 @@ import Modal from 'components/common/Modal'
 import { useNavigate } from "react-router-dom";
 import 'styles/board-style.css';
 import { useRef, useState } from "react";
-import { BOARD_WRITE_AND_UPDATE, MAIN_PATH } from "constant";
+import { BOARD_WRITE_AND_UPDATE, MAIN_PATH, NON_PERMIT_EXTENSION } from "constant";
 import { FileType } from "types/interface";
 
 interface Props {
@@ -36,7 +36,9 @@ export default function BoardWriteCom({
 }: Props) {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [modalMessage, setModalMessage] = useState("")
   const fileInput = useRef<{[key:string]: HTMLInputElement | null }>({});
+  const permitExtension = ['txt', 'xlsx', 'png', 'jpg', 'jpeg', 'gif']
 
   const modalClose = () => {
     setIsModalOpen(false);
@@ -45,6 +47,7 @@ export default function BoardWriteCom({
   const formCheck = () => {
     if (!title || !content) {
       setIsModalOpen(true)
+      setModalMessage(BOARD_WRITE_AND_UPDATE)
     }
   }
 
@@ -52,9 +55,21 @@ export default function BoardWriteCom({
     fileInput.current[fileId]?.click();
   }
 
+  const handleFileExtensionCheck = (e:any, fileId: string) => {
+    if (!e.target?.files[0]) return;
+    const fileName = e.target.files[0].name
+    const extension = fileName.substring(fileName.lastIndexOf('.') + 1).toLowerCase();
+    if (!permitExtension.includes(extension)) {
+      setIsModalOpen(true)
+      setModalMessage(NON_PERMIT_EXTENSION)
+      return
+    }
+    if (handleFile) handleFile(e, fileId)
+  }
+
   return (
     <div className="write-container">
-      {isModalOpen && (<Modal modalClose={modalClose} message={BOARD_WRITE_AND_UPDATE} color={`rgba(255,0,0,1)`} />)}
+      {isModalOpen && (<Modal modalClose={modalClose} message={modalMessage} color={`rgba(255,0,0,1)`} />)}
       <h1 className="write-title">{comType === 'u' ? '수정' : '글쓰기'}</h1>
       <form onSubmit={handleSubmit} className="write-form">
         <div className="form-group">
@@ -84,8 +99,9 @@ export default function BoardWriteCom({
               <input
                 type="file"
                 ref={(el) => {fileInput.current[file.id] = el}}
-                onChange={(e) => handleFile(e, file.id)}
+                onChange={(e) => handleFileExtensionCheck(e, file.id)}
                 className="input-field"
+                accept="txt,xlsx,png,jpg,gif,jpeg"
                 placeholder="내용을 입력하세요"
                 multiple={false}
                 style={{ display: "none" }}
