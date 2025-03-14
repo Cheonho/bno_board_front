@@ -25,3 +25,12 @@ export const apitokendata = async(token: any) => {
     }) ;
     return response ;
 }
+
+export const refreshToken = async(refreshtoken : any) =>{
+    const response = await axios.post(`/mypage/refreshtoken`, {}, {
+    headers : {
+        "Authorization": `Bearer ${refreshtoken}`
+    }
+}) ;
+return response ;
+}

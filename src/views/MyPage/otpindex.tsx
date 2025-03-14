@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, use, useRef } from "react";
 import styles from "../../styles/modal.module.css"
 import QRCode from "react-qr-code";
-import { activateOtp, setOtp } from "api/JoinBoard";
+import { activateOtp, deactivateOtp, setOtp } from "api/JoinBoard";
 import { getCurrentUser } from "utils/Auth";
 import OtpInput from "components/Login/OtpInput";
 import useUserStore from 'stores/useUserStore'
@@ -33,33 +33,48 @@ const Otpidx = () => {
         navigate(MAIN_PATH())
     }
 
-    useEffect(() => {
-        const fetchUserAndSetupOtp = async () => {
-            try {
-                const userData = await getCurrentUser();
-                if (userData) {
-                    setUser(userData);
-                    const data = await setOtp();
-                    setOtpAuthUrl(data.otpAuthUrl);
-                    setStep(2);
-                }
-            } catch (error) {
-                console.error(error);
+     const fetchUserData = async () => {
+        try {
+            const userData = await getCurrentUser();
+            if (userData) {
+                setUser(userData);
+                const data = await setOtp();
+                setOtpAuthUrl(data.otpAuthUrl);
+                setStep(2); 
             }
-        };
+        } catch (error) {
+            console.error("사용자 정보 불러오기 실패", error);
+        }
+    };
 
-        fetchUserAndSetupOtp();
+    useEffect(() => {
+        fetchUserData();
     }, []);
 
     const handleOtpSubmit = async (otpCode: string) => {
         try {
             await activateOtp(otpCode);
             alert("OTP가 활성화되었습니다!");
+            await fetchUserData();
             setStep(3);
         } catch (error) {
             alert("OTP 인증 실패! 다시 입력해주세요.");
+            setOtpmodalOpen(true);
         }
     };
+
+    const clickDeactivateOtp = async () => {
+        try {
+            await deactivateOtp();
+            alert("OTP 인증이 비활성화 되었습니다!");
+            setOtpmodalOpen(false);
+            await fetchUserData();
+            
+        } catch (error) {
+            alert("오류");
+        }
+    };
+
 
 
     return (
@@ -86,7 +101,11 @@ const Otpidx = () => {
                             {user && user.otpEnabled == true ?
 
                                 <>
-                                    <button>OTP 인증 해제</button>
+                                    <button className={styles.btn} onClick={clickDeactivateOtp}>OTP 인증 해제</button>
+                                    <br />
+                                    <button className={styles.modal_close_btn} onClick={() => setOtpmodalOpen(false)}>
+                                        닫기
+                                    </button>
                                 </>
 
                                 : <>
@@ -105,12 +124,6 @@ const Otpidx = () => {
 
                                         </div>
                                     )}
-                                    {step === 3 &&
-                                        <>
-                                            <h3>OTP가 활성화되었습니다! 이제 로그인 시 OTP가 필요합니다.</h3>
-                                            <button onClick={logoutBtn} className={styles.otpButton}>로그아웃</button>
-                                        </>
-                                    }
                                 </>}
 
 

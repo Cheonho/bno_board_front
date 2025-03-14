@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from "react";
 import {useLocation, useNavigate} from "react-router-dom";
 import styles from "../../styles/mypage.module.css";
-import { apitokendata } from "../../api/Mypage/nicknameindex";
+import {apitokendata, refreshToken} from "../../api/Mypage/nicknameindex";
 import Swal from "sweetalert2";
 
 import Passwordchangeindex from "../../views/MyPage/passwordchangeindex";
@@ -9,11 +9,9 @@ import Addresschangeindex from "../../views/MyPage/addresschangeindex";
 import NicknameForm from "./nicknamecorrection";
 import LoadingIdx from "../../views/MyPage/lodingldx";
 import Otpidx from "../../views/MyPage/otpindex";
-
-
+import {Cookies} from 'react-cookie';
 
 const MypageForm = () => {
-    const navigate = useNavigate();
 
     const [email, setEmail] = useState("");
     const [nicknamemodalOpen, setNicknameModalOpen] = useState(false);
@@ -22,37 +20,80 @@ const MypageForm = () => {
     const [address, setAddress] = useState("") ;
     const [Loading, setLoading] = useState<boolean>(true);
 
+    const cookies = new Cookies() ;
+    const refreshtoken = cookies.get("refreshToken")
+    const token = localStorage.getItem("token");
+
     useEffect(() => {
-        const ApiTokenData = async () => {
-            setLoading(true);
-            const token = localStorage.getItem("token");
+        const checkToken = () => {
+
 
             if (!token) {
-                Swal.fire({
-                    icon: "error",
-                    text: "다시 로그인해 주세요."
-                }).then(() => {
-                    navigate("/login");
-                });
                 return;
             }
 
-            try {
-                const response = await apitokendata(token);
-                if (response.status === 200) {
-                    setEmail(response.data.apitokendataDto.email);
-                    setUserNickname(response.data.apitokendataDto.userNickname);
-                    setAddress(response.data.apitokendataDto.address);
-                }
-            } catch (error: any) {
-                navigate("/login");
-            } finally {
-                setLoading(false); // 로딩 완료 후 상태 변경
-            }
+            // .. 토큰이 존재할 때만 api 호출
+            ApiTokenData(token);
         };
 
-        ApiTokenData();
+        checkToken();
+        const interval = setInterval(checkToken, 10 * 60 * 1000); // 10초마다 체크
+
+        return () => clearInterval(interval);
+
     }, []);
+
+    const ApiTokenData = async (token: string) => {
+        try {
+            const response = await apitokendata(token);
+            console.log("API 응답:", response);
+            if (response.status === 200) {
+                setEmail(response.data.apitokendataDto.email);
+                setUserNickname(response.data.apitokendataDto.userNickname);
+                setAddress(response.data.apitokendataDto.address);
+            }
+        } catch (error: any) {
+            Swal.fire({
+                title: "로그인을 계속 유지하시겠습니까?",
+                icon: "warning",
+                text: "30분 연장됩니다.",
+
+                showCancelButton: true, // cancel버튼 보이기. 기본은 원래 없음
+                confirmButtonColor: '#3085d6', // confrim 버튼 색깔 지정
+                cancelButtonColor: '#d33', // cancel 버튼 색깔 지정
+                confirmButtonText: '승인', // confirm 버튼 텍스트 지정
+                cancelButtonText: '취소', // cancel 버튼 텍스트 지정
+
+                reverseButtons: true,
+
+            }).then(result => {
+                if (result.isConfirmed) { // 확인을 눌렀을 때
+                    RefreshToken(refreshtoken) ;
+                } else {
+
+                }
+            }) ;
+
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const RefreshToken = async (refreshtoken : string) => {
+        try {
+            const response = await refreshToken(refreshtoken) ;
+            console.log(response);
+            if (response.status === 200) {
+                if (typeof token === "string") {
+                    ApiTokenData(token);
+                }
+            }
+
+        } catch (error : any) {
+            console.log(error)
+
+        }
+    }
 
 
     if (Loading) {
