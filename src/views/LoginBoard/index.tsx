@@ -6,6 +6,7 @@ import LoginForm from "components/Login/LoginForm";
 import styles from "styles/login.module.css";
 import { AxiosError } from 'axios'
 import Swal from "sweetalert2";
+import {Cookies} from 'react-cookie';
 
 import useUserStore from "stores/useUserStore";
 import { OTP_VERIFY_PATH } from "constant";
@@ -15,7 +16,7 @@ const Login = () => {
     const [password, setPassword] = useState("");
     const { setUser } = useUserStore();
     const navigate = useNavigate();
-
+    const cookies = new Cookies();
     const join = () => navigate("/join");
     const findIdPw = () => navigate("/findIdPw");
 
@@ -28,7 +29,8 @@ const Login = () => {
             if (response.status === 200) {
                 const loginmodel: LoginModel = response.data.loginResponseDto;
                 if (loginmodel.otpEnabled) {
-                    navigate("/otp/verify", { state: { email: loginmodel.email } });
+                    navigate("/otp/verify", { state: { email: loginmodel.email,
+                                              refreshToken : response.data.refreshToken} });
                     return;
                 }
                 setUser({
@@ -36,8 +38,9 @@ const Login = () => {
                     role: loginmodel.role,
                     nickname: loginmodel.userNickname
                 });
-                const token = response.data.token;
-                localStorage.setItem("token", token);
+
+                localStorage.setItem("token", response.data.accessToken);
+                cookies.set("refreshToken", response.data.refreshToken) ;
 
                 Swal.fire({
                     icon: "success",
@@ -48,6 +51,7 @@ const Login = () => {
 
             }
         } catch (error: any) {
+            console.log(error)
             Swal.fire({
                 icon: "error",
                 text: error.response.data.body.message
