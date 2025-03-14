@@ -10,10 +10,7 @@ import NicknameForm from "./nicknamecorrection";
 import LoadingIdx from "../../views/MyPage/lodingldx";
 import Otpidx from "../../views/MyPage/otpindex";
 
-
-
 const MypageForm = () => {
-    const navigate = useNavigate();
 
     const [email, setEmail] = useState("");
     const [nicknamemodalOpen, setNicknameModalOpen] = useState(false);
@@ -23,36 +20,46 @@ const MypageForm = () => {
     const [Loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
-        const ApiTokenData = async () => {
-            setLoading(true);
+        const checkToken = () => {
             const token = localStorage.getItem("token");
 
             if (!token) {
-                Swal.fire({
-                    icon: "error",
-                    text: "다시 로그인해 주세요."
-                }).then(() => {
-                    navigate("/login");
-                });
                 return;
             }
 
-            try {
-                const response = await apitokendata(token);
-                if (response.status === 200) {
-                    setEmail(response.data.apitokendataDto.email);
-                    setUserNickname(response.data.apitokendataDto.userNickname);
-                    setAddress(response.data.apitokendataDto.address);
-                }
-            } catch (error: any) {
-                navigate("/login");
-            } finally {
-                setLoading(false); // 로딩 완료 후 상태 변경
-            }
+            // .. 토큰이 존재할 때만 api 호출
+            ApiTokenData(token);
         };
 
-        ApiTokenData();
+        checkToken();
+        const interval = setInterval(checkToken, 10 * 60 * 1000); // 10초마다 체크
+
+        return () => clearInterval(interval);
+
     }, []);
+
+    const ApiTokenData = async (token: string) => {
+        try {
+            const response = await apitokendata(token);
+            console.log("API 응답:", response);
+            if (response.status === 200) {
+                setEmail(response.data.apitokendataDto.email);
+                setUserNickname(response.data.apitokendataDto.userNickname);
+                setAddress(response.data.apitokendataDto.address);
+            }
+        } catch (error: any) {
+            console.log("error : ", error);
+            Swal.fire({
+                icon: "error",
+                text: "다시 로그인해 주세요."
+            }).then(() => {
+                localStorage.removeItem("token");
+                window.location.href = "/login";
+            });
+        } finally {
+            setLoading(false);
+        }
+    };
 
 
     if (Loading) {

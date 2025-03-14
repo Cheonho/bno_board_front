@@ -8,6 +8,7 @@ import { AxiosError } from 'axios'
 import Swal from "sweetalert2";
 
 import useUserStore from "stores/useUserStore";
+import {setCookie} from "next-auth/next/utils";
 
 const Login = () => {
     const [email, setEmail] = useState("");
@@ -26,10 +27,11 @@ const Login = () => {
             // 로그인 성공
             if (response.status === 200) {
                 const loginmodel: LoginModel = response.data.loginResponseDto;
-                // saveSession(loginmodel.id, loginmodel.userNickname, loginmodel.role, loginmodel.email);
                 setUser({email: loginmodel.email, role: loginmodel.role, nickname: loginmodel.userNickname})
+                console.log(response)
                 const token = response.data.token;
                 localStorage.setItem("token", token);
+
 
                 Swal.fire({
                     icon: "success",

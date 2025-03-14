@@ -61,6 +61,7 @@
     ]
   },
   "devDependencies": {
+    "@types/css-modules": "^1.0.5",
     "@types/jwt-decode": "^2.2.1",
     "@types/react-router-dom": "^5.3.3"
   }

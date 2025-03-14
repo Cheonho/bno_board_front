@@ -1,6 +1,6 @@
-import React, { useRef, useState } from "react";
-import styles from "../../styles/mypage.module.css";
+import { useRef, useState } from "react";
 import PasswordForm from "../../components/Mypage/passwordcorrection";
+import styles from "styles/mypage.module.css";
 
 const Passwordchangeindex = () => {
     const [passwordmodalOpen, setPasswordModalOpen] = useState(false);
