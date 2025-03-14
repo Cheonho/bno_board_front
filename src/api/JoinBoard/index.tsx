@@ -17,3 +17,38 @@ export const checkUserName = async (userNickname: string) => {
     const response = await authInstance.get(`/namecheck?userNickname=${userNickname}`);
     return response;
 };
+
+// google otp 초기 세팅
+export const setOtp = async () => {
+    const token = localStorage.getItem("token"); 
+    if (!token) throw new Error("로그인이 필요합니다.");
+
+    const response = await authInstance.post(`/otp/setup`, {}, {
+        headers: {
+            "Authorization": `Bearer ${token}`,
+        }
+    });
+    return response.data;
+};
+
+// google otp 활성화 시키기 (Otp 검증 on)
+export const activateOtp = async (otpCode: string) => {
+    const token = localStorage.getItem("token"); 
+    if (!token) throw new Error("로그인이 필요합니다.");
+
+    const response = await authInstance.post(`/otp/activate`, {otpCode},{
+        headers: {
+            "Authorization": `Bearer ${token}`,
+        }
+    });
+    return response.data;
+
+}
+
+// googlt otp 6자리 검증
+export const verifyOtp = async (email:string, otpCode: string) => {
+    const response = await authInstance.post(`/otp/verify`, {email, otpCode});
+    return response;
+
+}
+

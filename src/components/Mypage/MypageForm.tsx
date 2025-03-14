@@ -69,7 +69,7 @@ const MypageForm = () => {
     }
 
     return (
-        <div className={styles.container}>
+        <div className={styles.mypage_container}>
             <h2>기본 정보</h2>
             <div className={styles.info_box}>
                 <span className={styles.info_title}>닉네임</span>

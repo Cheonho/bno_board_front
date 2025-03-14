@@ -18,7 +18,7 @@ const PasswordForm: React.FC = () => {
 
     const navigate = useNavigate();
 
-    const [id, setId] = useState("") ;
+    const [id, setId] = useState("");
 
         const ApiTokenData = async () => {
             const token =  localStorage.getItem("token") ;

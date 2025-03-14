@@ -33,7 +33,7 @@ export default function Container() {
 
   return (
     <>
-      <div style={{opacity: isRendered ? "flex" : "none"}} className={isClass ? `container` : ''}>
+      <div style={{visibility: isRendered ? "visible" : "hidden"}} className={isClass ? `container` : ''}>
         <Header />
         <Outlet />
         {pathname !== AUTH_PATH() && <Footer />}

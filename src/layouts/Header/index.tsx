@@ -9,6 +9,7 @@ import { LOGIN_PATH, MAIN_PATH, FIND_ID_PW_PATH, JOIN_PATH, MY_PAGE_PATH } from 
 export default function Header() {
   const navigate = useNavigate();
   const {clearUser, user: userState} = useUserStore();
+  const token = localStorage.getItem('token')
   // const userState = useUserStore((state) => state.user);
   const location = useLocation().pathname;
   const exceptionPath = [LOGIN_PATH(), FIND_ID_PW_PATH(), JOIN_PATH(), '/board/update', '/board/detail']
@@ -30,7 +31,7 @@ export default function Header() {
         <>
           <Button text={"게시판"} classNames='btn-pr btn-login' onClick={() => navigate(boardPath)} />
           {
-            userState ? (
+            (userState && token) ? (
               <>
                 <Button text={"마이 페이지"} classNames='btn-pr btn-login' onClick={() => navigate(myPagePath)} />
                 <Button text={"로그아웃"} classNames='btn-pr btn-login' onClick={logoutBtn} />

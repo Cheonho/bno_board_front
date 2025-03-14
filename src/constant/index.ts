@@ -11,6 +11,8 @@ export const MY_PAGE_PATH = () => `/mypage`;
 export const NICKNAME_CORRECTION = () => `/nicknamecorrection`
 export const PASSWORD_CORRECTION = () => `/passwordcorrection`
 export const ADDRESS_CORRECTION =() => `/addresscorrection`
+export const OTP_ACTIVATE_PATH = () => `/otp/activate`;
+export const OTP_VERIFY_PATH = () => `/otp/verify`;
 
 // Board
 export const BOARD_PATH = () => '/board';

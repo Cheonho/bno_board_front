@@ -4,6 +4,11 @@ import { useNavigate } from "react-router-dom";
 import styles from "styles/boardDetail.module.css";
 import {BoardType, FileInfoType} from "types/interface";
 import useUserStore from "stores/useUserStore";
+import Button from "components/common/Button";
+import customApi from "utils/interceptor";
+import { getRefreshFileDownloadUrl } from "api/board";
+import axios from "axios";
+import Modal from 'components/common/Modal'
 
 interface BoardInfoProps {
     boardNum: string | number;
@@ -18,7 +23,59 @@ export default function BoardInfo({ boardNum, board, deleteBoard, goBoardList }:
 
     const {user} = useUserStore();
     const [writerEmail, setWriterEmail] = useState("");
-    const files = board.files ? board.files : []
+    const [files, setFiles] = useState(board.files ? board.files : [])
+    const [isModalOpen, setIsModalOpen] = useState(false)
+    const [modalMessage, setModalMessage] = useState("")
+
+    const handleBlobData = (blobData: Blob, fileName: string) => {
+        const url = URL.createObjectURL(blobData);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    };
+
+    const fileDownload = async (file: FileInfoType) => {
+        if (!file.minioDataUrl) {
+            setIsModalOpen(true)
+            setModalMessage("파일 URL이 존재하지 않습니다.")
+            return;
+        }
+        try {
+            const res = await axios.get(`${file.minioDataUrl}`, { responseType: "blob" })
+            if (res.status === 200) {
+                handleBlobData(res.data, file.fileName)
+            }
+        } catch (error: any) {
+            if (error?.status !== 200) {
+                const url = await refreshFileUrl(file)
+                const resRe = await axios.get(`${url}`, { responseType: "blob" })
+                if (resRe.status === 200) {
+                    handleBlobData(resRe.data, file.fileName)
+                }
+            }
+        }
+    }
+
+    const refreshFileUrl = async (file: FileInfoType) => {
+        const refreshRes = await getRefreshFileDownloadUrl(file.id)
+        console.log(refreshRes)
+        setFiles((prev) => {
+            prev.map((item) => {
+                if (file.id === item.id) return {...item, minioDataUrl: refreshRes.refreshUrl}
+                return {...item}
+            })
+            return prev
+        })
+        return refreshRes.refreshUrl
+    }
+
+    const modalClose = () => {
+        setIsModalOpen(false);
+    };
 
      useEffect(() => {
             if (user) {
@@ -28,6 +85,7 @@ export default function BoardInfo({ boardNum, board, deleteBoard, goBoardList }:
     
     return (
         <>
+            {isModalOpen && (<Modal modalClose={modalClose} message={modalMessage} />)}
             <h2 className={styles.title}>{board.title}</h2>
             <div className={styles.infoContainer}>
                 <p className={styles.info}>
@@ -50,10 +108,7 @@ export default function BoardInfo({ boardNum, board, deleteBoard, goBoardList }:
                         <ul className={styles.fileWrap}>
                             {files.map((file, index) => (
                                 <li key={index} className={styles.fileItem}>
-                                    <span>{file.fileName}</span>
-                                    {/* <a href={file.minioDataUrl} download>
-                                        다운로드
-                                    </a> */}
+                                    <Button text={file.fileName} classNames="non-btn" onClick={() => fileDownload(file)} />
                                 </li>
                             ))}
                         </ul>

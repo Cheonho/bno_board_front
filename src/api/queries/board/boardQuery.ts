@@ -1,7 +1,7 @@
 import { getBoardListApi, getDetailBoardApi, getSearchBoardListApi, patchViewCountApi, postWriteBoardApi, putUpdateBoardApi } from "api/board";
 import { useMutation, useQuery, useQueryClient, UseQueryResult } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
-import { BoardListType, BoardWriteType } from "types/interface";
+import { BoardListType, BoardWriteType, FileDeleteIdList } from "types/interface";
 import { DetailBoardType } from "types/interface/board-list.interface";
 import useSearchHistoryStore from "stores/useSearchHistoryStore";
 
@@ -65,7 +65,7 @@ export const usePutUpdateBoardApiQuery = () => {
   const queryClient = useQueryClient();
   
   return useMutation({
-    mutationFn: ({board, files, deleteFileList} : {board:BoardWriteType, files: File[], deleteFileList: string[]}) => putUpdateBoardApi(board, files, deleteFileList),
+    mutationFn: ({board, files, deleteFileList} : {board:BoardWriteType, files: File[], deleteFileList?: FileDeleteIdList}) => putUpdateBoardApi(board, files, deleteFileList),
     onSuccess: () => {
       console.log("update 성공")
       queryClient.invalidateQueries({queryKey: ["BoardList"], refetchType: "all"})

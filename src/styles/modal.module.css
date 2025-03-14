@@ -8,7 +8,7 @@ body, html {
 }
 
 /* 메인 컨테이너 고정 크기 설정 */
-.container {
+.modal_container {
     width: 300px; /* 고정된 너비 */
     height: 700px; /* 고정된 높이 */
     margin: 50px auto;
@@ -119,4 +119,35 @@ body, html {
     to {
         transform: scale(1);
     }
+}
+
+
+.otpInput{
+    width: 170px;
+    height: 30px;
+    font-size: 18px;
+}
+
+.otpButton {
+    width: 150px;
+    height: 40px;
+    background-color: #f0f0f0; 
+    border: 1px solid #d9d9d9;
+    border-radius: 8px; 
+    color: #555; 
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.otp_modal_container {
+    background: white;
+    padding: 25px;
+    width: 400px;
+    border-radius: 12px;
+    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    transform: scale(0.8);
+    animation: scaleUp 0.3s forwards;
 }

@@ -7,7 +7,9 @@ import {
   MY_PAGE_PATH,
   NICKNAME_CORRECTION,
   PASSWORD_CORRECTION,
-  USER_PATH
+  USER_PATH,
+  OTP_ACTIVATE_PATH,
+  OTP_VERIFY_PATH
 } from "constant";
 import Login from "views/LoginBoard";
 import Join from "views/JoinBoard";
@@ -18,6 +20,7 @@ import FindIdPw from "components/FindIdPw";
 import Authentication from 'views/Authentication';
 import User from 'views/User';
 import AddressCorrectionForm from "../components/Mypage/addresscorrection";
+import VerifyOtpPage from "views/Otp/verify";
 
 
 export const userRoutes: MenuRouter[] = [
@@ -56,5 +59,9 @@ export const userRoutes: MenuRouter[] = [
   {
     path: `${ADDRESS_CORRECTION()}`,
     element: <AddressCorrectionForm />
+  },
+  {
+    path: `${OTP_VERIFY_PATH()}`,
+    element: <VerifyOtpPage />
   }
 ]

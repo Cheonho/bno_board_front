@@ -1,19 +1,19 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { login } from "api/LoginBoard";
-import {LoginModel, UserModel} from "common/UserModel";
+import { LoginModel, UserModel } from "common/UserModel";
 import LoginForm from "components/Login/LoginForm";
 import styles from "styles/login.module.css";
 import { AxiosError } from 'axios'
 import Swal from "sweetalert2";
 
 import useUserStore from "stores/useUserStore";
-import {setCookie} from "next-auth/next/utils";
+import { OTP_VERIFY_PATH } from "constant";
 
 const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const {setUser} = useUserStore();
+    const { setUser } = useUserStore();
     const navigate = useNavigate();
 
     const join = () => navigate("/join");
@@ -27,11 +27,17 @@ const Login = () => {
             // 로그인 성공
             if (response.status === 200) {
                 const loginmodel: LoginModel = response.data.loginResponseDto;
-                setUser({email: loginmodel.email, role: loginmodel.role, nickname: loginmodel.userNickname})
-                console.log(response)
+                if (loginmodel.otpEnabled) {
+                    navigate("/otp/verify", { state: { email: loginmodel.email } });
+                    return;
+                }
+                setUser({
+                    email: loginmodel.email,
+                    role: loginmodel.role,
+                    nickname: loginmodel.userNickname
+                });
                 const token = response.data.token;
                 localStorage.setItem("token", token);
-
 
                 Swal.fire({
                     icon: "success",
@@ -40,11 +46,12 @@ const Login = () => {
                     navigate("/");
                 });
 
-            }  } catch (error : any) {
+            }
+        } catch (error: any) {
             Swal.fire({
                 icon: "error",
                 text: error.response.data.body.message
-            }) ;
+            });
         }
     }
     return (
