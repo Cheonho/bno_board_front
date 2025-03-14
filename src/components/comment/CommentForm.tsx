@@ -2,6 +2,8 @@ import {useEffect, useState} from "react";
 import styles from "styles/boardDetail.module.css";
 import { modifyCommentApi, addCommentApi } from "api/board";
 import useUserStore from "stores/useUserStore";
+import { useNavigate } from "react-router-dom";
+import { LOGIN_PATH } from "constant";
 
 interface CommentFormProps {
     boardNum: number | string;
@@ -14,6 +16,7 @@ interface CommentFormProps {
 }
 
 export default function CommentForm({ boardNum, commentNum, parentNum, isEdit = false, defaultContent = "", onSubmitSuccess, onCancel }: CommentFormProps) {
+    const navigate = useNavigate();
     const [content, setContent] = useState(defaultContent);
 
     const userInfo = useUserStore((state) => state.user);
@@ -30,6 +33,12 @@ export default function CommentForm({ boardNum, commentNum, parentNum, isEdit = 
     };
 
     const handleSubmit = async () => {
+
+        if (!userInfo) {
+            alert("로그인을 해주세요.");
+            navigate(`${LOGIN_PATH()}`);
+          }
+
         if (content.trim() === "") {
             alert("내용을 입력해주세요.");
             return;
@@ -58,7 +67,9 @@ export default function CommentForm({ boardNum, commentNum, parentNum, isEdit = 
             onSubmitSuccess();
         } catch (error) {
             console.error("댓글 처리 중 오류 발생:", error);
+            if (userInfo) {
             alert("댓글 처리에 실패했습니다. 다시 시도해주세요.");
+        }
         }
     };
 
