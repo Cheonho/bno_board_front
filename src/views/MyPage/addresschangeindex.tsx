@@ -1,6 +1,6 @@
-import React, {use, useEffect, useLayoutEffect, useRef, useState} from "react";
+import React, { useRef, useState} from "react";
 import AddressCorrectionForm from "../../components/Mypage/addresscorrection";
-import styles from "../../styles/modal.module.css"
+import styles from "styles/modal.module.css"
 
 const Addresschangeindex = () => {
     const [addressmodalOpen, setAddressModalOpen] = useState(false) ;
