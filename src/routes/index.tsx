@@ -21,10 +21,6 @@ const RouterSetting = () => {
   // }
 
   // useEffect(() => {
-  //   getPathList()
-  // }, [])
-
-  // useEffect(() => {
   //   setBoardPathList(boardRoutes(totalPathList))
   // }, [totalPathList])
 
