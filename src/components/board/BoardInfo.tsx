@@ -5,7 +5,6 @@ import styles from "styles/boardDetail.module.css";
 import {BoardType, FileInfoType} from "types/interface";
 import useUserStore from "stores/useUserStore";
 import Button from "components/common/Button";
-import customApi from "utils/interceptor";
 import { getRefreshFileDownloadUrl } from "api/board";
 import axios from "axios";
 import Modal from 'components/common/Modal'

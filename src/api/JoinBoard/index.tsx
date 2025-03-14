@@ -45,10 +45,21 @@ export const activateOtp = async (otpCode: string) => {
 
 }
 
-// googlt otp 6자리 검증
+// google otp 6자리 검증
 export const verifyOtp = async (email:string, otpCode: string) => {
     const response = await authInstance.post(`/otp/verify`, {email, otpCode});
     return response;
+}
 
+// google otp 비활성화 시키기
+export const deactivateOtp  = async() => {
+    const token = localStorage.getItem("token"); 
+    if (!token) throw new Error("로그인이 필요합니다.");
+    const response = await authInstance.patch(`/otp/deactivate`, {},{
+        headers: {
+            "Authorization": `Bearer ${token}`,
+        }
+    });
+    return response.data;
 }
 
