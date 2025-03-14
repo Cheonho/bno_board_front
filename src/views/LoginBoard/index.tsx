@@ -24,7 +24,6 @@ const Login = () => {
         e.preventDefault();
         try {
             const response = await login(email, password);
-
             // 로그인 성공
             if (response.status === 200) {
                 const loginmodel: LoginModel = response.data.loginResponseDto;

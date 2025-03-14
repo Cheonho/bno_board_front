@@ -34,6 +34,7 @@ export default function BoardTable({ title, tableHeader, boardList, category, on
   }
 
   const {user} = useUserStore()
+  const token = localStorage.getItem('token')
 
   const handleDetailPath = (event: any, boardNum: number | string) => {
     if (typeof(handleViewCount) == 'function') {
@@ -58,7 +59,7 @@ export default function BoardTable({ title, tableHeader, boardList, category, on
           <div className='board-top'>
             <Input type="text" id="search-input" value={searchWord} onChange={handleSearch} />
             <div className='btn-box'>
-              {user?.email ? <Button text={"글쓰기"} onClick={() => navigate(writePath)} /> : ""}
+              {(user?.email && token) ? <Button text={"글쓰기"} onClick={() => navigate(writePath)} /> : ""}
             </div>
           </div>
         </div>
