@@ -8,6 +8,7 @@ import Button from "components/common/Button";
 import { getRefreshFileDownloadUrl } from "api/board";
 import axios from "axios";
 import Modal from 'components/common/Modal'
+import DOMPurify from "dompurify";
 
 interface BoardInfoProps {
     boardNum: string | number;
@@ -115,7 +116,14 @@ export default function BoardInfo({ boardNum, board, deleteBoard, goBoardList }:
                 )}
             </div>
             <div className={styles.content}>
-                <p>{board.content}</p>
+                {board.content && (
+                    <div 
+                        dangerouslySetInnerHTML = {{
+                            __html: DOMPurify.sanitize(String(board.content))
+                        }}
+                    />
+                )}
+                {/* <p>{board.content}</p> */}
             </div>
             <div className={styles.btn_box}>
 

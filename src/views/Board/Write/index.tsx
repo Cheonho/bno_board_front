@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import './style.css'
-import BoardWriteCom from 'components/board/BoardWrite'
 import { BoardWriteType, FileType } from 'types/interface';
 import useUserStore from 'stores/useUserStore';
 import { usePostWriteBoardListApiQuery } from 'api/queries/board/boardQuery';
 import { useNavigate } from 'react-router-dom';
+import BoardEdit from 'components/board/BoardEdit';
 
 // 검색기록 저장
 export default function BoardWrite() {
@@ -23,7 +23,7 @@ export default function BoardWrite() {
   }
 
   const onChangeContent = (e: any) => {
-    setContent(e.target.value)
+    setContent(e)
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -88,11 +88,11 @@ export default function BoardWrite() {
       setWriterEmail(userInfo.email)
     }
   }, [userInfo, navigate])
-
+  
   return (
     <div>
       {userInfo ? 
-        <BoardWriteCom 
+        <BoardEdit 
           comType='w'
           title={title}
           content={content}

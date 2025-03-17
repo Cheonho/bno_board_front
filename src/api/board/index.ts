@@ -139,6 +139,30 @@ export async function getRefreshFileDownloadUrl(fileId: string): Promise<FileRef
   return res.data
 }
 
+// export async function postFileUploadApi(board: BoardWriteType, files: File[]): Promise<ResType> {
+//   const requestBody  = new FormData();
+//   const jsonData = JSON.stringify(board);
+//   const boardInfo = new Blob([jsonData], { type: 'application/json' });
+//   requestBody.append('board', boardInfo)
+
+//   files.forEach((file) => {
+//     if (file?.name) requestBody.append("file", file)
+//   })
+  
+//   const res = await customApi<any>(
+//     `/file/upload`,
+//     'POST',
+//     {
+//       data: requestBody,
+//       headers: {
+//         'Content-Type' : 'multipart/form-data'
+//       }
+//     },
+//     {isAuth: true}
+//   )
+//   return res.data;
+// }
+
 export const getBoardApi = async (boardNum: number | string): Promise<BoardType> => {
   const response = await authInstance.get(`/board/detail/${boardNum}`);
   return response.data;

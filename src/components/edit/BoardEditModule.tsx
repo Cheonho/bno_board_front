@@ -42,7 +42,7 @@ const BoardEditModule = () => {
           <div className="ql-formats">
               <button className="ql-code-block" />
               <button className="ql-link" />
-              <button className="ql-image" />
+              {/* <button className="ql-image" /> */}
           </div>
       </>
   )

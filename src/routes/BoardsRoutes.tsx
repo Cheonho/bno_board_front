@@ -3,7 +3,6 @@ import BoardList from 'views/Board/List';
 import BoardDetail from 'views/Board/Detail';
 import BoardWrite from 'views/Board/Write';
 import BoardUpdate from 'views/Board/Update';
-import BoardTest from 'views/Board/Test'
 
 
 // export default function boardRoutes(pathList: any) {
@@ -43,9 +42,5 @@ export const boardRoutes: MenuRouter[] = [
   {
     path: `${BOARD_PATH()}/${BOARD_UPDATE_PATH(`:boardNum`)}`,
     element: <BoardUpdate />
-  },
-  {
-    path: `${BOARD_PATH()}/test`,
-    element: <BoardTest />
   }
 ]

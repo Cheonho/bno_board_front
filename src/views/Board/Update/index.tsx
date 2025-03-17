@@ -1,12 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import './style.css'
-import BoardWriteCom from 'components/board/BoardWrite'
 import { BoardType, FileDeleteIdList, FileInfoType, FileType } from 'types/interface';
 import { useLocation, useNavigate } from 'react-router-dom';
 import useUserStore from 'stores/useUserStore';
 import Modal from 'components/common/Modal'
 import { LOGIN_PATH, MAIN_PATH } from 'constant';
 import { usePutUpdateBoardApiQuery } from 'api/queries/board/boardQuery';
+import BoardEdit from 'components/board/BoardEdit';
 
 export default function BoardUpdate() {
   const [title, setTitle] = useState("");
@@ -69,7 +69,8 @@ export default function BoardUpdate() {
   }
 
   const onChangeContent = (e: any) => {
-    setContent(e.target.value)
+    console.log(e)
+    setContent(e)
   }
 
   const handleDeleteFileList = (item: FileType) => {
@@ -168,7 +169,7 @@ export default function BoardUpdate() {
     <div>
       {isModalOpen && (<Modal modalClose={modalClose} message={modalMessage} />)}
       {userInfo ? 
-        (<BoardWriteCom 
+        (<BoardEdit 
           comType="u"
           title={title}
           content={content}

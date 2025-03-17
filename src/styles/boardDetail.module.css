@@ -68,14 +68,8 @@
     padding: 20px;
     background: #fafafa;
     border-radius: 8px;
-    font-size: 18px;
-    line-height: 1.8;
     color: #444;
     min-height: 300px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: justify;
 }
 
 .btn_box{
@@ -85,7 +79,6 @@
     width: 95%;
     margin-left: auto;
     padding: 20px;
-
 }
 
 .btn{

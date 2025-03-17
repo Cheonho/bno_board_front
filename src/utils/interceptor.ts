@@ -1,5 +1,6 @@
 import axios, { AxiosError, Method } from "axios";
 import { getToken } from "./token";
+import useUserStore from "stores/useUserStore";
 // import { getSession } from "next-auth/react";
 
 axios.defaults.baseURL = process.env.REACT_APP_SERVER_URL;
@@ -53,8 +54,9 @@ authInstance.interceptors.response.use(
       if (errorMessage.status === 401) {
         window.location.href = "/login";
       } else if (errorMessage.status === 403) {
-        // localStorage.removeItem('token')
-
+        localStorage.removeItem('token')
+        useUserStore.getState().clearUser();
+        window.location.href = "/login";
       }
     } else {
       console.log(`[Error] : ${error}`)
