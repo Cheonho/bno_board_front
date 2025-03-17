@@ -1,5 +1,5 @@
 import React, { useMemo, useRef, useState } from 'react';
-import ReactQuill from 'react-quill';
+import ReactQuill from 'react-quill-new';
 import 'react-quill/dist/quill.snow.css';
 import Input from 'components/common/Input';
 import Button from 'components/common/Button';
@@ -47,9 +47,9 @@ export default function BoardEdit({
   const formats:string[] = [
     "header", "size", "font",
     "bold", "italic", "underline", "strike", "blockquote",
-    "list", "bullet", "indent", "link", "image",
+    "list", "indent", "link", "image",
     "color", "background", "align",
-    "script", "code-block", "clean"
+    "script", "code-block"
   ];
 
   const modalClose = () => {

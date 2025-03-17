@@ -69,7 +69,6 @@ export default function BoardUpdate() {
   }
 
   const onChangeContent = (e: any) => {
-    console.log(e)
     setContent(e)
   }
 

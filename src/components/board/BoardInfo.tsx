@@ -62,7 +62,6 @@ export default function BoardInfo({ boardNum, board, deleteBoard, goBoardList }:
 
     const refreshFileUrl = async (file: FileInfoType) => {
         const refreshRes = await getRefreshFileDownloadUrl(file.id)
-        console.log(refreshRes)
         setFiles((prev) => {
             prev.map((item) => {
                 if (file.id === item.id) return {...item, minioDataUrl: refreshRes.refreshUrl}
